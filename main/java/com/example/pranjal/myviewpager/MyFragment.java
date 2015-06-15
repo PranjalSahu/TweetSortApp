@@ -39,7 +39,7 @@ public class MyFragment extends BaseFragment {
 
     protected void setDummyDataWithHeader(ListView listView, View headerView) {
         listView.addHeaderView(headerView);
-        setDummyData(listView);
+        setDummyData(listView); // testing git
     }
 
     @Override
