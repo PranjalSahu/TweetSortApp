@@ -216,7 +216,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
 
-        private static final String[] TITLES = new String[]{"Applepie", "Butter Cookie", "Cupcake", "Donut", "Eclair", "Froyo", "Gingerbread", "Honeycomb", "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop"};
+        private static final String[] TITLES = new String[]{"Timeline", "Check1", "Check2"};
 
         private int mScrollY;
 
