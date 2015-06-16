@@ -30,13 +30,14 @@
 
 
         <activity android:name=".ViewPagerTabListViewActivity" > </activity>
+        <activity android:name=".MainActivity" > </activity>
         <activity android:name=".ShowTweet" > </activity>
         <activity android:name=".ShowUserProfile" > </activity>
         <activity android:name=".StartActivity" > </activity>
         <activity android:name=".LoginActivity" > </activity>
 
         <activity
-            android:name="com.example.pranjal.myviewpager.MainActivity"
+            android:name="com.example.pranjal.myviewpager.MyMainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Toolbar">
             <intent-filter>
