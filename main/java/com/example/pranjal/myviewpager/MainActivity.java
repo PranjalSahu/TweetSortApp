@@ -42,7 +42,7 @@ public class MainActivity  extends BaseActivity {
          String TWITTER_SECRET = "ivA141Pewjx3VYfKOUBMIRJZZnNhPQNW9gVdM1nlXrnsNmir29";
 
         authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new Twitter(authConfig));//
 
         MyApplication appState = ((MyApplication) getApplicationContext());
         currentSession         = Twitter.getSessionManager().getActiveSession();
