@@ -47,7 +47,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         setContentView(R.layout.activity_viewpagertab);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
