@@ -16,6 +16,7 @@
 
 package com.example.pranjal.myviewpager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -63,6 +64,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public static FavoriteService favoriteService;
     public static TwitterAuthConfig   authConfig     = null;
     public static TwitterSession currentSession = null;
+    public static Context baseContext = null;
 
     String TWITTER_KEY = "i8lsarVzM1RLdQli7JvGibJya";
     String TWITTER_SECRET = "ivA141Pewjx3VYfKOUBMIRJZZnNhPQNW9gVdM1nlXrnsNmir29";
@@ -76,7 +78,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         setContentView(R.layout.activity_viewpagertab);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
+        baseContext = this.getApplication().getBaseContext();
 
         authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
@@ -282,7 +284,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             if(statusesService == null)
                 System.out.println("YOYO PRANJAL NULL");
 
-            f.setAppState(statusesService, accountService, favoriteService);
+
+            f.setAppState(  baseContext, statusesService, accountService, favoriteService);
 
             f.LoadTweets();
             return f;

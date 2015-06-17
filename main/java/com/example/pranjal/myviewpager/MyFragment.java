@@ -17,6 +17,7 @@
 package com.example.pranjal.myviewpager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -38,10 +39,12 @@ import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
+import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -83,6 +86,8 @@ public class MyFragment extends BaseFragment {
     StatusesService statusesService;
     AccountService accountService;
     FavoriteService favoriteService;
+    ObservableListView listView;
+    Context baseContext;
 
     @Override
     public void onAttach(Activity activity) {
@@ -117,19 +122,23 @@ public class MyFragment extends BaseFragment {
 //            System.out.println("PRANJAL IT IS NULL CHECK IT3");
 
         //LoadTweets();
+        //tweetadapter     = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
+
     }
 
-    public void setAppState( StatusesService statusesService,
+    public void setAppState( Context baseContext, StatusesService statusesService,
             AccountService accountService,
             FavoriteService favoriteService) {
         this.statusesService  = statusesService;
         this.accountService   = accountService;
         this.favoriteService  = favoriteService;
+        this.baseContext      = baseContext;
 
-        tweetadapter     = new MyAdapter(this.getActivity(), this.statusesService, this.favoriteService);
+        if(baseContext == null)
+            System.out.println("PRANJALITISNULLBASEa");
 
-        if(tweetadapter == null)
-            System.out.println("YOYOYO NULL TWEETADAPTER");
+        tweetadapter     = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
+
     }
 
     void setmydata(ListView listView, View headerView){
@@ -147,12 +156,19 @@ public class MyFragment extends BaseFragment {
 
         Activity parentActivity = getActivity();
 
-        linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
+        Fabric.with(getActivity(), new TweetUi());
 
-        final ObservableListView listView = (ObservableListView) view.findViewById(R.id.mylist);
+        linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
+        //lv        = (ListView)view.findViewById(R.id.mylist);
+        //lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        listView = (ObservableListView) view.findViewById(R.id.mylist);
         //setDummyDataWithHeader(listView, inflater.inflate(R.layout.padding, listView, false));
 
+
         setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
+        listView.setAdapter(tweetadapter);
+
         linlaHeaderProgress.setBackgroundColor(-1);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
 
@@ -185,7 +201,7 @@ public class MyFragment extends BaseFragment {
                         .setOAuthAccessToken(accesstoken)
                         .setOAuthAccessTokenSecret(accesssecret);
 
-        twitter1 = new TwitterFactory(config.build()).getInstance();
+        twitter1         = new TwitterFactory(config.build()).getInstance();
         tweetlist        = new ArrayList<Tweet>();
         return view;
     }
@@ -207,7 +223,8 @@ public class MyFragment extends BaseFragment {
                         tweetadapter.notifyDataSetChanged();
                         //mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
 
-                        lv.setAdapter(tweetadapter);
+                        //lv.setAdapter(tweetadapter);
+                        //listView.setAdapter(tweetadapter);
 
                         //lv.setAdapter(mAdAdapter);
                         //lv.setAdapter(tweetadapter);
