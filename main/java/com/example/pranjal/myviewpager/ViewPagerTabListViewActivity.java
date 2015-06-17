@@ -23,6 +23,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
@@ -31,6 +32,16 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.services.AccountService;
+import com.twitter.sdk.android.core.services.FavoriteService;
+import com.twitter.sdk.android.core.services.StatusesService;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.twitter.sdk.android.tweetui.TweetUi;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * SlidingTabLayout and SlidingTabStrip are from google/iosched:
@@ -38,11 +49,25 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
  */
 public class ViewPagerTabListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
+    MyTwitterApiClient  twitterApiClient;
+
     private View mHeaderView;
     private View mToolbarView;
     private int mBaseTranslationY;
     private ViewPager mPager;
     private NavigationAdapter mPagerAdapter;
+    static MyApplication appState;
+
+    public static StatusesService statusesService;
+    public static AccountService accountService;
+    public static FavoriteService favoriteService;
+    public static TwitterAuthConfig   authConfig     = null;
+    public static TwitterSession currentSession = null;
+
+    String TWITTER_KEY = "i8lsarVzM1RLdQli7JvGibJya";
+    String TWITTER_SECRET = "ivA141Pewjx3VYfKOUBMIRJZZnNhPQNW9gVdM1nlXrnsNmir29";
+
+    String username                  = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +76,24 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         setContentView(R.layout.activity_viewpagertab);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+
+        authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new TweetUi());
+        Fabric.with(this, new TweetComposer());
+
+        currentSession = Twitter.getSessionManager().getActiveSession();
+
+
+        username = currentSession.getUserName();
+
+        twitterApiClient = new MyTwitterApiClient(currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
+        accountService   = twitterApiClient.getAccountService();
+        statusesService  = twitterApiClient.getStatusesService();
+        favoriteService  = twitterApiClient.getFavoriteService();
+
+
 
         mHeaderView = findViewById(R.id.header);
         ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));
@@ -123,6 +166,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         if (listView == null) {
             return;
         }
+
+        TextView tv;
+
         int scrollY = listView.getCurrentScrollY();
         if (scrollState == ScrollState.DOWN) {
             showToolbar();
@@ -232,18 +278,13 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         @Override
         protected Fragment createItem(int position) {
            // Fragment f = new ViewPagerTabListViewFragment();
-            Fragment f = new MyFragment();
+            MyFragment f = new MyFragment();
+            if(statusesService == null)
+                System.out.println("YOYO PRANJAL NULL");
 
+            f.setAppState(statusesService, accountService, favoriteService);
 
-
-
-            /*if (0 < mScrollY) {
-                Bundle args = new Bundle();
-                args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
-                f.setArguments(args);
-            }*/
-
-
+            f.LoadTweets();
             return f;
         }
 
