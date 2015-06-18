@@ -132,6 +132,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        System.out.println("ViewPagerTabListViewActivity onScrollChanged dragging "+dragging+" firstScroll "+firstScroll+" scrollY "+scrollY);
+
         if (dragging) {
             int toolbarHeight = mToolbarView.getHeight();
             float currentHeaderTranslationY = ViewHelper.getTranslationY(mHeaderView);
@@ -148,10 +150,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     @Override
     public void onDownMotionEvent() {
+        System.out.println("ViewPagerTabListViewActivity onDownMotionEvent");
+
     }
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        System.out.println("ViewPagerTabListViewActivity onUpOrCancelMotionEvent ScrollState "+scrollState);
+
         mBaseTranslationY = 0;
 
         Fragment fragment = getCurrentFragment();
@@ -164,7 +170,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         }
 
         int toolbarHeight = mToolbarView.getHeight();
-        final ObservableListView listView = (ObservableListView) view.findViewById(R.id.scroll);
+        final ObservableListView listView = (ObservableListView) view.findViewById(R.id.mylist);
         if (listView == null) {
             return;
         }

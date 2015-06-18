@@ -49,40 +49,18 @@ public class MyMainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        System.out.println("HELLO PRANJAL");
         String TWITTER_KEY = "i8lsarVzM1RLdQli7JvGibJya";
         String TWITTER_SECRET = "ivA141Pewjx3VYfKOUBMIRJZZnNhPQNW9gVdM1nlXrnsNmir29";
-
-        authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
-
-        MyApplication appState = ((MyApplication) getApplicationContext());
-        currentSession = Twitter.getSessionManager().getActiveSession();
-        appState.currentSession = currentSession;
 
         authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         Fabric.with(this, new TweetUi());
         Fabric.with(this, new TweetComposer());
 
-        username = currentSession.getUserName();
+        MyApplication appState = ((MyApplication) getApplicationContext());
+        currentSession = Twitter.getSessionManager().getActiveSession();
 
-        twitterApiClient = new MyTwitterApiClient(currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
-        accountService   = twitterApiClient.getAccountService();
-        statusesService  = twitterApiClient.getStatusesService();
-        favoriteService  = twitterApiClient.getFavoriteService();
-
-        appState.accountService   = accountService;
-        appState.favoriteService  = favoriteService;
-        appState.statusesService  = statusesService;
-        appState.twitterApiClient = twitterApiClient;
-        appState.authConfig       = authConfig;
-        appState.currentSession   = currentSession;
-        appState.username         = username;
-
-        if(appState.statusesService == null)
-            System.out.println("PRANJAL IT IS NULL CHECK IT1a");
-        if(appState.favoriteService == null)
-            System.out.println("PRANJAL IT IS NULL CHECK IT2a");
 
 
         if (currentSession == null) {
