@@ -107,14 +107,6 @@ public class MyFragment extends BaseFragment {
         //bundle.putSerializable(DESCRIBABLE_KEY, describable);
         //fragment.setArguments(bundle);
 
-//        if(appState == null)
-//            System.out.println("PRANJAL IT IS NULL CHECK IT");
-//        if(appState.username == null)
-//            System.out.println("PRANJAL IT IS NULL CHECK IT user");
-//        if(appState.statusesService == null)
-//            System.out.println("PRANJAL IT IS NULL CHECK IT1");
-//        if(appState.favoriteService == null)
-//            System.out.println("PRANJAL IT IS NULL CHECK IT2");
 
 //        tweetadapter     = new MyAdapter(appState, appState.statusesService, appState.favoriteService);
 

@@ -269,8 +269,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         propagateToolbarState(false);
     }
 
+    //private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
     private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
-
         private static final String[] TITLES = new String[]{"Timeline", "Check1", "Check2"};
 
         private int mScrollY;
@@ -287,9 +287,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         protected Fragment createItem(int position) {
            // Fragment f = new ViewPagerTabListViewFragment();
             MyFragment f = new MyFragment();
-            if(statusesService == null)
-                System.out.println("YOYO PRANJAL NULL");
-
+            if (0 < mScrollY) {
+                Bundle args = new Bundle();
+                args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
+                f.setArguments(args);
+            }
 
             f.setAppState(  baseContext, statusesService, accountService, favoriteService);
 
