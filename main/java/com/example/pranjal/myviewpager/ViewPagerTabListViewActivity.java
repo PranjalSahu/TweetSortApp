@@ -293,9 +293,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 f.setArguments(args);
             }
 
-            f.setAppState(  baseContext, statusesService, accountService, favoriteService);
-
-            f.LoadTweets();
+            f.setAppState(baseContext, statusesService, accountService, favoriteService);
+            //f.LoadTweets();
             return f;
         }
 

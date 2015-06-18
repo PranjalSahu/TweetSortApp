@@ -31,6 +31,11 @@ import android.widget.ProgressBar;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.mopub.nativeads.MoPubAdAdapter;
+import com.mopub.nativeads.MoPubNativeAdPositioning;
+import com.mopub.nativeads.MoPubNativeAdRenderer;
+import com.mopub.nativeads.RequestParameters;
+import com.mopub.nativeads.ViewBinder;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -42,6 +47,7 @@ import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
@@ -68,6 +74,9 @@ public class MyFragment extends BaseFragment {
 
     LinearLayout linlaHeaderProgress;
     MyAdapter         tweetadapter;
+    MoPubAdAdapter mAdAdapter;
+
+
     Long              lasttweetid    = null;
     boolean           loading        = false;
     SharedPreferences prefs          = null;
@@ -89,10 +98,14 @@ public class MyFragment extends BaseFragment {
     ObservableListView listView;
     Context baseContext;
 
+    private RequestParameters mRequestParameters;
+    private static final String MY_AD_UNIT_ID = "d05480af91a04d7c841c5f9bb7621032";
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        //System.out.println("PRANCONTEXT "+activity + " "+ activity.getBaseContext());
         //appState = ((MyApplication)activity.getApplicationContext());
 
         //appState = ((MyApplication)activity.getApplication());
@@ -116,6 +129,25 @@ public class MyFragment extends BaseFragment {
         //LoadTweets();
         //tweetadapter     = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
 
+        ViewBinder viewBinder = new ViewBinder.Builder(com.twitter.sdk.android.tweetui.R.layout.tw__tweet_compact)
+                .mainImageId(R.id.tw__tweet_media)
+                .iconImageId(R.id.tw__tweet_author_avatar)
+                .titleId(R.id.tw__tweet_author_screen_name)
+                .textId(R.id.tw__tweet_text)
+                        //.addExtra("sponsoredText", R.id.sponsored_text)
+                        //.addExtra("sponsoredImage", R.id.sponsored_image)
+                .build();
+
+
+        MoPubNativeAdPositioning.MoPubServerPositioning adPositioning =
+                MoPubNativeAdPositioning.serverPositioning();
+        MoPubNativeAdRenderer adRenderer = new MoPubNativeAdRenderer(viewBinder);
+
+
+        mAdAdapter      = new MoPubAdAdapter(activity, tweetadapter, adPositioning);
+        System.out.println("YOYO AFTER");
+        mAdAdapter.registerAdRenderer(adRenderer);
+        LoadTweets();
     }
 
     public void setAppState( Context baseContext, StatusesService statusesService,
@@ -129,7 +161,13 @@ public class MyFragment extends BaseFragment {
         if(baseContext == null)
             System.out.println("PRANJALITISNULLBASEa");
 
-        tweetadapter     = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
+
+
+        // Set up the positioning behavior your ads should have.
+
+        tweetadapter    = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
+        System.out.println("PRANJALCHECKIT "+this.baseContext);
+
 
     }
 
@@ -158,8 +196,30 @@ public class MyFragment extends BaseFragment {
         //setDummyDataWithHeader(listView, inflater.inflate(R.layout.padding, listView, false));
 
 
+        final EnumSet<RequestParameters.NativeAdAsset> desiredAssets = EnumSet.of(
+                RequestParameters.NativeAdAsset.TITLE,
+                RequestParameters.NativeAdAsset.TEXT,
+                RequestParameters.NativeAdAsset.ICON_IMAGE,
+                RequestParameters.NativeAdAsset.MAIN_IMAGE,
+                RequestParameters.NativeAdAsset.CALL_TO_ACTION_TEXT);
+
+        mRequestParameters = new RequestParameters.Builder()
+                //.location(location)
+                .keywords("food")
+                .desiredAssets(desiredAssets)
+                .build();
+
+
+
         setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
+
+        //mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
+
+        //listView.setAdapter(mAdAdapter);
         listView.setAdapter(tweetadapter);
+
+
+        //listView.setAdapter(tweetadapter);
 
         linlaHeaderProgress.setBackgroundColor(-1);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
@@ -213,9 +273,23 @@ public class MyFragment extends BaseFragment {
                         tweetadapter.setTweets(tweetlist);
 
                         tweetadapter.notifyDataSetChanged();
-                        //mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
+                        mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
+
+                        /*mAdAdapter.setAdLoadedListener(new MoPubNativeAdLoadedListener() {
+                            @Override
+                            public void onAdLoaded(int i) {
+
+                            }
+
+                            @Override
+                            public void onAdRemoved(int i) {
+
+                            }
+                        });*/
 
                         //lv.setAdapter(tweetadapter);
+                        //listView.setAdapter(tweetadapter);
+                        listView.setAdapter(mAdAdapter);
                         //listView.setAdapter(tweetadapter);
 
                         //lv.setAdapter(mAdAdapter);
