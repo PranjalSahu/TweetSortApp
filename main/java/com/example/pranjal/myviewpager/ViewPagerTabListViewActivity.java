@@ -45,7 +45,6 @@ import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
@@ -103,26 +102,30 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         bt1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                System.out.println("pranjal touch");
+                System.out.println("pranjal touch ");
                 MyFragment fg = (MyFragment)getCurrentFragment();
                 List<Tweet> tList =  fg.tweetlist;
                 MyAdapter   mya   =  fg.tweetadapter;
                 ObservableListView olv = fg.listView;
 
-                if(currentState == 0){
-                    List<Tweet> tListTemp = new ArrayList<Tweet>(tList);
-                    HelperFunctions.sortTweets(1, tListTemp, mya, olv);
-                    fg.tweetadapter.setTweets(tListTemp);
-                    fg.tweetadapter.notifyDataSetChanged();
-                    olv.smoothScrollToPosition(0);
-                }
-                else{
-                    fg.tweetadapter.setTweets(tList);
-                    fg.tweetadapter.notifyDataSetChanged();
-                    olv.smoothScrollToPosition(0);
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (currentState == 0) {
+                        List<Tweet> tListTemp = fg.tempTweetList;
+                        HelperFunctions.sortTweets(1, tListTemp, mya, olv);
+                        fg.tweetadapter.setTweets(tListTemp);
+                        fg.tweetadapter.notifyDataSetChanged();
+                        olv.smoothScrollToPosition(0);
+                        bt1.setText("YO");
+                        currentState = 1;
+                    } else {
+                        fg.tweetadapter.setTweets(tList);
+                        fg.tweetadapter.notifyDataSetChanged();
+                        olv.smoothScrollToPosition(0);
+                        bt1.setText("CHECK");
+                        currentState = 0;
+                    }
                 }
 
-                currentState = 1-currentState;
                 return true;
             }
         });

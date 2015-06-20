@@ -67,7 +67,9 @@ public class MyFragment extends BaseFragment {
     TwitterSession ts = null;
     ListView lv;
     LinearLayout        mLayout;
+
     List<Tweet> tweetlist;
+    List<Tweet> tempTweetList;      // for storing in sorted order
 
     twitter4j.Twitter twitter1;
     TwitterFactory      twitterFactory;
@@ -271,6 +273,7 @@ public class MyFragment extends BaseFragment {
                             //System.out.println("YOYOYOYO"+t.idStr);
                         }
                         tweetadapter.setTweets(tweetlist);
+                        tempTweetList = new ArrayList<Tweet>(tweetlist);
 
                         tweetadapter.notifyDataSetChanged();
                         mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
