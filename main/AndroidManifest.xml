@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="22"
@@ -17,7 +16,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="My App"
         android:theme="@style/AppTheme"
         android:name="com.example.pranjal.myviewpager.MyApplication">
 
@@ -47,8 +46,9 @@
 
         <activity
             android:name=".ViewPagerTabListViewActivity"
-            android:label="@string/title_activity_viewpagertablistview"
-            android:theme="@style/AppTheme.Toolbar">
+            android:label="My App"
+            android:theme="@style/AppTheme.Toolbar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -57,7 +57,8 @@
         <activity
             android:name="com.example.pranjal.myviewpager.MyMainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Toolbar">
+            android:theme="@style/AppTheme.Toolbar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

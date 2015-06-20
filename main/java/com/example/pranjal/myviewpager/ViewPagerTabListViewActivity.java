@@ -23,7 +23,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
@@ -36,11 +38,15 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -49,6 +55,8 @@ import io.fabric.sdk.android.Fabric;
  * https://github.com/google/iosched
  */
 public class ViewPagerTabListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+
+    int currentState = 0;
 
     MyTwitterApiClient  twitterApiClient;
 
@@ -71,6 +79,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     String username                  = null;
 
+    private Button bt1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +98,35 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         currentSession = Twitter.getSessionManager().getActiveSession();
 
 
+        bt1 = (Button)findViewById(R.id.showevents);
+
+        bt1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                System.out.println("pranjal touch");
+                MyFragment fg = (MyFragment)getCurrentFragment();
+                List<Tweet> tList =  fg.tweetlist;
+                MyAdapter   mya   =  fg.tweetadapter;
+                ObservableListView olv = fg.listView;
+
+                if(currentState == 0){
+                    List<Tweet> tListTemp = new ArrayList<Tweet>(tList);
+                    HelperFunctions.sortTweets(1, tListTemp, mya, olv);
+                    fg.tweetadapter.setTweets(tListTemp);
+                    fg.tweetadapter.notifyDataSetChanged();
+                    olv.smoothScrollToPosition(0);
+                }
+                else{
+                    fg.tweetadapter.setTweets(tList);
+                    fg.tweetadapter.notifyDataSetChanged();
+                    olv.smoothScrollToPosition(0);
+                }
+
+                currentState = 1-currentState;
+                return true;
+            }
+        });
+
         username = currentSession.getUserName();
 
         twitterApiClient = new MyTwitterApiClient(currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
@@ -95,11 +134,10 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         statusesService  = twitterApiClient.getStatusesService();
         favoriteService  = twitterApiClient.getFavoriteService();
 
-
-
         mHeaderView = findViewById(R.id.header);
         ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));
         mToolbarView = findViewById(R.id.toolbar);
+
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
@@ -132,7 +170,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        System.out.println("ViewPagerTabListViewActivity onScrollChanged dragging "+dragging+" firstScroll "+firstScroll+" scrollY "+scrollY);
+        //System.out.println("ViewPagerTabListViewActivity onScrollChanged dragging "+dragging+" firstScroll "+firstScroll+" scrollY "+scrollY);
 
         if (dragging) {
             int toolbarHeight = mToolbarView.getHeight();
@@ -150,13 +188,13 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     @Override
     public void onDownMotionEvent() {
-        System.out.println("ViewPagerTabListViewActivity onDownMotionEvent");
+        //System.out.println("ViewPagerTabListViewActivity onDownMotionEvent");
 
     }
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        System.out.println("ViewPagerTabListViewActivity onUpOrCancelMotionEvent ScrollState "+scrollState);
+        //System.out.println("ViewPagerTabListViewActivity onUpOrCancelMotionEvent ScrollState "+scrollState);
 
         mBaseTranslationY = 0;
 
@@ -286,6 +324,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         @Override
         protected Fragment createItem(int position) {
            // Fragment f = new ViewPagerTabListViewFragment();
+            //showToolbar();
             MyFragment f = new MyFragment();
             if (0 < mScrollY) {
                 Bundle args = new Bundle();

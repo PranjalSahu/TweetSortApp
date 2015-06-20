@@ -129,11 +129,11 @@ public class MyFragment extends BaseFragment {
         //LoadTweets();
         //tweetadapter     = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
 
-        ViewBinder viewBinder = new ViewBinder.Builder(com.twitter.sdk.android.tweetui.R.layout.tw__tweet_compact)
-                .mainImageId(R.id.tw__tweet_media)
-                .iconImageId(R.id.tw__tweet_author_avatar)
-                .titleId(R.id.tw__tweet_author_screen_name)
-                .textId(R.id.tw__tweet_text)
+        ViewBinder viewBinder = new ViewBinder.Builder(R.layout.mynativead)
+                .mainImageId(R.id.tw__full_ad_image)
+                .iconImageId(R.id.tw__tweet_author_avatar_pran)
+                .titleId(R.id.tw__tweet_author_full_name_pran)
+                .textId(R.id.tw__tweet_text_pran)
                         //.addExtra("sponsoredText", R.id.sponsored_text)
                         //.addExtra("sponsoredImage", R.id.sponsored_image)
                 .build();
@@ -259,7 +259,7 @@ public class MyFragment extends BaseFragment {
     }
 
     public void LoadTweets() {
-        statusesService.homeTimeline(20, null, lasttweetid, false, true, false, true,
+        statusesService.homeTimeline(150, null, lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
                     public void success(Result<List<Tweet>> result) {
@@ -268,7 +268,7 @@ public class MyFragment extends BaseFragment {
                             Tweet t = ls.get(i);
                             tweetlist.add(t);
                             lasttweetid = t.getId();
-                            System.out.println("YOYOYOYO"+t.idStr);
+                            //System.out.println("YOYOYOYO"+t.idStr);
                         }
                         tweetadapter.setTweets(tweetlist);
 
@@ -297,6 +297,8 @@ public class MyFragment extends BaseFragment {
 
                         linlaHeaderProgress.setVisibility(View.GONE);
 
+
+                        //HelperFunctions.sortTweets(1, tweetlist, tweetadapter);
                         System.out.println("TWEETS LOADED " + lasttweetid);
                         loading = false;
                         //setProgressBarIndeterminateVisibility(false);
