@@ -45,28 +45,28 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#009688"
+            android:background="#1684ca"
             android:minHeight="@dimen/abc_action_bar_default_height_material"
             app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:theme="@style/Toolbar">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/showevents"
-                android:textSize="12sp"
-                android:layout_gravity="right"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="CHECK"/>
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/showevents"
+            android:textSize="12sp"
+            android:layout_gravity="right"
+            android:background="@null"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="CHECK"/>
         </android.support.v7.widget.Toolbar>
 
         <com.example.pranjal.myviewpager.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
-            android:background="#009688" />
+            android:background="#1684ca" />
     </LinearLayout>
 
 </FrameLayout>

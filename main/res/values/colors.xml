@@ -14,10 +14,10 @@
   limitations under the License.
 -->
 <resources>
-
-    <color name="primary">#009688</color>
-    <color name="primaryDark">#00796b</color>
-    <color name="accent">#eeff41</color>
-    <color name="accentLight">#F4FF81</color>
+    <!--#009688 #00796b #eeff41 #F4FF81-->
+    <color name="primary">#18376a</color>
+    <color name="primaryDark">#18376a</color>
+    <color name="accent">#18376a</color>
+    <color name="accentLight">#18376a</color>
 
 </resources>

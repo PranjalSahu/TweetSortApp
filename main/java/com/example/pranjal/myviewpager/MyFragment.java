@@ -103,33 +103,11 @@ public class MyFragment extends BaseFragment {
     private RequestParameters mRequestParameters;
     private static final String MY_AD_UNIT_ID = "d05480af91a04d7c841c5f9bb7621032";
 
+    boolean filterTweets;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        //System.out.println("PRANCONTEXT "+activity + " "+ activity.getBaseContext());
-        //appState = ((MyApplication)activity.getApplicationContext());
-
-        //appState = ((MyApplication)activity.getApplication());
-
-//        Bundle args = new Bundle();
-//        Bundle bd = getArguments().getBundle("appstate");
-//        bd.
-//        // args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
-        // f.setArguments(args);
-
-        //Bundle bundle = new Bundle();
-        //bundle.putSerializable(DESCRIBABLE_KEY, describable);
-        //fragment.setArguments(bundle);
-
-
-//        tweetadapter     = new MyAdapter(appState, appState.statusesService, appState.favoriteService);
-
-//        if(tweetadapter == null)
-//            System.out.println("PRANJAL IT IS NULL CHECK IT3");
-
-        //LoadTweets();
-        //tweetadapter     = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
 
         ViewBinder viewBinder = new ViewBinder.Builder(R.layout.mynativead)
                 .mainImageId(R.id.tw__full_ad_image)
@@ -145,9 +123,8 @@ public class MyFragment extends BaseFragment {
                 MoPubNativeAdPositioning.serverPositioning();
         MoPubNativeAdRenderer adRenderer = new MoPubNativeAdRenderer(viewBinder);
 
-
+        tweetadapter    = new MyAdapter(activity, this.statusesService, this.favoriteService);
         mAdAdapter      = new MoPubAdAdapter(activity, tweetadapter, adPositioning);
-        System.out.println("YOYO AFTER");
         mAdAdapter.registerAdRenderer(adRenderer);
         LoadTweets();
     }
@@ -163,13 +140,8 @@ public class MyFragment extends BaseFragment {
         if(baseContext == null)
             System.out.println("PRANJALITISNULLBASEa");
 
-
-
-        // Set up the positioning behavior your ads should have.
-
-        tweetadapter    = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
-        System.out.println("PRANJALCHECKIT "+this.baseContext);
-
+        //tweetadapter    = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
+        //tweetadapter    = new MyAdapter(this.getActivity(), this.statusesService, this.favoriteService);
 
     }
 
@@ -187,16 +159,16 @@ public class MyFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.tweet_list, container, false);
 
         Activity parentActivity = getActivity();
-
         Fabric.with(getActivity(), new TweetUi());
 
+        Bundle bd = getArguments();
+        if(bd != null && bd.getBoolean("filter"))
+            filterTweets = true;
+        else
+            filterTweets = false;
+
         linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
-        //lv        = (ListView)view.findViewById(R.id.mylist);
-        //lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
         listView = (ObservableListView) view.findViewById(R.id.mylist);
-        //setDummyDataWithHeader(listView, inflater.inflate(R.layout.padding, listView, false));
-
 
         final EnumSet<RequestParameters.NativeAdAsset> desiredAssets = EnumSet.of(
                 RequestParameters.NativeAdAsset.TITLE,
@@ -212,16 +184,9 @@ public class MyFragment extends BaseFragment {
                 .build();
 
 
-
         setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
 
-        //mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
-
-        //listView.setAdapter(mAdAdapter);
         listView.setAdapter(tweetadapter);
-
-
-        //listView.setAdapter(tweetadapter);
 
         linlaHeaderProgress.setBackgroundColor(-1);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
@@ -266,11 +231,13 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void success(Result<List<Tweet>> result) {
                         List<Tweet> ls = result.data;
-                        for (int i=1;i<ls.size();++i) {
+                        for (int i = 1; i < ls.size(); ++i) {
                             Tweet t = ls.get(i);
-                            tweetlist.add(t);
+
+                            if((filterTweets && MyFilter.checkit(t)) || !filterTweets)
+                                tweetlist.add(t);
+
                             lasttweetid = t.getId();
-                            //System.out.println("YOYOYOYO"+t.idStr);
                         }
                         tweetadapter.setTweets(tweetlist);
                         tempTweetList = new ArrayList<Tweet>(tweetlist);
@@ -290,29 +257,16 @@ public class MyFragment extends BaseFragment {
                             }
                         });*/
 
-                        //lv.setAdapter(tweetadapter);
-                        //listView.setAdapter(tweetadapter);
                         listView.setAdapter(mAdAdapter);
-                        //listView.setAdapter(tweetadapter);
-
-                        //lv.setAdapter(mAdAdapter);
-                        //lv.setAdapter(tweetadapter);
-
                         linlaHeaderProgress.setVisibility(View.GONE);
-
-
-                        //HelperFunctions.sortTweets(1, tweetlist, tweetadapter);
                         System.out.println("TWEETS LOADED " + lasttweetid);
                         loading = false;
-                        //setProgressBarIndeterminateVisibility(false);
-                        //lv.removeFooterView(footer);
                     }
 
                     @Override
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
-                        //LoadTweets();
                     }
                 }
         );

@@ -329,6 +329,12 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
            // Fragment f = new ViewPagerTabListViewFragment();
             //showToolbar();
             MyFragment f = new MyFragment();
+            if(position == 1) {
+                Bundle b = new Bundle();
+                b.putBoolean("filter", true);
+                f.setArguments(b);
+            }
+
             if (0 < mScrollY) {
                 Bundle args = new Bundle();
                 args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);

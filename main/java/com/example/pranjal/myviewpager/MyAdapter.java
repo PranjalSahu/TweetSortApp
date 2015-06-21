@@ -45,6 +45,7 @@ public class MyAdapter extends TweetViewAdapter {
             if(t.id == updateTweet.id)
                 break;
             ++pos;
+            ++pos;
         }
 
         tl.set(pos, updateTweet);
@@ -118,11 +119,11 @@ public class MyAdapter extends TweetViewAdapter {
 
                 if(child instanceof TextView) {
                     TextView tmp = ((TextView) child);
-                    System.out.println("pranjaldisable : Disabling TextView " + tmp.getId() + tmp.getText());
+                    return;
                 }
                 if(child instanceof ImageView){
                     ImageView tmp = ((ImageView) child);
-                    System.out.println("pranjaldisable : checking ImageView " + tmp.getDrawable().getIntrinsicHeight() + "hex "+Integer.toHexString(tmp.getId()));
+                    System.out.println("pranjaldisable : checking ImageView " + child.getId());
                     //return;
                 }
                 child.setEnabled(false);
@@ -191,6 +192,7 @@ public class MyAdapter extends TweetViewAdapter {
                     Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
                     if(!tempTweet.retweeted) {
+
                         statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
