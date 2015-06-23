@@ -45,14 +45,11 @@ public class MyAdapter extends TweetViewAdapter {
             if(t.id == updateTweet.id)
                 break;
             ++pos;
-            ++pos;
         }
 
         tl.set(pos, updateTweet);
         this.setTweets(tl);
         System.out.println("tweet updated " + updateTweet.id + " old: " + this.getTweetAtPosition(pos).favorited + " new: " + updateTweet.favorited);
-        //this.setTweetAtPosition();
-        //this.setTweetAtPosition(pos, updateTweet);
 
         this.notifyDataSetChanged();
 
