@@ -38,14 +38,14 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#009688"
+        android:background="#55acee"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#1684ca"
+            android:background="#55acee"
             android:minHeight="@dimen/abc_action_bar_default_height_material"
             app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:theme="@style/Toolbar">
@@ -54,19 +54,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/showevents"
-            android:textSize="12sp"
-            android:layout_gravity="right"
-            android:background="@null"
+            android:textSize="16sp"
+            android:layout_gravity="left"
+            android:background="#18376a"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="CHECK"/>
+            android:text="TWEET SORT"/>
         </android.support.v7.widget.Toolbar>
 
         <com.example.pranjal.myviewpager.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
-            android:background="#1684ca" />
+            android:background="#55acee" />
     </LinearLayout>
 
 </FrameLayout>

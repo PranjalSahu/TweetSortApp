@@ -7,6 +7,7 @@ import com.twitter.sdk.android.core.models.Tweet;
  */
 public class MyFilter {
     public static boolean checkit(Tweet t){
+
         return t.user.verified;
     }
 }

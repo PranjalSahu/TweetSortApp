@@ -24,9 +24,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -65,7 +67,6 @@ public class MyFragment extends BaseFragment {
     MyApplication appState;
 
     TwitterSession ts = null;
-    ListView lv;
     LinearLayout        mLayout;
 
     List<Tweet> tweetlist;
@@ -100,10 +101,15 @@ public class MyFragment extends BaseFragment {
     ObservableListView listView;
     Context baseContext;
 
+    Activity storedActivity;
+
     private RequestParameters mRequestParameters;
     private static final String MY_AD_UNIT_ID = "d05480af91a04d7c841c5f9bb7621032";
 
     boolean filterTweets;
+    View footer;
+
+    AbsListView.OnScrollListener listenerObject = null;
 
     @Override
     public void onAttach(Activity activity) {
@@ -123,9 +129,14 @@ public class MyFragment extends BaseFragment {
                 MoPubNativeAdPositioning.serverPositioning();
         MoPubNativeAdRenderer adRenderer = new MoPubNativeAdRenderer(viewBinder);
 
+        footer           = (View)activity.getLayoutInflater().inflate(R.layout.listview_footer_row, null);
+
         tweetadapter    = new MyAdapter(activity, this.statusesService, this.favoriteService);
         mAdAdapter      = new MoPubAdAdapter(activity, tweetadapter, adPositioning);
         mAdAdapter.registerAdRenderer(adRenderer);
+        //mySetOnScrollListener(activity);
+
+        storedActivity = activity;
         LoadTweets();
     }
 
@@ -139,9 +150,6 @@ public class MyFragment extends BaseFragment {
 
         if(baseContext == null)
             System.out.println("PRANJALITISNULLBASEa");
-
-        //tweetadapter    = new MyAdapter(this.baseContext, this.statusesService, this.favoriteService);
-        //tweetadapter    = new MyAdapter(this.getActivity(), this.statusesService, this.favoriteService);
 
     }
 
@@ -168,7 +176,10 @@ public class MyFragment extends BaseFragment {
             filterTweets = false;
 
         linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
-        listView = (ObservableListView) view.findViewById(R.id.mylist);
+        listView            = (ObservableListView) view.findViewById(R.id.mylist);
+
+        //listView.setBackgroundColor(getResources().getColor(R.color.mycolors));
+
 
         final EnumSet<RequestParameters.NativeAdAsset> desiredAssets = EnumSet.of(
                 RequestParameters.NativeAdAsset.TITLE,
@@ -225,7 +236,65 @@ public class MyFragment extends BaseFragment {
         return view;
     }
 
+    public void mySetOnScrollListener(final Activity activity){
+
+        if(listenerObject == null) {
+            listenerObject = new AbsListView.OnScrollListener() {
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                }
+
+                public void onScroll(AbsListView view, int firstVisibleItem,
+                                     int visibleItemCount, int totalItemCount) {
+
+                    int visibleThreshold = 5;
+                    System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
+                    if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+                        Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT);
+                        //mytweets();
+                        System.out.println("pranjal tweet footer scroll");
+                        //loading = true;
+                        //lv.addFooterView(footer);
+                        //System.out.println("Footer View Added");
+                    }
+                }
+            };
+        }
+
+        listView.setOnScrollListener(listenerObject);
+    }
+
+    void mytweets() {
+        //linlaHeaderProgress.setVisibility(View.VISIBLE);
+        statusesService.homeTimeline(10, null, lasttweetid, false, true, false, true,
+                new Callback<List<Tweet>>() {
+                    @Override
+                    public void success(Result<List<Tweet>> result) {
+                        List<Tweet> ls = result.data;
+
+                        for (int i = 1; i < ls.size(); ++i) {
+                            Tweet t = ls.get(i);
+                            tweetlist.add(t);
+                            lasttweetid = t.getId();
+                        }
+
+                        tweetadapter.setTweets(tweetlist);
+                        linlaHeaderProgress.setVisibility(View.GONE);
+
+                        listView.setAdapter(tweetadapter);
+                        tweetadapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        exception.printStackTrace();
+                        linlaHeaderProgress.setVisibility(View.GONE);
+                    }
+                }
+        );
+    }
+
     public void LoadTweets() {
+
         statusesService.homeTimeline(150, null, lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
@@ -256,6 +325,9 @@ public class MyFragment extends BaseFragment {
 
                             }
                         });*/
+
+                        mySetOnScrollListener(storedActivity);
+                        listView.addFooterView(footer);
 
                         listView.setAdapter(mAdAdapter);
                         linlaHeaderProgress.setVisibility(View.GONE);

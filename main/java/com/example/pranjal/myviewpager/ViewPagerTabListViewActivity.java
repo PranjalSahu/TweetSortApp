@@ -79,12 +79,15 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     String username                  = null;
 
     private Button bt1;
+    View footer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getSupportActionBar().hide();
         setContentView(R.layout.activity_viewpagertab);
+
+
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         baseContext = this.getApplication().getBaseContext();
@@ -96,6 +99,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         currentSession = Twitter.getSessionManager().getActiveSession();
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         bt1 = (Button)findViewById(R.id.showevents);
 
@@ -108,6 +112,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 MyAdapter   mya   =  fg.tweetadapter;
                 ObservableListView olv = fg.listView;
 
+
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (currentState == 0) {
                         List<Tweet> tListTemp = fg.tempTweetList;
@@ -115,15 +120,17 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                         fg.tweetadapter.setTweets(tListTemp);
                         fg.tweetadapter.notifyDataSetChanged();
                         olv.smoothScrollToPosition(0);
-                        bt1.setText("YO");
+                        bt1.setText("ORIGINAL");
                         currentState = 1;
                     } else {
                         fg.tweetadapter.setTweets(tList);
                         fg.tweetadapter.notifyDataSetChanged();
                         olv.smoothScrollToPosition(0);
-                        bt1.setText("CHECK");
+                        bt1.setText("TWEET SORT");
                         currentState = 0;
                     }
+                    //getActionBar().setTitle("Pranjal");
+                    //getSupportActionBar().setTitle("Pranjal");
                 }
 
                 return true;
@@ -312,7 +319,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     //private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
     private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
-        private static final String[] TITLES = new String[]{"Timeline", "Check1", "Check2"};
+        private static final String[] TITLES = new String[]{"Timeline", "Verified", "Check2"};
 
         private int mScrollY;
 

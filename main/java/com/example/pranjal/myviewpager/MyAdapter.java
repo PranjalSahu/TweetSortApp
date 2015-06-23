@@ -198,7 +198,7 @@ public class MyAdapter extends TweetViewAdapter {
                             public void success(Result<Tweet> result) {
                                 //updateTweet(result.data);
                                 iv2.setTag(tempTweet.id);
-                                iv2.setImageResource(R.drawable.retweet_on);
+
                                 Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_LONG).show();
                             }
                             @Override
@@ -488,21 +488,26 @@ public class MyAdapter extends TweetViewAdapter {
                    Tweet tempTweet = (Tweet) v.getTag();
                    Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
-                   favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
-                       @Override
-                       public void success(Result<Tweet> result) {
-                           updateTweet(result.data);
-                           child2.setTag(result.data);
-                           child2.setImageResource(R.drawable.favorite_on);
-                           System.out.println("5pranjalupdate favoriteon " + result.data.id);
-                           Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_LONG).show();
-                       }
+                   if(!tempTweet.favorited) {
+                       favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
+                           @Override
+                           public void success(Result<Tweet> result) {
+                               updateTweet(result.data);
+                               child2.setTag(result.data);
+                               child2.setImageResource(R.drawable.favorite_on);
+                               System.out.println("5pranjalupdate favoriteon " + result.data.id);
+                               Toast.makeText(context, "Favorite Done " + result.data.favorited, Toast.LENGTH_LONG).show();
+                           }
 
-                       @Override
-                       public void failure(TwitterException e) {
-                           Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
-                       }
-                   });
+                           @Override
+                           public void failure(TwitterException e) {
+                               Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
+                           }
+                       });
+                   }
+                   else{
+
+                   }
                }
            });
 

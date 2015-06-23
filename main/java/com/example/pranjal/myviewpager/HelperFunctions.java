@@ -25,15 +25,13 @@ public class HelperFunctions {
     }
 
     public static void sortTweets(int type,  List<Tweet> tweetlist, MyAdapter tweetadapter, ObservableListView lv){
+        if(tweetlist == null || tweetlist.size() <= 0)
+            return;
+
         if(type == 1)
             Collections.sort(tweetlist, comparatorTweetCount);
         else if(type == 2)
             Collections.sort(tweetlist, comparatorFavoriteCount);
-
-        //tweetadapter.notifyDataSetChanged();
-        //lv.setSelectionAfterHeaderView();
-        //lv.smoothScrollToPosition(0);
-
     }
 
     public static Comparator<Tweet> comparatorTweetCount = new Comparator<Tweet>() {
