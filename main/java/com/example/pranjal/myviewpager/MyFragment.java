@@ -81,6 +81,7 @@ public class MyFragment extends BaseFragment {
     MoPubAdAdapter mAdAdapter;
 
 
+    Long              firsttweetid   = null;
     Long              lasttweetid    = null;
     boolean           loading        = false;
     SharedPreferences prefs          = null;
@@ -169,6 +170,13 @@ public class MyFragment extends BaseFragment {
 
         SwipeRefreshLayout mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeLayout.setProgressViewOffset(false, 150, 200);
+
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
 
 
         Activity parentActivity = getActivity();
@@ -268,6 +276,27 @@ public class MyFragment extends BaseFragment {
         listView.setOnScrollListener(listenerObject);
     }
 
+    void loadRecent(){
+        statusesService.homeTimeline(10, firsttweetid, null, false, true, false, true,
+                new Callback<List<Tweet>>() {
+                    @Override
+                    public void success(Result<List<Tweet>> result) {
+                        List<Tweet> ls = result.data;
+                        firsttweetid = ls.get(0).getId();
+                        tweetlist.addAll(0, ls);
+                        tweetadapter.setTweets(tweetlist);
+                        listView.setAdapter(tweetadapter);
+                        tweetadapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+        );
+    }
+
     void mytweets() {
         //linlaHeaderProgress.setVisibility(View.VISIBLE);
         statusesService.homeTimeline(10, null, lasttweetid, false, true, false, true,
@@ -305,8 +334,11 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void success(Result<List<Tweet>> result) {
                         List<Tweet> ls = result.data;
+
                         for (int i = 1; i < ls.size(); ++i) {
                             Tweet t = ls.get(i);
+                            if(firsttweetid != null)
+                                firsttweetid = t.getId();
 
                             if((filterTweets && MyFilter.checkit(t)) || !filterTweets)
                                 tweetlist.add(t);
