@@ -103,6 +103,7 @@ public class MyFragment extends BaseFragment {
     ObservableListView listView;
     Context baseContext;
 
+    SwipeRefreshLayout mSwipeLayout;
     Activity storedActivity;
 
     private RequestParameters mRequestParameters;
@@ -168,13 +169,13 @@ public class MyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tweet_list, container, false);
 
-        SwipeRefreshLayout mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeLayout.setProgressViewOffset(false, 150, 200);
 
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                loadRecent();
             }
         });
 
@@ -265,7 +266,7 @@ public class MyFragment extends BaseFragment {
                         Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT);
                         //mytweets();
                         System.out.println("pranjal tweet footer scroll");
-                        //loading = true;
+                        loading = true;
                         //lv.addFooterView(footer);
                         //System.out.println("Footer View Added");
                     }
@@ -277,6 +278,8 @@ public class MyFragment extends BaseFragment {
     }
 
     void loadRecent(){
+        System.out.println("LOAD recent called");
+
         statusesService.homeTimeline(10, firsttweetid, null, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
@@ -287,6 +290,7 @@ public class MyFragment extends BaseFragment {
                         tweetadapter.setTweets(tweetlist);
                         listView.setAdapter(tweetadapter);
                         tweetadapter.notifyDataSetChanged();
+                        mSwipeLayout.setRefreshing(false);
                     }
 
                     @Override
