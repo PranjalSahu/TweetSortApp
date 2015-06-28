@@ -264,10 +264,10 @@ public class MyFragment extends BaseFragment {
                     System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
                     if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                         Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT);
-                        //mytweets();
-                        System.out.println("pranjal tweet footer scroll");
                         loading = true;
-                        //lv.addFooterView(footer);
+                        listView.addFooterView(footer);
+                        mytweets();
+                        System.out.println("pranjal tweet footer scroll");
                         //System.out.println("Footer View Added");
                     }
                 }
@@ -286,7 +286,15 @@ public class MyFragment extends BaseFragment {
                     public void success(Result<List<Tweet>> result) {
                         List<Tweet> ls = result.data;
                         firsttweetid = ls.get(0).getId();
-                        tweetlist.addAll(0, ls);
+                        List<Tweet> finalList;
+                        if(filterTweets)
+                            finalList = MyFilter.getFilteredList(ls);
+                        else
+                            finalList = ls;
+
+                        if(finalList.size() != 0)
+                            tweetlist.addAll(0, finalList);
+
                         tweetadapter.setTweets(tweetlist);
                         listView.setAdapter(tweetadapter);
                         tweetadapter.notifyDataSetChanged();
@@ -311,21 +319,27 @@ public class MyFragment extends BaseFragment {
 
                         for (int i = 1; i < ls.size(); ++i) {
                             Tweet t = ls.get(i);
-                            tweetlist.add(t);
+
+                            if((filterTweets && MyFilter.checkit(t)) || !filterTweets)
+                                tweetlist.add(t);
+
+                            //tweetlist.add(t);
                             lasttweetid = t.getId();
                         }
 
+                        //footer.setVisibility(View.INVISIBLE);
                         tweetadapter.setTweets(tweetlist);
-                        linlaHeaderProgress.setVisibility(View.GONE);
-
                         listView.setAdapter(tweetadapter);
                         tweetadapter.notifyDataSetChanged();
+                        loading = false;
+                        listView.removeFooterView(footer);
                     }
 
                     @Override
                     public void failure(TwitterException exception) {
+                        loading = false;
                         exception.printStackTrace();
-                        linlaHeaderProgress.setVisibility(View.GONE);
+                        //linlaHeaderProgress.setVisibility(View.GONE);
                     }
                 }
         );
@@ -333,7 +347,7 @@ public class MyFragment extends BaseFragment {
 
     public void LoadTweets() {
 
-        statusesService.homeTimeline(150, null, lasttweetid, false, true, false, true,
+        statusesService.homeTimeline(10, null, lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
                     public void success(Result<List<Tweet>> result) {
@@ -368,8 +382,8 @@ public class MyFragment extends BaseFragment {
                         });*/
 
                         mySetOnScrollListener(storedActivity);
-                        listView.addFooterView(footer);
-
+                        //listView.addFooterView(footer);
+                        //listView.removeFooterView(footer);
                         listView.setAdapter(mAdAdapter);
                         linlaHeaderProgress.setVisibility(View.GONE);
                         System.out.println("TWEETS LOADED " + lasttweetid);
@@ -380,6 +394,7 @@ public class MyFragment extends BaseFragment {
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
+                        loading = false;
                     }
                 }
         );
