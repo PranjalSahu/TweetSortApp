@@ -49,14 +49,14 @@
             android:minHeight="@dimen/abc_action_bar_default_height_material"
             app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:theme="@style/Toolbar">
-
+     <!--            android:background="#18376a"-->
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:id="@+id/showevents"
             android:textSize="16sp"
             android:layout_gravity="left"
-            android:background="#18376a"
+            android:background="@drawable/mybutton"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:text="TWEET SORT"/>

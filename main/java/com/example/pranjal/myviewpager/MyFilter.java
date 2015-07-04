@@ -2,6 +2,7 @@ package com.example.pranjal.myviewpager;
 
 import com.twitter.sdk.android.core.models.Tweet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,10 +14,13 @@ public class MyFilter {
     }
 
     public static List<Tweet> getFilteredList(List<Tweet> tList){
+        List<Tweet> resultList = new ArrayList<Tweet>();
+
         for(int i=0;i< tList.size();++i){
-            if(!checkit(tList.get(i)))
-                tList.remove(i);
+            if(checkit(tList.get(i)))
+                resultList.add(tList.get(i));
         }
-        return tList;
+
+        return resultList;
     }
 }

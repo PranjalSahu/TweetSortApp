@@ -261,13 +261,15 @@ public class MyFragment extends BaseFragment {
                                      int visibleItemCount, int totalItemCount) {
 
                     int visibleThreshold = 5;
-                    System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
+                    //System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
                     if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                         Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT);
                         loading = true;
-                        listView.addFooterView(footer);
+
+                        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
+                        //listView.addFooterView(footer);
                         mytweets();
-                        System.out.println("pranjal tweet footer scroll");
+                        //System.out.println("pranjal tweet footer scroll");
                         //System.out.println("Footer View Added");
                     }
                 }
@@ -295,8 +297,8 @@ public class MyFragment extends BaseFragment {
                         if(finalList.size() != 0)
                             tweetlist.addAll(0, finalList);
 
-                        tweetadapter.setTweets(tweetlist);
-                        listView.setAdapter(tweetadapter);
+                        //tweetadapter.setTweets(tweetlist);
+                        //listView.setAdapter(tweetadapter);
                         tweetadapter.notifyDataSetChanged();
                         mSwipeLayout.setRefreshing(false);
                     }
@@ -327,12 +329,13 @@ public class MyFragment extends BaseFragment {
                             lasttweetid = t.getId();
                         }
 
+                        //footer.setLayoutParams(new AbsListView.LayoutParams(0, 0));
                         //footer.setVisibility(View.INVISIBLE);
-                        tweetadapter.setTweets(tweetlist);
-                        listView.setAdapter(tweetadapter);
+                        //tweetadapter.setTweets(tweetlist);
+                        //listView.setAdapter(tweetadapter);
                         tweetadapter.notifyDataSetChanged();
                         loading = false;
-                        listView.removeFooterView(footer);
+                        //listView.removeFooterView(footer);
                     }
 
                     @Override
@@ -382,7 +385,9 @@ public class MyFragment extends BaseFragment {
                         });*/
 
                         mySetOnScrollListener(storedActivity);
-                        //listView.addFooterView(footer);
+                        listView.addFooterView(footer);
+                        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
+
                         //listView.removeFooterView(footer);
                         listView.setAdapter(mAdAdapter);
                         linlaHeaderProgress.setVisibility(View.GONE);

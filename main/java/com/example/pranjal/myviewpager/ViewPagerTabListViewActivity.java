@@ -23,7 +23,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,14 +37,11 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
-
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -103,7 +99,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         bt1 = (Button)findViewById(R.id.showevents);
 
-        bt1.setOnTouchListener(new View.OnTouchListener() {
+        /*bt1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 System.out.println("pranjal touch ");
@@ -135,7 +131,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
                 return true;
             }
-        });
+        });*/
 
         username = currentSession.getUserName();
 
