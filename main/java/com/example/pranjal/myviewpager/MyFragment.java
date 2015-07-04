@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -70,6 +71,10 @@ public class MyFragment extends BaseFragment {
     TwitterSession ts = null;
     LinearLayout        mLayout;
 
+    Long lastDisplayTweetId  = null;
+    Long firstDisplayTweetId = null;
+
+    List<Tweet> loadingTweets;
     List<Tweet> tweetlist;
     List<Tweet> tempTweetList;      // for storing in sorted order
 
@@ -144,7 +149,6 @@ public class MyFragment extends BaseFragment {
         storedActivity = activity;
 
         LoadFirst();
-        LoadTweets();
     }
 
     public void setAppState( Context baseContext, StatusesService statusesService,
@@ -251,38 +255,47 @@ public class MyFragment extends BaseFragment {
 
         twitter1         = new TwitterFactory(config.build()).getInstance();
         tweetlist        = new ArrayList<Tweet>();
+        loadingTweets    = new ArrayList<Tweet>();
         return view;
     }
 
     void LoadFirst(){
         lasttweetid  = TweetBank.lasttweetid;
         firsttweetid = TweetBank.firsttweetid;
-        tweetlist = new ArrayList<Tweet>();
-
-        for (int i = 1; i < TweetBank.tweetlist.size(); ++i) {
-            Tweet t = TweetBank.tweetlist.get(i);
-            if ((filterTweets && MyFilter.checkit(t)) || !filterTweets)
-                tweetlist.add(t);
-        }
-
-        if(tweetlist != null && tweetlist.size() > 0) {
-            tweetadapter.setTweets(tweetlist);
-            //tempTweetList = new ArrayList<Tweet>(tweetlist);
-
-            tweetadapter.notifyDataSetChanged();
-            mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
-
-            mySetOnScrollListener(storedActivity);
-            listView.addFooterView(footer);
-            footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
-
-            listView.setAdapter(mAdAdapter);
-            linlaHeaderProgress.setVisibility(View.GONE);
-            System.out.println("TWEETS LOADED " + lasttweetid);
-            loading = false;
-        }
+        tweetlist    = new ArrayList<Tweet>();
+        tweetadapter.setTweets(tweetlist);
+        LoadTweets();
         return;
     }
+
+    void refreshAdapter(){
+        tweetadapter.notifyDataSetChanged();
+        tempTweetList = new ArrayList<Tweet>(tweetlist);
+        mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
+        loadingTweets.clear();
+        System.out.println("Size of tweelist is "+tweetlist.size());
+        loading = false;
+    }
+
+    public class LoadTwitterFeed extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            FetchTweetsOld();
+            return null;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //listView.addFooterView(footer);
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            tweetlist.addAll(loadingTweets);
+            refreshAdapter();
+            System.out.println("LOADING DONE");
+        }
+    }
+
 
     public void mySetOnScrollListener(final Activity activity){
 
@@ -299,12 +312,8 @@ public class MyFragment extends BaseFragment {
                     if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                         Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT);
                         loading = true;
-
                         footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
-                        //listView.addFooterView(footer);
-                        mytweets();
-                        //System.out.println("pranjal tweet footer scroll");
-                        //System.out.println("Footer View Added");
+                        DisplayTweetsOld();
                     }
                 }
             };
@@ -321,17 +330,17 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void success(Result<List<Tweet>> result) {
                         List<Tweet> ls = result.data;
-                        if(ls.size() <= 0)
+                        if (ls.size() <= 0)
                             return;
 
                         firsttweetid = ls.get(0).getId();
                         List<Tweet> finalList;
-                        if(filterTweets)
+                        if (filterTweets)
                             finalList = MyFilter.getFilteredList(ls);
                         else
                             finalList = ls;
 
-                        if(finalList.size() != 0)
+                        if (finalList.size() != 0)
                             tweetlist.addAll(0, finalList);
 
                         //tweetadapter.setTweets(tweetlist);
@@ -358,8 +367,9 @@ public class MyFragment extends BaseFragment {
 
                         for (int i = 1; i < ls.size(); ++i) {
                             Tweet t = ls.get(i);
+                            TweetBank.sqlitehelper.insertTweet(TweetBank.WriteAbleDB, t);
 
-                            if((filterTweets && MyFilter.checkit(t)) || !filterTweets)
+                            if ((filterTweets && MyFilter.checkit(t)) || !filterTweets)
                                 tweetlist.add(t);
 
                             tempTweetList = new ArrayList<Tweet>(tweetlist);
@@ -387,9 +397,56 @@ public class MyFragment extends BaseFragment {
         );
     }
 
+    public void DisplayTweetsNew(){
+
+    }
+
+    public void FetchTweetsOld(){
+        List<Tweet> temp = new ArrayList<Tweet>();
+        int count = 0;
+
+        if(lastDisplayTweetId == null){
+            for(int i=0; i < TweetBank.tweetlist.size() && count < 10; ++i){
+                temp.add(TweetBank.tweetlist.get(i));
+                ++count;
+                lastDisplayTweetId = TweetBank.tweetlist.get(i).id;
+                System.out.println("lastDisplayTweetId NULL: "+lastDisplayTweetId);
+            }
+        }
+        else {
+            for (int i=0; i < TweetBank.tweetlist.size() && count < 10; ++i) {
+                if (TweetBank.tweetlist.get(i).id < lastDisplayTweetId) {
+                    temp.add(TweetBank.tweetlist.get(i));
+                    ++count;
+                    lastDisplayTweetId = TweetBank.tweetlist.get(i).id;
+                    System.out.println("lastDisplayTweetId : "+lastDisplayTweetId);
+                }
+            }
+        }
+        loadingTweets = temp;
+    }
+
+    public List<Tweet> FetchTweetsNew(){
+        return null;
+    }
+
+    public void DisplayTweetsOld(){
+        new LoadTwitterFeed().execute("0", "10");
+
+        mySetOnScrollListener(storedActivity);
+        listView.addFooterView(footer);
+        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
+
+        listView.setAdapter(mAdAdapter);
+        linlaHeaderProgress.setVisibility(View.GONE);
+        System.out.println("TWEETS LOADED " + lasttweetid);
+        loading = false;
+    }
+
+
     public void LoadTweets() {
 
-        statusesService.homeTimeline(10, null, lasttweetid, false, true, false, true,
+        statusesService.homeTimeline(150, null, lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
                     public void success(Result<List<Tweet>> result) {
@@ -397,41 +454,15 @@ public class MyFragment extends BaseFragment {
 
                         for (int i = 1; i < ls.size(); ++i) {
                             Tweet t = ls.get(i);
+                            TweetBank.sqlitehelper.insertTweet(TweetBank.WriteAbleDB, t);
+                            TweetBank.tweetlist.add(t);
+
                             if(firsttweetid != null)
                                 firsttweetid = t.getId();
-
-                            if((filterTweets && MyFilter.checkit(t)) || !filterTweets)
-                                tweetlist.add(t);
-
                             lasttweetid = t.getId();
                         }
-                        tweetadapter.setTweets(tweetlist);
-                        tempTweetList = new ArrayList<Tweet>(tweetlist);
 
-                        tweetadapter.notifyDataSetChanged();
-                        mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
-
-                        /*mAdAdapter.setAdLoadedListener(new MoPubNativeAdLoadedListener() {
-                            @Override
-                            public void onAdLoaded(int i) {
-
-                            }
-
-                            @Override
-                            public void onAdRemoved(int i) {
-
-                            }
-                        });*/
-
-                        mySetOnScrollListener(storedActivity);
-                        listView.addFooterView(footer);
-                        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
-
-                        //listView.removeFooterView(footer);
-                        listView.setAdapter(mAdAdapter);
-                        linlaHeaderProgress.setVisibility(View.GONE);
-                        System.out.println("TWEETS LOADED " + lasttweetid);
-                        loading = false;
+                        DisplayTweetsOld();
                     }
 
                     @Override

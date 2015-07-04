@@ -92,9 +92,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(MySQLiteHelper.COLUMN_DATA, tweet_json);
         values.put(MySQLiteHelper.COLUMN_ID, tweet.id);
 
-        db.replace(TWEETS_TABLE_NAME, null, values);
+        //db.replace(TWEETS_TABLE_NAME, null, values);
         //db.()
-        //db.insert(TWEETS_TABLE_NAME, null, values);
+        db.insert(TWEETS_TABLE_NAME, null, values);
+        System.out.println("size of db pranjal is " + getSizeOfDB(db));
     }
 
     public List<Tweet> getTweetsFromDb(SQLiteDatabase db, int size){

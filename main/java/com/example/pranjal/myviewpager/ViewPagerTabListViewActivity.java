@@ -17,7 +17,6 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -59,7 +58,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        sqlitehelper.storeState(WriteAbleDB);
+        //sqlitehelper.storeState(WriteAbleDB);
         finish();
     }
 
@@ -89,9 +88,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private Button bt1;
     View footer;
 
-    MySQLiteHelper sqlitehelper     = null;
-    private SQLiteDatabase WriteAbleDB;
-    private SQLiteDatabase ReadAbleDB;
 
     @Override
     protected void onPause() {
@@ -106,12 +102,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         //getSupportActionBar().hide();
         setContentView(R.layout.activity_viewpagertab);
 
-        sqlitehelper = new MySQLiteHelper(this.getApplicationContext());
-        WriteAbleDB  = sqlitehelper.getWritableDatabase();
-        ReadAbleDB   = sqlitehelper.getReadableDatabase();
-
-        TweetBank.tweetlist = sqlitehelper.getTweetsFromDb(ReadAbleDB, 100);
-        
+        TweetBank.init(this.getApplicationContext());
+        TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         baseContext = this.getApplication().getBaseContext();
