@@ -49,9 +49,9 @@
             android:label="My App"
             android:theme="@style/AppTheme.Toolbar"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <activity

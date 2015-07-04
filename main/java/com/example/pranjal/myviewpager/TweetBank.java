@@ -18,14 +18,14 @@ public class TweetBank {
 
     public static MySQLiteHelper sqlitehelper = null;
     public static SQLiteDatabase WriteAbleDB  = null;
-    public static SQLiteDatabase ReadAbleDB   = null;
 
 
     public static void init(Context ct){
         sqlitehelper = new MySQLiteHelper(ct);
         WriteAbleDB  = sqlitehelper.getWritableDatabase();
-        ReadAbleDB   = sqlitehelper.getReadableDatabase();
         tweetlist = new ArrayList<Tweet>();
+
+        sqlitehelper.clearDb(WriteAbleDB);
     }
 
 }

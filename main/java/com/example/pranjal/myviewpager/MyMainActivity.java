@@ -68,11 +68,13 @@ public class MyMainActivity extends AppCompatActivity {
         Parse.initialize(this, "RO9EX10OE04h3ZEnFzuiddMpRgADGjt5K40eLfWH", "SHhX4ewjms9uTrYPb67M3kcJYvMMYH9aK6aXur24");
 
 
+
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", "bar");
         testObject.saveInBackground();
 
 
+        System.out.println("zooweemama");
         if (currentSession == null) {
             System.out.println("NULL POINTER EXCEPTION");
             Intent intent = new Intent(MyMainActivity.this, LoginActivity.class);

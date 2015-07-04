@@ -47,7 +47,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         int beforesize = getSizeOfDB(db);
         System.out.println("size of db before cleardb "+beforesize);
-        //System.out.println();
 
         if(beforesize < 200) {
             System.out.println("returning size is "+beforesize);
@@ -57,7 +56,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         while (i< size) {
             String tweetString = cursor.getString(1);
             Tweet t1          = gson.fromJson(tweetString, Tweet.class);
-            //if(t1.createdAt)
             cursor.moveToNext();
             ++i;
         }
@@ -67,9 +65,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             ++tempcount;
             String tweetString = cursor.getString(1);
             Tweet t1          = gson.fromJson(tweetString, Tweet.class);
-            //db.rawQuery("delete from TweetsTable where TweetId = " + t1.id, null);
             int delete = db.delete(TWEETS_TABLE_NAME, "TweetId = " + t1.id, null);
-            System.out.println("pranjal tweet "+delete);
             cursor.moveToNext();
         }
 
@@ -85,7 +81,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return;
     }
 
-    public void insertTweet(SQLiteDatabase db, Tweet tweet) {
+    public long insertTweet(SQLiteDatabase db, Tweet tweet) {
         String tweet_json = gson.toJson(tweet);
 
         ContentValues values = new ContentValues();
@@ -94,8 +90,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         //db.replace(TWEETS_TABLE_NAME, null, values);
         //db.()
-        db.insert(TWEETS_TABLE_NAME, null, values);
-        System.out.println("size of db pranjal is " + getSizeOfDB(db));
+        return db.insert(TWEETS_TABLE_NAME, null, values);
     }
 
     public List<Tweet> getTweetsFromDb(SQLiteDatabase db, int size){

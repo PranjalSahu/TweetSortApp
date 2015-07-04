@@ -60,6 +60,30 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:text="TWEET SORT"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/myRadioGroup"
+                android:checkedButton="@+id/sound" >
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/favoritesort"
+                    android:textColor="#FFFFFF"
+                    android:text="Favourite" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/retweetsort"
+                    android:textColor="#FFFFFF"
+                    android:text="Retweet" />
+
+            </RadioGroup>
+
         </android.support.v7.widget.Toolbar>
 
         <com.example.pranjal.myviewpager.SlidingTabLayout

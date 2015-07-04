@@ -17,6 +17,8 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -54,6 +56,14 @@ import io.fabric.sdk.android.Fabric;
  * https://github.com/google/iosched
  */
 public class ViewPagerTabListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     @Override
     public void onBackPressed() {
@@ -102,6 +112,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         //getSupportActionBar().hide();
         setContentView(R.layout.activity_viewpagertab);
 
+        System.out.println("zooweemama1");
+
+
         TweetBank.init(this.getApplicationContext());
         TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
 
@@ -119,6 +132,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         bt1 = (Button)findViewById(R.id.showevents);
 
+        bt1.setText("TWEET SORT");
         bt1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -267,10 +281,10 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         MyFragment myfg = (MyFragment)fg;
 
         if(myfg.currentState == 0){
-            bt1.setText("ORIGINAL");
+            bt1.setText("ORIGINAL1");
         }
         else
-            bt1.setText("TWEET SORT");
+            bt1.setText("TWEET SORT1");
 
         return fg;
     }

@@ -20,6 +20,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -71,8 +73,8 @@ public class MyFragment extends BaseFragment {
     TwitterSession ts = null;
     LinearLayout        mLayout;
 
-    Long lastDisplayTweetId  = null;
-    Long firstDisplayTweetId = null;
+    Long lastDisplayTweetId  = Long.MIN_VALUE;
+    Long firstDisplayTweetId = Long.MAX_VALUE;
 
     List<Tweet> loadingTweets;
     List<Tweet> tweetlist;
@@ -91,6 +93,7 @@ public class MyFragment extends BaseFragment {
     Long              firsttweetid   = null;
     Long              lasttweetid    = null;
     boolean           loading        = false;
+    boolean           downloading = false;
     SharedPreferences prefs          = null;
     ProgressBar headerProgress       = null;
     LinearLayout myLayout;
@@ -120,6 +123,13 @@ public class MyFragment extends BaseFragment {
     View footer;
 
     AbsListView.OnScrollListener listenerObject = null;
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) storedActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -267,13 +277,28 @@ public class MyFragment extends BaseFragment {
         return;
     }
 
+    boolean checkToLoad(){
+        int sizeOfDb = TweetBank.sqlitehelper.getSizeOfDB(TweetBank.WriteAbleDB);
+        System.out.println("SIZE DIFFERENCE IS "+sizeOfDb+ " "+tweetlist.size());
+        if(sizeOfDb - tweetlist.size() < 50)
+            return true;
+        else
+            return false;
+    }
+
     void refreshAdapter(){
         tweetadapter.notifyDataSetChanged();
         tempTweetList = new ArrayList<Tweet>(tweetlist);
         mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
+        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
         loadingTweets.clear();
         System.out.println("Size of tweelist is " + tweetlist.size());
+        linlaHeaderProgress.setVisibility(View.GONE);//linlaHeaderProgress.getvisi
         loading = false;
+
+        if(checkToLoad() && downloading == false){
+            LoadTweets();
+        }
     }
 
     public class LoadTwitterFeed extends AsyncTask<String, Integer, String> {
@@ -285,13 +310,13 @@ public class MyFragment extends BaseFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
             //listView.addFooterView(footer);
         }
         @Override
         protected void onPostExecute(String result) {
             tweetlist.addAll(loadingTweets);
             tweetadapter.setTweets(tweetlist);
-
             refreshAdapter();
             System.out.println("LOADING DONE");
         }
@@ -308,10 +333,10 @@ public class MyFragment extends BaseFragment {
                 public void onScroll(AbsListView view, int firstVisibleItem,
                                      int visibleItemCount, int totalItemCount) {
 
-                    int visibleThreshold = 5;
+                    int visibleThreshold = 1;
                     //System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
                     if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                        Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT);
+                        //Toast.makeText(activity, "END REACHED", Toast.LENGTH_SHORT).show();
                         loading = true;
                         footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
                         DisplayTweetsOld();
@@ -404,49 +429,151 @@ public class MyFragment extends BaseFragment {
 
     public void FetchTweetsOld(){
         List<Tweet> temp = new ArrayList<Tweet>();
-        int count = 0;
+        int count        = 0;
 
-        if(lastDisplayTweetId == null){
+        System.out.println("BANK SIZE is " + TweetBank.tweetlist.size());
+
+        if(lastDisplayTweetId == Long.MIN_VALUE){
             for(int i=0; i < TweetBank.tweetlist.size() && count < 10; ++i){
-                temp.add(TweetBank.tweetlist.get(i));
-                ++count;
-                lastDisplayTweetId = TweetBank.tweetlist.get(i).id;
+                System.out.println("SEE :"+TweetBank.tweetlist.get(i).id +" "+lastDisplayTweetId);
+
+                if ((filterTweets && MyFilter.checkit(TweetBank.tweetlist.get(i))) || !filterTweets) {
+                    temp.add(TweetBank.tweetlist.get(i));
+                    ++count;
+                }
+                lastDisplayTweetId  = TweetBank.tweetlist.get(i).id;
                 System.out.println("lastDisplayTweetId NULL: "+lastDisplayTweetId);
             }
+            if(temp.size() > 0)
+                firstDisplayTweetId = temp.get(0).id;
         }
         else {
             for (int i=0; i < TweetBank.tweetlist.size() && count < 10; ++i) {
+                System.out.println("SEE :"+TweetBank.tweetlist.get(i).id +" "+lastDisplayTweetId);
+
                 if (TweetBank.tweetlist.get(i).id < lastDisplayTweetId) {
-                    temp.add(TweetBank.tweetlist.get(i));
-                    ++count;
+                    if ((filterTweets && MyFilter.checkit(TweetBank.tweetlist.get(i))) || !filterTweets) {
+                        temp.add(TweetBank.tweetlist.get(i));
+                        ++count;
+                    }
                     lastDisplayTweetId = TweetBank.tweetlist.get(i).id;
                     System.out.println("lastDisplayTweetId : "+lastDisplayTweetId);
                 }
             }
         }
+
+        System.out.println("reloaded size is "+temp.size());
         loadingTweets = temp;
     }
 
-    public List<Tweet> FetchTweetsNew(){
-        return null;
+    public void FetchTweetsNew(){
+        List<Tweet> temp = new ArrayList<Tweet>();
+        int count        = 0;
+
+        System.out.println("BANK SIZE is " + TweetBank.tweetlist.size());
+
+        if(lastDisplayTweetId == Long.MIN_VALUE){
+            for(int i=0; i < TweetBank.tweetlist.size() && count < 10; ++i){
+                System.out.println("SEE :"+TweetBank.tweetlist.get(i).id +" "+lastDisplayTweetId);
+
+                if ((filterTweets && MyFilter.checkit(TweetBank.tweetlist.get(i))) || !filterTweets) {
+                    temp.add(TweetBank.tweetlist.get(i));
+                    ++count;
+                }
+                lastDisplayTweetId  = TweetBank.tweetlist.get(i).id;
+                System.out.println("lastDisplayTweetId NULL: "+lastDisplayTweetId);
+            }
+            if(temp.size() > 0)
+                firstDisplayTweetId = temp.get(0).id;
+        }
+        else {
+            for (int i=0; i < TweetBank.tweetlist.size() && count < 10; ++i) {
+                System.out.println("SEE :"+TweetBank.tweetlist.get(i).id +" "+lastDisplayTweetId);
+
+                if (TweetBank.tweetlist.get(i).id < lastDisplayTweetId) {
+                    if ((filterTweets && MyFilter.checkit(TweetBank.tweetlist.get(i))) || !filterTweets) {
+                        temp.add(TweetBank.tweetlist.get(i));
+                        ++count;
+                    }
+                    lastDisplayTweetId = TweetBank.tweetlist.get(i).id;
+                    System.out.println("lastDisplayTweetId : "+lastDisplayTweetId);
+                }
+            }
+        }
+
+        System.out.println("reloaded size is "+temp.size());
+        loadingTweets = temp;
     }
+
+    public void DisplayTweetsOldFirst(){
+        new LoadTwitterFeed().execute("0", "10");
+
+        mySetOnScrollListener(storedActivity);
+        //listView.addFooterView(footer);
+        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
+
+        listView.setAdapter(mAdAdapter);
+        //System.out.println("TWEETS LOADED " + lasttweetid);
+        loading = false;
+    }
+
 
     public void DisplayTweetsOld(){
         new LoadTwitterFeed().execute("0", "10");
 
         mySetOnScrollListener(storedActivity);
-        listView.addFooterView(footer);
+        //listView.addFooterView(footer);
         footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
-
-        listView.setAdapter(mAdAdapter);
-        linlaHeaderProgress.setVisibility(View.GONE);
         System.out.println("TWEETS LOADED " + lasttweetid);
         loading = false;
     }
 
 
-    public void LoadTweets() {
+    public void LoadTweetsFirst() {
+        System.out.println("LOADING LOADING LOADING LOADING");
+        downloading = true;
+        statusesService.homeTimeline(150, null, lasttweetid, false, true, false, true,
+                new Callback<List<Tweet>>() {
+                    @Override
+                    public void success(Result<List<Tweet>> result) {
+                        List<Tweet> ls = result.data;
 
+                        for (int i = 1; i < ls.size(); ++i) {
+
+                            Tweet t = ls.get(i);
+                            long temp = TweetBank.sqlitehelper.insertTweet(TweetBank.WriteAbleDB, t);
+
+                            if(temp == -1){
+                                Toast.makeText(storedActivity, "ALREADY PRESENT", Toast.LENGTH_SHORT).show();
+                                downloading = false;
+                                DisplayTweetsOldFirst();
+                                return;
+                            }
+                            TweetBank.tweetlist.add(t);
+
+                            if(firsttweetid != null)
+                                firsttweetid = t.getId();
+                            lasttweetid = t.getId();
+                        }
+
+                        downloading = false;
+                        DisplayTweetsOldFirst();
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        exception.printStackTrace();
+                        System.out.println("EXCEPTION FAILED TWITTER");
+                        loading = false;
+                        downloading = false;
+                    }
+                }
+        );
+    }
+
+    public void LoadTweets() {
+        downloading = true;
+        System.out.println("LOADING LOADING LOADING LOADING");
         statusesService.homeTimeline(150, null, lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
@@ -462,7 +589,7 @@ public class MyFragment extends BaseFragment {
                                 firsttweetid = t.getId();
                             lasttweetid = t.getId();
                         }
-
+                        downloading = false;
                         DisplayTweetsOld();
                     }
 
@@ -471,6 +598,7 @@ public class MyFragment extends BaseFragment {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
                         loading = false;
+                        downloading = false;
                     }
                 }
         );

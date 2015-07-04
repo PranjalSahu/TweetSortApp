@@ -29,6 +29,10 @@ public class LoginActivity extends Activity {
                 currentSession = result.data;
                 MyApplication appState = ((MyApplication)getApplicationContext());
                 appState.currentSession = currentSession;
+
+                Intent intent = new Intent(LoginActivity.this, ViewPagerTabListViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                appState.startActivity(intent);
             }
 
             @Override
@@ -41,6 +45,7 @@ public class LoginActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         loginButton.onActivityResult(requestCode, resultCode, data);
+
     }
 
 }
