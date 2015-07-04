@@ -81,6 +81,8 @@ public class MyFragment extends BaseFragment {
     MoPubAdAdapter mAdAdapter;
 
 
+    int currentState = 0;
+
     Long              firsttweetid   = null;
     Long              lasttweetid    = null;
     boolean           loading        = false;
@@ -140,6 +142,8 @@ public class MyFragment extends BaseFragment {
         //mySetOnScrollListener(activity);
 
         storedActivity = activity;
+
+        LoadFirst();
         LoadTweets();
     }
 
@@ -250,6 +254,36 @@ public class MyFragment extends BaseFragment {
         return view;
     }
 
+    void LoadFirst(){
+        lasttweetid  = TweetBank.lasttweetid;
+        firsttweetid = TweetBank.firsttweetid;
+        tweetlist = new ArrayList<Tweet>();
+
+        for (int i = 1; i < TweetBank.tweetlist.size(); ++i) {
+            Tweet t = TweetBank.tweetlist.get(i);
+            if ((filterTweets && MyFilter.checkit(t)) || !filterTweets)
+                tweetlist.add(t);
+        }
+
+        if(tweetlist != null && tweetlist.size() > 0) {
+            tweetadapter.setTweets(tweetlist);
+            //tempTweetList = new ArrayList<Tweet>(tweetlist);
+
+            tweetadapter.notifyDataSetChanged();
+            mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
+
+            mySetOnScrollListener(storedActivity);
+            listView.addFooterView(footer);
+            footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 0));
+
+            listView.setAdapter(mAdAdapter);
+            linlaHeaderProgress.setVisibility(View.GONE);
+            System.out.println("TWEETS LOADED " + lasttweetid);
+            loading = false;
+        }
+        return;
+    }
+
     public void mySetOnScrollListener(final Activity activity){
 
         if(listenerObject == null) {
@@ -287,6 +321,9 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void success(Result<List<Tweet>> result) {
                         List<Tweet> ls = result.data;
+                        if(ls.size() <= 0)
+                            return;
+
                         firsttweetid = ls.get(0).getId();
                         List<Tweet> finalList;
                         if(filterTweets)
@@ -325,6 +362,7 @@ public class MyFragment extends BaseFragment {
                             if((filterTweets && MyFilter.checkit(t)) || !filterTweets)
                                 tweetlist.add(t);
 
+                            tempTweetList = new ArrayList<Tweet>(tweetlist);
                             //tweetlist.add(t);
                             lasttweetid = t.getId();
                         }
@@ -335,6 +373,7 @@ public class MyFragment extends BaseFragment {
                         //listView.setAdapter(tweetadapter);
                         tweetadapter.notifyDataSetChanged();
                         loading = false;
+                        System.out.println("TWEETS LOADED " + lasttweetid);
                         //listView.removeFooterView(footer);
                     }
 

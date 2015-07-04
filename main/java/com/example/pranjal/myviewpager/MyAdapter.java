@@ -120,7 +120,7 @@ public class MyAdapter extends TweetViewAdapter {
                 }
                 if(child instanceof ImageView){
                     ImageView tmp = ((ImageView) child);
-                    System.out.println("pranjaldisable : checking ImageView " + child.getId());
+                    //System.out.println("pranjaldisable : checking ImageView " + child.getId());
                     //return;
                 }
                 child.setEnabled(false);
@@ -158,18 +158,18 @@ public class MyAdapter extends TweetViewAdapter {
             }
             else {
                 iv2.setImageResource(R.drawable.retweet_on);
-                System.out.println("pranjalupdate retweeton "+tweet.id);
+                //System.out.println("pranjalupdate retweeton "+tweet.id);
             }
 
             iv3.setTag(tweet);
             iv3.setTag(R.string.tweetposition, position);
             if (!tweet.favorited) {
                 iv3.setImageResource(R.drawable.favorite);
-                System.out.println("1pranjalupdate favorite " + tweet.id);
+                //System.out.println("1pranjalupdate favorite " + tweet.id);
             }
             else {
                 iv3.setImageResource(R.drawable.favorite_on);
-                System.out.println("1pranjalupdate favoriteon " + tweet.id);
+                //System.out.println("1pranjalupdate favoriteon " + tweet.id);
             }
 
             iv1.setImageResource(R.drawable.abc_item_background_holo_dark);

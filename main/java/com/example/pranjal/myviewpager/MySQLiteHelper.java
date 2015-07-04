@@ -73,10 +73,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
 
-
         System.out.println("checking count "+tempcount);
         cursor.close();
         System.out.println("size of db after cleardb "+getSizeOfDB(db));
+    }
+
+    public void storeState(SQLiteDatabase db){
+        for(Tweet t:TweetBank.tweetlist)
+            insertTweet(db, t);
+        clearDb(db);
+        return;
     }
 
     public void insertTweet(SQLiteDatabase db, Tweet tweet) {
@@ -84,10 +90,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_DATA, tweet_json);
-
         values.put(MySQLiteHelper.COLUMN_ID, tweet.id);
 
-        db.insert(TWEETS_TABLE_NAME, null, values);
+        db.replace(TWEETS_TABLE_NAME, null, values);
+        //db.()
+        //db.insert(TWEETS_TABLE_NAME, null, values);
     }
 
     public List<Tweet> getTweetsFromDb(SQLiteDatabase db, int size){
@@ -97,7 +104,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         int i=0;
-        while (i< size) {
+        while (i< size && i < cursor.getCount()) {
             String tweetString = cursor.getString(1);
             Tweet t1          = gson.fromJson(tweetString, Tweet.class);
             tweets.add(t1);

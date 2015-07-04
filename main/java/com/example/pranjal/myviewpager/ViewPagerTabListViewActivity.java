@@ -17,12 +17,14 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,11 +39,14 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
+
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -50,6 +55,13 @@ import io.fabric.sdk.android.Fabric;
  * https://github.com/google/iosched
  */
 public class ViewPagerTabListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sqlitehelper.storeState(WriteAbleDB);
+        finish();
+    }
 
     int currentState = 0;
 
@@ -77,13 +89,29 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private Button bt1;
     View footer;
 
+    MySQLiteHelper sqlitehelper     = null;
+    private SQLiteDatabase WriteAbleDB;
+    private SQLiteDatabase ReadAbleDB;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getSupportActionBar().hide();
         setContentView(R.layout.activity_viewpagertab);
 
+        sqlitehelper = new MySQLiteHelper(this.getApplicationContext());
+        WriteAbleDB  = sqlitehelper.getWritableDatabase();
+        ReadAbleDB   = sqlitehelper.getReadableDatabase();
 
+        TweetBank.tweetlist = sqlitehelper.getTweetsFromDb(ReadAbleDB, 100);
+        
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         baseContext = this.getApplication().getBaseContext();
@@ -99,7 +127,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         bt1 = (Button)findViewById(R.id.showevents);
 
-        /*bt1.setOnTouchListener(new View.OnTouchListener() {
+        bt1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 System.out.println("pranjal touch ");
@@ -110,28 +138,26 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
 
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (currentState == 0) {
+                    if (fg.currentState == 0) {
                         List<Tweet> tListTemp = fg.tempTweetList;
                         HelperFunctions.sortTweets(1, tListTemp, mya, olv);
                         fg.tweetadapter.setTweets(tListTemp);
                         fg.tweetadapter.notifyDataSetChanged();
                         olv.smoothScrollToPosition(0);
                         bt1.setText("ORIGINAL");
-                        currentState = 1;
+                        fg.currentState = 1;
                     } else {
                         fg.tweetadapter.setTweets(tList);
                         fg.tweetadapter.notifyDataSetChanged();
                         olv.smoothScrollToPosition(0);
                         bt1.setText("TWEET SORT");
-                        currentState = 0;
+                        fg.currentState = 0;
                     }
-                    //getActionBar().setTitle("Pranjal");
-                    //getSupportActionBar().setTitle("Pranjal");
                 }
 
                 return true;
             }
-        });*/
+        });
 
         username = currentSession.getUserName();
 
@@ -245,7 +271,16 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     }
 
     private Fragment getCurrentFragment() {
-        return mPagerAdapter.getItemAt(mPager.getCurrentItem());
+        Fragment fg = mPagerAdapter.getItemAt(mPager.getCurrentItem());
+        MyFragment myfg = (MyFragment)fg;
+
+        if(myfg.currentState == 0){
+            bt1.setText("ORIGINAL");
+        }
+        else
+            bt1.setText("TWEET SORT");
+
+        return fg;
     }
 
     private void propagateToolbarState(boolean isShown) {
