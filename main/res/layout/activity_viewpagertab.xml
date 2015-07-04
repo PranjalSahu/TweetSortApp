@@ -50,23 +50,42 @@
             app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:theme="@style/Toolbar">
      <!--            android:background="#18376a"-->
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:id="@+id/showevents"
-            android:textSize="16sp"
-            android:layout_gravity="left"
-            android:background="@drawable/mybutton"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:text="TWEET SORT"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tweetsorttext"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:textSize="23dp"
+                    android:fontFamily="Arial"
+                    android:text="Tweet SORT"/>
+
+                <Switch
+                    android:id="@+id/togglebutton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tweetsorttext"
+                    android:gravity="left"
+                    android:showText="true"
+                    android:textOn="ON"
+                    android:textOff="OFF" />
+           </RelativeLayout>
 
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:id="@+id/myRadioGroup"
-                android:checkedButton="@+id/sound" >
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:checkedButton="@+id/retweetsort">
 
                 <RadioButton
                     android:layout_width="wrap_content"

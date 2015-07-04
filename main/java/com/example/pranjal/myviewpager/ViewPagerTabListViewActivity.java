@@ -25,9 +25,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
@@ -47,6 +48,7 @@ import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
@@ -68,7 +70,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //sqlitehelper.storeState(WriteAbleDB);
         finish();
     }
 
@@ -95,7 +96,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     String username                  = null;
 
-    private Button bt1;
+    private RadioGroup rg1;
+
     View footer;
 
 
@@ -116,7 +118,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
 
         TweetBank.init(this.getApplicationContext());
-        TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
+    //    TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         baseContext = this.getApplication().getBaseContext();
@@ -130,40 +132,58 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        bt1 = (Button)findViewById(R.id.showevents);
+        rg1 = (RadioGroup)findViewById(R.id.myRadioGroup);
+        Switch toggle = (Switch) findViewById(R.id.togglebutton);
 
-        bt1.setText("TWEET SORT");
-        bt1.setOnTouchListener(new View.OnTouchListener() {
+        rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                System.out.println("pranjal touch ");
-                MyFragment fg = (MyFragment)getCurrentFragment();
-                List<Tweet> tList =  fg.tweetlist;
-                MyAdapter   mya   =  fg.tweetadapter;
-                ObservableListView olv = fg.listView;
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                MyFragment fg = (MyFragment) getCurrentFragment();
+                ObservableListView olv  = fg.listView;
+                List<Tweet> tList       = fg.tweetlist;
+                MyAdapter mya           = fg.tweetadapter;
 
-
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (fg.currentState == 0) {
-                        List<Tweet> tListTemp = fg.tempTweetList;
+                if(currentState == 1) {
+                    List<Tweet> tListTemp = new ArrayList<Tweet>(fg.tweetlist);
+                    if (checkedId == R.id.favoritesort)
+                        HelperFunctions.sortTweets(2, tListTemp, mya, olv);
+                     else if (checkedId == R.id.retweetsort)
                         HelperFunctions.sortTweets(1, tListTemp, mya, olv);
-                        fg.tweetadapter.setTweets(tListTemp);
-                        fg.tweetadapter.notifyDataSetChanged();
-                        olv.smoothScrollToPosition(0);
-                        bt1.setText("ORIGINAL");
-                        fg.currentState = 1;
-                    } else {
-                        fg.tweetadapter.setTweets(tList);
-                        fg.tweetadapter.notifyDataSetChanged();
-                        olv.smoothScrollToPosition(0);
-                        bt1.setText("TWEET SORT");
-                        fg.currentState = 0;
-                    }
+                    fg.tweetadapter.setTweets(tListTemp);
+                    fg.tweetadapter.notifyDataSetChanged();
+                    olv.smoothScrollToPosition(0);
                 }
-
-                return true;
             }
         });
+
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                MyFragment fg = (MyFragment) getCurrentFragment();
+                ObservableListView olv = fg.listView;
+                List<Tweet> tList = fg.tweetlist;
+                MyAdapter mya = fg.tweetadapter;
+
+                if (isChecked) {
+                    currentState = 1;
+
+                    int sortBy = rg1.getCheckedRadioButtonId();
+                    if (sortBy == R.id.retweetsort)
+                        sortBy = 1;
+                    else
+                        sortBy = 2;
+
+                    List<Tweet> tListTemp = new ArrayList<Tweet>(fg.tweetlist);
+                    HelperFunctions.sortTweets(sortBy, tListTemp, mya, olv);
+                    fg.tweetadapter.setTweets(tListTemp);
+                } else {
+                    currentState = 0;
+                    fg.tweetadapter.setTweets(fg.tweetlist);
+                }
+                fg.tweetadapter.notifyDataSetChanged();
+                olv.smoothScrollToPosition(0);
+            }
+        });
+
 
         username = currentSession.getUserName();
 
@@ -279,13 +299,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private Fragment getCurrentFragment() {
         Fragment fg = mPagerAdapter.getItemAt(mPager.getCurrentItem());
         MyFragment myfg = (MyFragment)fg;
-
-        if(myfg.currentState == 0){
-            bt1.setText("ORIGINAL1");
-        }
-        else
-            bt1.setText("TWEET SORT1");
-
         return fg;
     }
 
