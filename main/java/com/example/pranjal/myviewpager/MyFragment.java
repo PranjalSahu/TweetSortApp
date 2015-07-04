@@ -263,7 +263,6 @@ public class MyFragment extends BaseFragment {
         lasttweetid  = TweetBank.lasttweetid;
         firsttweetid = TweetBank.firsttweetid;
         tweetlist    = new ArrayList<Tweet>();
-        tweetadapter.setTweets(tweetlist);
         LoadTweets();
         return;
     }
@@ -273,7 +272,7 @@ public class MyFragment extends BaseFragment {
         tempTweetList = new ArrayList<Tweet>(tweetlist);
         mAdAdapter.loadAds(MY_AD_UNIT_ID, mRequestParameters);
         loadingTweets.clear();
-        System.out.println("Size of tweelist is "+tweetlist.size());
+        System.out.println("Size of tweelist is " + tweetlist.size());
         loading = false;
     }
 
@@ -291,6 +290,8 @@ public class MyFragment extends BaseFragment {
         @Override
         protected void onPostExecute(String result) {
             tweetlist.addAll(loadingTweets);
+            tweetadapter.setTweets(tweetlist);
+
             refreshAdapter();
             System.out.println("LOADING DONE");
         }
