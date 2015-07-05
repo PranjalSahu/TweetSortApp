@@ -31,6 +31,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -315,8 +316,6 @@ public class MyFragment extends BaseFragment {
                     int visibleThreshold = 2;
                     //System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
                     if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                        loading = true;
-                        listView.addFooterView(footer);
                         LoadOldTweets();
                         //footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
                     }
@@ -353,7 +352,8 @@ public class MyFragment extends BaseFragment {
     }
 
     public void displayTweetsRecent(){
-        tweetlist.addAll(0, getFilteredRecent());
+        List<Tweet> filteredTweets = getFilteredRecent();
+        tweetlist.addAll(0, filteredTweets);
         tweetadapter.notifyDataSetChanged();
         mSwipeLayout.setRefreshing(false);
     }
@@ -398,11 +398,10 @@ public class MyFragment extends BaseFragment {
     }
 
     public void displayTweets(){
-        tweetlist.addAll(getFiltered());
+        List<Tweet> filteredTweets = getFiltered();
+        tweetlist.addAll(filteredTweets);
         tweetadapter.notifyDataSetChanged();
         mySetOnScrollListener(storedActivity);
-        listView.removeFooterView(footer);
-        loading = false;
     }
 
     public void displayTweetsFirst(){
@@ -421,8 +420,6 @@ public class MyFragment extends BaseFragment {
 
         listView.setAdapter(mAdAdapter);
         linlaHeaderProgress.setVisibility(View.GONE);
-        loading = false;
-
     }
 
     public void LoadOldTweetsFirst() {
@@ -453,6 +450,9 @@ public class MyFragment extends BaseFragment {
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
+                        Toast.makeText(storedActivity, "Check Network connectivity", Toast.LENGTH_LONG).show();
+                        linlaHeaderProgress.setVisibility(View.GONE);
+                        listView.removeFooterView(footer);
                         loading     = false;
                         downloading = false;
                     }
@@ -463,6 +463,7 @@ public class MyFragment extends BaseFragment {
     public void LoadOldTweets() {
         downloading = true;
         loading     = true;
+        listView.addFooterView(footer);
 
         System.out.println("LOADING LOADING LOADING LOADING");
         statusesService.homeTimeline(150, null, TweetBank.lasttweetid, false, true, false, true,
@@ -477,6 +478,7 @@ public class MyFragment extends BaseFragment {
                             }
                         }
                         displayTweets();
+                        listView.removeFooterView(footer);
                         loading     = false;
                         downloading = false;
                     }
@@ -485,9 +487,12 @@ public class MyFragment extends BaseFragment {
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
+                        displayTweets();
+                        listView.removeFooterView(footer);
                         loading     = false;
                         downloading = false;
                     }
+
                 }
         );
     }

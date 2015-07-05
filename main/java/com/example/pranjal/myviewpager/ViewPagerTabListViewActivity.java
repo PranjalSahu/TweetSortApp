@@ -369,7 +369,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     //private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
     private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
-        private static final String[] TITLES = new String[]{"Timeline", "Verified", "Check2"};
+        private static final String[] TITLES = new String[]{"Timeline", "Verified", "Images"};
 
         private int mScrollY;
 

@@ -29,6 +29,7 @@ public class TweetBank {
     public static List<Tweet> getOlderThan(Long id){
         List<Tweet> tempList  = new ArrayList<Tweet>();
         for (Tweet t: tweetlist) {         // TODO make it binary search
+            //t.entities.media.
             if(t.id < id)
                 tempList.add(t);
         }
