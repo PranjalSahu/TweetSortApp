@@ -46,6 +46,10 @@ public class LoginActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         loginButton.onActivityResult(requestCode, resultCode, data);
 
+
+        if(resultCode == 0)
+            finish();
+
     }
 
 }

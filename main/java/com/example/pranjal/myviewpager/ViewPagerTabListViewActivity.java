@@ -38,6 +38,9 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -70,6 +73,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(0);
+        //System.exit(0);
         finish();
     }
 
@@ -79,7 +84,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     private View mHeaderView;
     private View mToolbarView;
-    private int mBaseTranslationY;
+    private int  mBaseTranslationY;
     private ViewPager mPager;
     private NavigationAdapter mPagerAdapter;
     static MyApplication appState;
@@ -100,13 +105,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     View footer;
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-
-    }
+    protected ImageLoader imageLoader;
+    DisplayImageOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +116,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         System.out.println("zooweemama1");
 
+        // Create global configuration and initialize ImageLoader with this config
+        imageLoader = ImageLoader.getInstance();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 
         TweetBank.init(this.getApplicationContext());
     //    TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
@@ -317,7 +320,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
             // Skip destroyed or not created item
             Fragment f = mPagerAdapter.getItemAt(i);
-            if (f == null) {
+            if (f == null || f instanceof MyImageFragment) {
                 continue;
             }
 
@@ -383,24 +386,27 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         protected Fragment createItem(int position) {
-           // Fragment f = new ViewPagerTabListViewFragment();
-            //showToolbar();
-            MyFragment f = new MyFragment();
-            if(position == 1) {
-                Bundle b = new Bundle();
-                b.putBoolean("filter", true);
-                f.setArguments(b);
+            if(position == 2){
+                MyImageFragment f = new MyImageFragment();
+                return f;
             }
+            else {
+                MyFragment f = new MyFragment();
+                if (position == 1) {
+                    Bundle b = new Bundle();
+                    b.putBoolean("filter", true);
+                    f.setArguments(b);
+                }
 
-            if (0 < mScrollY) {
-                Bundle args = new Bundle();
-                args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
-                f.setArguments(args);
+                if (0 < mScrollY) {
+                    Bundle args = new Bundle();
+                    args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
+                    f.setArguments(args);
+                }
+
+                f.setAppState(baseContext, statusesService, accountService, favoriteService);
+                return f;
             }
-
-            f.setAppState(baseContext, statusesService, accountService, favoriteService);
-            //f.LoadTweets();
-            return f;
         }
 
         @Override

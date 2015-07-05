@@ -535,26 +535,6 @@ public class MyAdapter extends TweetViewAdapter {
             });
         }
 
-//        int distance = 100;
-//        LinearLayout animationView = (LinearLayout)rowView;
-//        AbsListView.LayoutParams params = new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-//        params.setMargins(30, 0, 30, 0);
-//        //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 0, 30, 0);
-//        //animationView.setMargins(30, 0, 30, 0);
-//        animationView.setLayoutParams(params);
-
-//        if(params != null) {
-//            params.rightMargin = -distance;
-//            params.leftMargin = distance;
-//            animationView.setLayoutParams(params);
-//        }
-//        else
-//            System.out.println("NULLPOINTER1");
-
-        //vt.setOnTouchListener(swipeDetector);
-        //Drawable dr = new Drawable();
-        //((LinearLayout) rowView).setBackground();
         return (View)rowView;
     }
 }

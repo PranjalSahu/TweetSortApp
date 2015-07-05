@@ -48,6 +48,16 @@ public class MyMainActivity extends AppCompatActivity {
     TwitterSession      currentSession = null;
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(resultCode){
+            case 0:
+                setResult(0);
+                finish();
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -79,12 +89,14 @@ public class MyMainActivity extends AppCompatActivity {
             System.out.println("NULL POINTER EXCEPTION");
             Intent intent = new Intent(MyMainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            appState.startActivity(intent);
+            startActivityForResult(intent, 1);
+            //appState.startActivity(intent);
         } else {
             System.out.println("Pranjal testing");
             Intent intent = new Intent(MyMainActivity.this, ViewPagerTabListViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            appState.startActivity(intent);
+            startActivityForResult(intent, 1);
+            //appState.startActivity(intent);
         }
 
     }
