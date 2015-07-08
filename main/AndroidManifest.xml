@@ -18,6 +18,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="My App1"
         android:theme="@style/AppTheme"
+        tools:replace="android:label"
         android:name="com.example.pranjal.myviewpager.MyApplication">
 
         <meta-data android:name="com.google.android.gms.version"
@@ -29,7 +30,8 @@
 
 
         <activity android:name=".MainActivity" > </activity>
-        <activity android:name=".ShowTweet" > </activity>
+        <activity android:name=".ShowTweet" android:theme="@style/Theme.Transparent"> </activity>
+        <activity android:name=".ShowImage" android:theme="@style/Theme.Transparent"> </activity>
         <activity android:name=".ShowUserProfile" > </activity>
         <activity android:name=".StartActivity" > </activity>
         <activity android:name=".LoginActivity" > </activity>
@@ -56,7 +58,7 @@
 
         <activity
             android:name="com.example.pranjal.myviewpager.MyMainActivity"
-            android:label="@string/app_name"
+            android:label="@string/my_app_name"
             android:theme="@style/AppTheme.Toolbar"
             android:screenOrientation="portrait">
             <intent-filter>

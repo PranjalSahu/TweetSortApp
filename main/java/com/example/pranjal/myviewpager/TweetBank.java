@@ -21,11 +21,12 @@ public class TweetBank {
     public static SQLiteDatabase WriteAbleDB  = null;
     static TreeMap<Long, Tweet> tweetmap      = null;
 
-    public static List<String> getAllImageUrls(){
-        List<String> tempList = new ArrayList<String>();
+    public static List<Tweet> getAllImageUrls(){
+        List<Tweet> tempList = new ArrayList<Tweet>();
         for(Tweet t: tweetlist){
             if(MyFilter.checkit(t) && t.entities != null &&  t.entities.media != null &&  t.entities.media.size() > 0)
-                tempList.add(t.entities.media.get(0).mediaUrl);
+                //tempList.add(t.entities.media.get(0).mediaUrl);
+                tempList.add(t);
         }
         return tempList;
     }
@@ -38,8 +39,8 @@ public class TweetBank {
 
     public static List<Tweet> getOlderThan(Long id){
         List<Tweet> tempList  = new ArrayList<Tweet>();
+        System.out.println("id: "+id +" lastTweetId: "+lasttweetid);
         for (Tweet t: tweetlist) {         // TODO make it binary search
-            //t.entities.media.
             if(t.id < id)
                 tempList.add(t);
         }

@@ -31,7 +31,6 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -86,7 +85,7 @@ public class MyFragment extends BaseFragment {
     MyAdapter         tweetadapter;
     MoPubAdAdapter mAdAdapter;
 
-
+    long lastTimeStamp;
     int currentState = 0;
 
     Long              firsttweetid   = null;
@@ -185,12 +184,17 @@ public class MyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tweet_list, container, false);
 
+        lastTimeStamp = System.currentTimeMillis();
+
         mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeLayout.setProgressViewOffset(false, 150, 200);
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                LoadRecentTweets();
+                long currentTimeStamp = System.currentTimeMillis();
+                if((currentTimeStamp - lastTimeStamp)/1000 >10)
+                    LoadRecentTweets();
+
             }
         });
 
@@ -314,8 +318,9 @@ public class MyFragment extends BaseFragment {
                                      int visibleItemCount, int totalItemCount) {
 
                     int visibleThreshold = 2;
+                    long currentTimeStamp = System.currentTimeMillis();
                     //System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
-                    if (loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+                    if ((currentTimeStamp - lastTimeStamp)/1000 >10 && loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                         LoadOldTweets();
                         //footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
                     }
@@ -338,6 +343,8 @@ public class MyFragment extends BaseFragment {
                                 TweetBank.insertTweet(t);
                             }
                         }
+                        lastTimeStamp = System.currentTimeMillis();
+
                         displayTweetsRecent();
                         downloading = false;
                         mSwipeLayout.setRefreshing(false);
@@ -346,6 +353,9 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
+                        lastTimeStamp = System.currentTimeMillis();
+
+                        displayTweetsRecent();
                     }
                 }
         );
@@ -438,6 +448,8 @@ public class MyFragment extends BaseFragment {
                             }
                         }
 
+                        lastTimeStamp = System.currentTimeMillis();
+
                         //lastDisplayTweetId  = TweetBank.lasttweetid;
                         //firstDisplayTweetId = TweetBank.firsttweetid;
 
@@ -450,7 +462,10 @@ public class MyFragment extends BaseFragment {
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
-                        Toast.makeText(storedActivity, "Check Network connectivity", Toast.LENGTH_LONG).show();
+                        lastTimeStamp = System.currentTimeMillis();
+                        displayTweetsFirst();
+                        // TODO make this toast when the internet connection is not present
+                        //Toast.makeText(storedActivity, "Check Network connectivity", Toast.LENGTH_LONG).show();
                         linlaHeaderProgress.setVisibility(View.GONE);
                         listView.removeFooterView(footer);
                         loading     = false;
@@ -477,6 +492,7 @@ public class MyFragment extends BaseFragment {
                                 TweetBank.insertTweet(t);
                             }
                         }
+                        lastTimeStamp = System.currentTimeMillis();
                         displayTweets();
                         listView.removeFooterView(footer);
                         loading     = false;
@@ -487,6 +503,7 @@ public class MyFragment extends BaseFragment {
                     public void failure(TwitterException exception) {
                         exception.printStackTrace();
                         System.out.println("EXCEPTION FAILED TWITTER");
+                        lastTimeStamp = System.currentTimeMillis();
                         displayTweets();
                         listView.removeFooterView(footer);
                         loading     = false;

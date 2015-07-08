@@ -67,6 +67,7 @@
                     android:fontFamily="Arial"
                     android:text="Tweet SORT"/>
 
+
                 <Switch
                     android:id="@+id/togglebutton"
                     android:layout_width="100dp"

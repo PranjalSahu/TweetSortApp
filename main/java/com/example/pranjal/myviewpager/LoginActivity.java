@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
 
                 Intent intent = new Intent(LoginActivity.this, ViewPagerTabListViewActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                appState.startActivity(intent);
+                startActivityForResult(intent, 1);
             }
 
             @Override
@@ -47,8 +47,10 @@ public class LoginActivity extends Activity {
         loginButton.onActivityResult(requestCode, resultCode, data);
 
 
-        if(resultCode == 0)
+        if(resultCode == 0) {
+            setResult(0);
             finish();
+        }
 
     }
 

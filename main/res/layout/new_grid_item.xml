@@ -6,17 +6,19 @@
 
     <com.example.pranjal.myviewpager.SquareImageView
         android:id="@+id/picture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:padding="3dp"
+        android:cropToPadding="true"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:scaleType="centerCrop"/>
 
     <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
+        android:id="@+id/picturetext"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="17dp"
         android:paddingBottom="15dp"
         android:layout_gravity="bottom"
         android:textColor="@android:color/white"

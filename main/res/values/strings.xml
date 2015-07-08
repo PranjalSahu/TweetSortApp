@@ -15,6 +15,7 @@
 -->
 <resources>
 
+    <string name="my_app_name">Tweet Sort</string>
     <string name="app_name">ObservableScrollView for Android</string>
     <string name="title_activity_main">AOSV-Demos</string>
     <string name="title_activity_about">About this app</string>

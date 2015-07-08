@@ -96,7 +96,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public static TwitterSession currentSession = null;
     public static Context baseContext = null;
 
-    String TWITTER_KEY = "i8lsarVzM1RLdQli7JvGibJya";
+    String TWITTER_KEY    = "i8lsarVzM1RLdQli7JvGibJya";
     String TWITTER_SECRET = "ivA141Pewjx3VYfKOUBMIRJZZnNhPQNW9gVdM1nlXrnsNmir29";
 
     String username                  = null;
