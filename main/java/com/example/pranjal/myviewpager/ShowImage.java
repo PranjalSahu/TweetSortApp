@@ -3,7 +3,6 @@ package com.example.pranjal.myviewpager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 
@@ -28,7 +27,23 @@ public class ShowImage extends Activity {
 
         setContentView(R.layout.my_tweet_layout);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        /*final Activity activity = this;
+        final Window w = activity.getWindow();
+
+        final View content = activity.findViewById(android.R.id.content).getRootView();
+        if (content.getWidth() > 0) {
+            Bitmap image = BlurBuilder.blur(content);
+            w.setBackgroundDrawable(new BitmapDrawable(activity.getResources(), image));
+        } else {
+            content.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    Bitmap image = BlurBuilder.blur(content);
+                    w.setBackgroundDrawable(new BitmapDrawable(activity.getResources(), image));
+                }
+            });
+        }
+        */
 
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress1);
         tweetLayout         = (LinearLayout) findViewById(R.id.tweetlinearlayout);

@@ -140,7 +140,7 @@ public class MyAdapter extends TweetViewAdapter {
         if(convertView == null) {
             rowView          = this.getTweetView(this.context, tweet);
 
-            final ImageButton iv1  = new ImageButton(this.context);
+            final ImageButton iv1      = new ImageButton(this.context);
             final ImageButton iv2  = new ImageButton(this.context);
             final ImageButton iv3  = new ImageButton(this.context);
 
