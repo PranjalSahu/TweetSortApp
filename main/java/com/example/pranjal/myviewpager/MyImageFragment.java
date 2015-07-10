@@ -18,13 +18,17 @@ package com.example.pranjal.myviewpager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +42,8 @@ import java.util.List;
 public class MyImageFragment extends BaseFragment {
     LinearLayout myGallery;
     LayoutInflater mInflater;
+
+    private GridView horizontalGridView;
 
 
     List<Tweet> imageTweets;
@@ -62,21 +68,20 @@ public class MyImageFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view  = inflater.inflate(R.layout.image_list, container, false);
-
-        View view  = inflater.inflate(R.layout.myhorizontalscrollview, container, false);
-
+        View view  = inflater.inflate(R.layout.image_list, container, false);
+        //View view  = inflater.inflate(R.layout.myhorizontalscrollviewa, container, false);
 
         storedView = view;
 
-        myGallery = (LinearLayout)view.findViewById(R.id.mygallery);
-
-
+        //myGallery = (LinearLayout)view.findViewById(R.id.mygallery);
+        //horizontalGridView = (GridView)view.findViewById(R.id.horizontal_gridView);
 
         parentActivity = getActivity();
 
         //imageUrls = TweetBank.getAllImageUrls();
         imageTweets =  TweetBank.getAllImageUrls();
+        //horizontalGridView.setNumColumns(imageTweets.size());
+
 
         mRequestQueue = Volley.newRequestQueue(parentActivity);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
@@ -89,19 +94,19 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        //GridView gridView = (GridView) view.findViewById(R.id.imagegridview);
+        GridView gridView = (GridView) view.findViewById(R.id.imagegridview);
         imageAdapter      = new ImageAdapter(getActivity());
-        //gridView.setAdapter(imageAdapter);
+        gridView.setAdapter(imageAdapter);
+        gridView.setNumColumns(imageTweets.size());
+        //horizontalGridView.setAdapter(imageAdapter);
 
-
-        mInflater = LayoutInflater.from(parentActivity);
-
+        //mInflater = LayoutInflater.from(parentActivity);
 
         int position = 0;
         SquareImageView picture;
         TextView name;
 
-        for(Tweet t: imageTweets){
+        /*for(Tweet t: imageTweets){
             View v;
             v = mInflater.inflate(R.layout.new_grid_item, container, false);
             v.setTag(R.id.picture, v.findViewById(R.id.picture));
@@ -115,10 +120,10 @@ public class MyImageFragment extends BaseFragment {
             name.setText("@" + t.user.screenName);
             myGallery.addView(v);
             ++position;
-        }
+        }*/
 
 
-        /*AbsListView.OnScrollListener listenerObject = null;
+        AbsListView.OnScrollListener listenerObject = null;
 
         if(listenerObject == null) {
             listenerObject = new AbsListView.OnScrollListener() {
@@ -165,9 +170,6 @@ public class MyImageFragment extends BaseFragment {
 //                        ((Image)view.setSelected(!(Image)view.getSelected()));
                     }
                 });
-*/
-
-
 
         return view;
     }

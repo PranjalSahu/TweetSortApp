@@ -28,7 +28,6 @@
         android:stretchMode="columnWidth"
         android:drawSelectorOnTop="false"
         android:listSelector="#000080"
-        android:numColumns="1"
         />
 
 
