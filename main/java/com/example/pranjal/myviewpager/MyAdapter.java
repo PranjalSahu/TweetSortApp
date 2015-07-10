@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.twitter.sdk.android.core.Callback;
@@ -53,7 +51,7 @@ public class MyAdapter extends TweetViewAdapter {
 
         this.notifyDataSetChanged();
 
-        System.out.println("tweet updated checking "+this.getTweetAtPosition(pos).id+" "+this.getTweetAtPosition(pos).favorited);
+        System.out.println("tweet updated checking " + this.getTweetAtPosition(pos).id + " " + this.getTweetAtPosition(pos).favorited);
         return;
     }
 
@@ -100,35 +98,7 @@ public class MyAdapter extends TweetViewAdapter {
         return this.getItem(position);
     }
 
-    //helper method to disable subviews
-    private void disableViewAndSubViews(ViewGroup layout) {
 
-        layout.setEnabled(false);
-        layout.setClickable(false);
-        layout.setLongClickable(false);
-
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            View child = layout.getChildAt(i);
-
-            if (child instanceof ViewGroup) {
-                disableViewAndSubViews((ViewGroup) child);
-            } else {
-
-                if(child instanceof TextView) {
-                    TextView tmp = ((TextView) child);
-                    return;
-                }
-                if(child instanceof ImageView){
-                    ImageView tmp = ((ImageView) child);
-                    //System.out.println("pranjaldisable : checking ImageView " + child.getId());
-                    //return;
-                }
-                child.setEnabled(false);
-                child.setClickable(false);
-                child.setLongClickable(false);
-            }
-        }
-    }
 
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -287,7 +257,7 @@ public class MyAdapter extends TweetViewAdapter {
             //disable subviews to avoid links are clickable
             if(rowView instanceof ViewGroup){
                 System.out.println("Disabling views while creating view");
-                disableViewAndSubViews((ViewGroup) rowView);
+                HelperFunctions.disableViewAndSubViews((ViewGroup) rowView);
             }
 
             //enable root view and attach custom listener
@@ -408,7 +378,7 @@ public class MyAdapter extends TweetViewAdapter {
 
             //disable subviews to avoid links are clickable
             if(convertView instanceof ViewGroup){
-                disableViewAndSubViews((ViewGroup) convertView);
+                HelperFunctions.disableViewAndSubViews((ViewGroup) convertView);
             }
 
             ((BaseTweetView)(((LinearLayout) convertView)

@@ -381,7 +381,7 @@ public class MyFragment extends BaseFragment {
         temp   =   TweetBank.getNewThan(firstDisplayTweetId);
 
         for(Tweet t: temp) {
-            if ((filterTweets && MyFilter.checkit(t)) || !filterTweets)
+            if ((filterTweets && HelperFunctions.checkit(t)) || !filterTweets)
                 filterTemp.add(t);
         }
         return filterTemp;
@@ -401,7 +401,7 @@ public class MyFragment extends BaseFragment {
         temp   =   TweetBank.getOlderThan(lastDisplayTweetId);
 
         for(Tweet t: temp) {
-            if ((filterTweets && MyFilter.checkit(t)) || !filterTweets)
+            if ((filterTweets && HelperFunctions.checkit(t)) || !filterTweets)
                 filterTemp.add(t);
         }
         return filterTemp;

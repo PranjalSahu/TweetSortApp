@@ -1,8 +1,15 @@
 package com.example.pranjal.myviewpager;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
+import com.google.gson.Gson;
 import com.twitter.sdk.android.core.models.Tweet;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -11,6 +18,51 @@ import java.util.List;
  * Created by pranjal on 29/04/15.
  */
 public class HelperFunctions {
+
+    public static Gson gson = new Gson();
+
+    public static boolean checkit(Tweet t){
+        return t.user.verified;
+    }
+
+    public static List<Tweet> getFilteredList(List<Tweet> tList){
+        List<Tweet> resultList = new ArrayList<Tweet>();
+        for(int i=0;i< tList.size();++i){
+            if(checkit(tList.get(i)))
+                resultList.add(tList.get(i));
+        }
+        return resultList;
+    }
+
+    //helper method to disable subviews
+    public static void disableViewAndSubViews(ViewGroup layout) {
+
+        layout.setEnabled(false);
+        layout.setClickable(false);
+        layout.setLongClickable(false);
+
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+
+            if (child instanceof ViewGroup) {
+                disableViewAndSubViews((ViewGroup) child);
+            } else {
+
+                if(child instanceof TextView) {
+                    TextView tmp = ((TextView) child);
+                    return;
+                }
+                if(child instanceof ImageView){
+                    ImageView tmp = ((ImageView) child);
+                    //System.out.println("pranjaldisable : checking ImageView " + child.getId());
+                    //return;
+                }
+                child.setEnabled(false);
+                child.setClickable(false);
+                child.setLongClickable(false);
+            }
+        }
+    }
 
     public static void sortTweets(int type,  List<Tweet> tweetlist, MyAdapter tweetadapter){
         if(type == 1)

@@ -24,7 +24,7 @@ public class TweetBank {
     public static List<Tweet> getAllImageUrls(){
         List<Tweet> tempList = new ArrayList<Tweet>();
         for(Tweet t: tweetlist){
-            if(MyFilter.checkit(t) && t.entities != null &&  t.entities.media != null &&  t.entities.media.size() > 0)
+            if(HelperFunctions.checkit(t) && t.entities != null &&  t.entities.media != null &&  t.entities.media.size() > 0)
                 //tempList.add(t.entities.media.get(0).mediaUrl);
                 tempList.add(t);
         }

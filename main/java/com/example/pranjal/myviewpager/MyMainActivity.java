@@ -38,9 +38,9 @@ public class MyMainActivity extends AppCompatActivity {
     MyTwitterApiClient  twitterApiClient;
     String username                  = null;
 
-    TwitterFactory twitterFactory;
+    TwitterFactory  twitterFactory;
     StatusesService statusesService;
-    AccountService accountService;
+    AccountService  accountService;
     FavoriteService favoriteService;
     TwitterAuthConfig   authConfig     = null;
     TwitterSession      currentSession = null;

@@ -18,17 +18,14 @@ package com.example.pranjal.myviewpager;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mopub.volley.RequestQueue;
@@ -39,7 +36,10 @@ import com.twitter.sdk.android.core.models.Tweet;
 import java.util.List;
 
 public class MyImageFragment extends BaseFragment {
-    //List<String> imageUrls;
+    LinearLayout myGallery;
+    LayoutInflater mInflater;
+
+
     List<Tweet> imageTweets;
     ImageAdapter imageAdapter;
 
@@ -62,8 +62,16 @@ public class MyImageFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.image_list, container, false);
+        //View view  = inflater.inflate(R.layout.image_list, container, false);
+
+        View view  = inflater.inflate(R.layout.myhorizontalscrollview, container, false);
+
+
         storedView = view;
+
+        myGallery = (LinearLayout)view.findViewById(R.id.mygallery);
+
+
 
         parentActivity = getActivity();
 
@@ -81,11 +89,36 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        GridView gridView = (GridView) view.findViewById(R.id.imagegridview);
-        imageAdapter = new ImageAdapter(getActivity());
-        gridView.setAdapter(imageAdapter);
+        //GridView gridView = (GridView) view.findViewById(R.id.imagegridview);
+        imageAdapter      = new ImageAdapter(getActivity());
+        //gridView.setAdapter(imageAdapter);
 
-        AbsListView.OnScrollListener listenerObject = null;
+
+        mInflater = LayoutInflater.from(parentActivity);
+
+
+        int position = 0;
+        SquareImageView picture;
+        TextView name;
+
+        for(Tweet t: imageTweets){
+            View v;
+            v = mInflater.inflate(R.layout.new_grid_item, container, false);
+            v.setTag(R.id.picture, v.findViewById(R.id.picture));
+            v.setTag(R.id.picturetext, v.findViewById(R.id.picturetext));
+
+            picture = (SquareImageView) v.getTag(R.id.picture);
+            name    = (TextView) v.getTag(R.id.picturetext);
+
+            //picture.setImageUrl(imageUrls.get(position), mImageLoader);
+            picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+            name.setText("@" + t.user.screenName);
+            myGallery.addView(v);
+            ++position;
+        }
+
+
+        /*AbsListView.OnScrollListener listenerObject = null;
 
         if(listenerObject == null) {
             listenerObject = new AbsListView.OnScrollListener() {
@@ -117,14 +150,23 @@ public class MyImageFragment extends BaseFragment {
                 new AdapterView.OnItemClickListener(){
                     public void onItemClick(AdapterView<?> arg0, View view, int arg2, long arg3) {
 
+
+//                        Uri uri = Uri.parse("http://javatechig.com");
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                        startActivity(intent);
+
                         Intent it = new Intent(parentActivity, ShowImage.class);
+                        it.putExtra("tweetstring", HelperFunctions.gson.toJson(view.getTag(5)) );
                         startActivity(it);
-                        //Toast.makeText(parentActivity,  ((TextView)(view.getTag(R.id.picturetext))).getText() , Toast.LENGTH_SHORT).show();
-                        //imageAdapter.notifyDataSetChanged();
-                        //Toast.makeText(parentActivity, "Hello", Toast.LENGTH_SHORT).show();
-                        //((Image)view.setSelected(!(Image)view.getSelected()));
+
+//                        Toast.makeText(parentActivity, ((TextView) (view.getTag(R.id.picturetext))).getText(), Toast.LENGTH_SHORT).show();
+//                        imageAdapter.notifyDataSetChanged();
+//                        Toast.makeText(parentActivity, "Hello", Toast.LENGTH_SHORT).show();
+//                        ((Image)view.setSelected(!(Image)view.getSelected()));
                     }
                 });
+*/
+
 
 
         return view;
@@ -169,7 +211,7 @@ public class MyImageFragment extends BaseFragment {
 
                 v = mInflater.inflate(R.layout.new_grid_item, parent, false);
                 v.setTag(R.id.picture, v.findViewById(R.id.picture));
-                v.setTag(R.id.picturetext,    v.findViewById(R.id.picturetext));
+                v.setTag(R.id.picturetext, v.findViewById(R.id.picturetext));
 
                 //imageView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 400));
                 //imageView = (NetworkImageView) storedView.inflate(parentActivity, R.id.networkimageview, null);
@@ -182,8 +224,9 @@ public class MyImageFragment extends BaseFragment {
 
             //picture.setImageUrl(imageUrls.get(position), mImageLoader);
             picture.setImageUrl(imageTweets.get(position).entities.media.get(0).mediaUrl, mImageLoader);
-            name.setText("@"+imageTweets.get(position).user.screenName);
+            name.setText("@" + imageTweets.get(position).user.screenName);
 
+            v.setTag(5, imageTweets.get(position));
             return v;
         }
     }
