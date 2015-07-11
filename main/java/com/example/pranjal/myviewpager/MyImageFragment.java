@@ -85,7 +85,7 @@ public class MyImageFragment extends BaseFragment {
 
         ViewGroup newsrowslist = (ViewGroup)view.findViewById(R.id.newsrowslist);
         //ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
-
+        //
         View horizontalView  = null;
         ViewGroup imageviews = null;
         int count = 0;
