@@ -86,73 +86,63 @@ public class MyImageFragment extends BaseFragment {
         ViewGroup newsrowslist = (ViewGroup)view.findViewById(R.id.newsrowslist);
         //ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
 
+        View horizontalView  = null;
+        ViewGroup imageviews = null;
+        int count = 0;
 
-        for(int total =0;total < 5;++total) {
-            View horizontalView = inflater.inflate(R.layout.myhorizontalscrollviewa, container, false);
-            newsrowslist.addView(horizontalView);
-
-            //ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
-            ViewGroup imageviews = (ViewGroup) horizontalView.findViewById(R.id.imageviews);
-
-
-            int count = 0;
-            for (Tweet t : imageTweets) {
-                if (count > 5)
-                    break;
-
-                ++count;
-                final View v = mInflater.inflate(R.layout.new_grid_item, container, false);
-                final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
-                final TextView name = (TextView) v.findViewById(R.id.picturetext);
-                name.setTag(0);
-                name.setTag(R.id.action0, name.getTop());
-
-                System.out.println("initial top position is " + name.getTop());
-
-                name.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        int flag = (int) v.getTag();
-                        if (flag == 0) {
-                            Layout t = name.getLayout();
-                            //name.setMaxLines(5);
-                            System.out.println("pranjal LAYOUT 0 width = " + t.getWidth() + " height " + t.getHeight());
-                            int top = 0;
-                            int left = name.getLeft();
-                            int right = name.getRight();
-                            int bottom = name.getBottom();
-
-                            // l t r b
-                            name.layout(left, top, right, picture.getBottom());
-                            name.setGravity(Gravity.NO_GRAVITY);
-                            name.setTag(1);
-                        } else {
-                            Layout t = name.getLayout();
-                            //name.setMaxLines(2);
-                            System.out.println("pranjal LAYOUT 1 width = " + t.getWidth() + " height " + t.getHeight());
-                            int top = (int) name.getTag(R.id.action0);
-
-                            System.out.println("new top position is " + top);
-
-
-                            int left = name.getLeft();
-                            int right = name.getRight();
-                            int bottom = name.getBottom();
-
-                            // l t r b
-                            name.layout(left, picture.getBottom() - 40, right, picture.getBottom());
-                            name.setGravity(Gravity.NO_GRAVITY);
-                            name.setTag(0);
-                        }
-                        return false;
-                    }
-                });
-
-                picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
-                imageviews.addView(v);
-                //horizontalView.addView(v);
+        for (Tweet t : imageTweets) {
+            if(count == 0) {
+                horizontalView = inflater.inflate(R.layout.myhorizontalscrollviewa, container, false);
+                newsrowslist.addView(horizontalView);
+                imageviews     = (ViewGroup) horizontalView.findViewById(R.id.imageviews);
             }
+            ++count;
+            count = count%5;
+
+            final View v = mInflater.inflate(R.layout.new_grid_item, container, false);
+            final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+            final TextView name = (TextView) v.findViewById(R.id.picturetext);
+
+            name.setTag(0);
+            name.setTag(R.id.action0, name.getTop());
+
+            name.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int flag = (int) v.getTag();
+                    Layout t = name.getLayout();
+
+                    int left    = name.getLeft();
+                    int right   = name.getRight();
+                    int bottom  = name.getBottom();
+
+                    if (flag == 0) {
+                        //name.setMaxLines(5);
+                        System.out.println("pranjal LAYOUT 0 width = " + t.getWidth() + " height " + t.getHeight());
+                        int top = 0;
+                        // l t r b
+                        name.layout(left, top, right, picture.getBottom());
+                        name.setGravity(Gravity.NO_GRAVITY);
+                        name.setTag(1);
+                    } else {
+                        //name.setMaxLines(2);
+                        System.out.println("pranjal LAYOUT 1 width = " + t.getWidth() + " height " + t.getHeight());
+                        int top = (int) name.getTag(R.id.action0);
+
+                        System.out.println("new top position is " + top);
+
+                        // l t r b
+                        name.layout(left, picture.getBottom() - 40, right, picture.getBottom());
+                        name.setGravity(Gravity.NO_GRAVITY);
+                        name.setTag(0);
+                    }
+                    return false;
+                }
+            });
+
+            picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
+            imageviews.addView(v);
         }
         return view;
     }
