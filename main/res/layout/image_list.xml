@@ -1,34 +1,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:widget="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="#ffffff">
 
-    <LinearLayout
-        android:id="@+id/linlaHeaderProgress"
+    <com.example.pranjal.myviewpager.HorizontalListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:widget="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/HorizontalListView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <ProgressBar
-            android:id="@+id/pbHeaderProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </ProgressBar>
-    </LinearLayout>
-
-    <GridView
-        android:id="@+id/imagegridview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:verticalSpacing="2dp"
-        android:horizontalSpacing="2dp"
-        android:stretchMode="columnWidth"
-        android:drawSelectorOnTop="false"
-        android:listSelector="#000080"
+        android:layout_height="100dp"
+        android:divider="#878787"
         />
+
+    <!--<HorizontalScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:id="@+id/title_horizontalScrollView"
+        android:layout_margin="1dp"
+        android:fillViewport="false">-->
+
+
+        <!--<GridView
+            android:id="@+id/imagegridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:verticalSpacing="2dp"
+            android:horizontalSpacing="2dp"
+            android:stretchMode="columnWidth"
+            android:drawSelectorOnTop="false"
+            android:listSelector="#000080"
+            />-->
+
 
 
 
