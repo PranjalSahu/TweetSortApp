@@ -20,19 +20,4 @@
             android:orientation="horizontal">
         </LinearLayout>
     </HorizontalScrollView>
-
-        <!--<GridView
-            android:id="@+id/imagegridview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:stretchMode="columnWidth"
-            android:drawSelectorOnTop="false"
-            android:listSelector="#000080"
-            />-->
-
-
-
-
 </LinearLayout>

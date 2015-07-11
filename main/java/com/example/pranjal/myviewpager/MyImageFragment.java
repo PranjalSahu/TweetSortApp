@@ -80,17 +80,24 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
+        ViewGroup newsrows = (ViewGroup)view.findViewById(R.id.newsrows);
 
-        for(Tweet t:imageTweets) {
-            View v = mInflater.inflate(R.layout.new_grid_item, container, false);
-            SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
-            TextView name           = (TextView) v.findViewById(R.id.picturetext);
-            picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>")+"\n"+t.text);
-            imageviews.addView(v);
+        for(int i=0;i<5;++i) {
+            ViewGroup horizontalView = (ViewGroup)mInflater.inflate(R.layout.image_list, container, false);
+            int count =0;
+            for (Tweet t : imageTweets) {
+                if(count < 5)
+                    break;
+                View v = mInflater.inflate(R.layout.new_grid_item, container, false);
+                SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+                TextView name = (TextView) v.findViewById(R.id.picturetext);
+                picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>") + "\n" + t.text);
+                horizontalView.addView(v);
+                ++count;
+            }
+            newsrows.addView(horizontalView);
         }
-
         return view;
     }
 
