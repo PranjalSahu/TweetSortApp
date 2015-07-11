@@ -336,7 +336,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
             // Skip destroyed or not created item
             Fragment f = mPagerAdapter.getItemAt(i);
-            if (f == null || f instanceof MyImageFragment) {
+            if (f == null ){//|| f instanceof MyImageFragment) {
                 continue;
             }
 
@@ -344,7 +344,13 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             if (view == null) {
                 continue;
             }
-            ObservableListView listView = (ObservableListView) view.findViewById(R.id.mylist);
+            ObservableListView listView;
+
+            //if(f instanceof  MyFragment)
+                listView = (ObservableListView) view.findViewById(R.id.mylist);
+            //else
+             //   listView = (ObservableListView) view.findViewById(R.id.newsobservableview);
+
             if (isShown) {
                 // Scroll up
                 if (0 < listView.getCurrentScrollY()) {
