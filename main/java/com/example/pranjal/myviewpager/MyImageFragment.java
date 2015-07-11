@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,7 @@ public class MyImageFragment extends BaseFragment {
             SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
             TextView name           = (TextView) v.findViewById(R.id.picturetext);
             picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-            name.setText("@" + t.user.screenName+"\n"+t.text);
+            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>")+"\n"+t.text);
             imageviews.addView(v);
         }
 
