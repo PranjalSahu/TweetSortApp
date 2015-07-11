@@ -90,36 +90,42 @@ public class MyImageFragment extends BaseFragment {
             final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
             final TextView name           = (TextView) v.findViewById(R.id.picturetext);
             name.setTag(0);
+            name.setTag(R.id.action0, name.getTop());
+
+            System.out.println("initial top position is " + name.getTop());
 
             name.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    int flag = (int)v.getTag();
-                    if(flag == 0) {
+                    int flag = (int) v.getTag();
+                    if (flag == 0) {
                         Layout t = name.getLayout();
                         //name.setMaxLines(5);
-                        System.out.println("pranjal LAYOUT 0 width = "+t.getWidth()+" height "+t.getHeight());
+                        System.out.println("pranjal LAYOUT 0 width = " + t.getWidth() + " height " + t.getHeight());
                         int top = 0;
-                        int left    = name.getLeft();
-                        int right   = name.getRight();
-                        int bottom  = name.getBottom();
+                        int left = name.getLeft();
+                        int right = name.getRight();
+                        int bottom = name.getBottom();
 
                         // l t r b
                         name.layout(left, top, right, picture.getBottom());
                         name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(1);
-                    }
-                    else{
+                    } else {
                         Layout t = name.getLayout();
                         //name.setMaxLines(2);
-                        System.out.println("pranjal LAYOUT 1 width = "+t.getWidth()+" height "+t.getHeight());
-                        int top     = 110;
-                        int left    = name.getLeft();
-                        int right   = name.getRight();
-                        int bottom  = name.getBottom();
+                        System.out.println("pranjal LAYOUT 1 width = " + t.getWidth() + " height " + t.getHeight());
+                        int top = (int)name.getTag(R.id.action0);
+
+                        System.out.println("new top position is "+top);
+
+
+                        int left = name.getLeft();
+                        int right = name.getRight();
+                        int bottom = name.getBottom();
 
                         // l t r b
-                        name.layout(left, top, right, picture.getBottom());
+                        name.layout(left, picture.getBottom()-40, right, picture.getBottom());
                         name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(0);
                     }
