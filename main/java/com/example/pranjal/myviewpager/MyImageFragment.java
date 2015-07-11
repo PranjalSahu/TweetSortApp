@@ -83,7 +83,15 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
+        ViewGroup newsrowslist = (ViewGroup)view.findViewById(R.id.newsrowslist);
+        //ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
+
+        View horizontalView  = inflater.inflate(R.layout.myhorizontalscrollviewa, container, false);
+        newsrowslist.addView(horizontalView);
+
+        //ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
+        ViewGroup imageviews = (ViewGroup)horizontalView.findViewById(R.id.imageviews);
+
 
         for(Tweet t:imageTweets) {
             final View v = mInflater.inflate(R.layout.new_grid_item, container, false);
@@ -115,9 +123,9 @@ public class MyImageFragment extends BaseFragment {
                         Layout t = name.getLayout();
                         //name.setMaxLines(2);
                         System.out.println("pranjal LAYOUT 1 width = " + t.getWidth() + " height " + t.getHeight());
-                        int top = (int)name.getTag(R.id.action0);
+                        int top = (int) name.getTag(R.id.action0);
 
-                        System.out.println("new top position is "+top);
+                        System.out.println("new top position is " + top);
 
 
                         int left = name.getLeft();
@@ -125,7 +133,7 @@ public class MyImageFragment extends BaseFragment {
                         int bottom = name.getBottom();
 
                         // l t r b
-                        name.layout(left, picture.getBottom()-40, right, picture.getBottom());
+                        name.layout(left, picture.getBottom() - 40, right, picture.getBottom());
                         name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(0);
                     }
@@ -136,6 +144,7 @@ public class MyImageFragment extends BaseFragment {
             picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
             name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
             imageviews.addView(v);
+            //horizontalView.addView(v);
         }
 
         return view;
