@@ -19,6 +19,7 @@ package com.example.pranjal.myviewpager;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.text.Html;
@@ -122,6 +123,7 @@ public class MyImageFragment extends BaseFragment {
                         int top = 0;
                         // l t r b
                         name.layout(left, top, right, picture.getBottom());
+                        name.setBackgroundColor(Color.parseColor("#FF000000"));
                         name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(1);
                     } else {
