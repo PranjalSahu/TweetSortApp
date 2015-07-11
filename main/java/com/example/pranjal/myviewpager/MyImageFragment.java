@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mopub.volley.RequestQueue;
@@ -60,7 +61,7 @@ public class MyImageFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.all_news, container, false);
+        LinearLayout view  = (LinearLayout)inflater.inflate(R.layout.all_news, container, false);
         storedView = view;
 
         parentActivity = getActivity();
@@ -80,24 +81,45 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        ViewGroup newsrows = (ViewGroup)view.findViewById(R.id.newsrows);
 
-        for(int i=0;i<5;++i) {
-            ViewGroup horizontalView = (ViewGroup)mInflater.inflate(R.layout.image_list, container, false);
-            int count =0;
-            for (Tweet t : imageTweets) {
-                if(count < 5)
-                    break;
-                View v = mInflater.inflate(R.layout.new_grid_item, container, false);
-                SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
-                TextView name = (TextView) v.findViewById(R.id.picturetext);
-                picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>") + "\n" + t.text);
-                horizontalView.addView(v);
-                ++count;
-            }
-            newsrows.addView(horizontalView);
+        ViewGroup mytemp = (ViewGroup)view.findViewById(R.id.newsrows);
+
+        int count =0;
+        for (Tweet t : imageTweets) {
+            if (count < 5)
+                break;
+
+            View v                  = mInflater.inflate(R.layout.new_grid_item, mytemp, true);
+            SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+            TextView name           = (TextView) v.findViewById(R.id.picturetext);
+
+            picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>") + "\n" + t.text);
+
+            ++count;
+            mytemp.addView(v);
+            //newsrows.addView(v);
         }
+//        for(int i=0;i<5;++i) {
+//            ViewGroup horizontalView = (ViewGroup)mInflater.inflate(R.layout.image_list, newsrows, false);
+//            int count =0;
+//            for (Tweet t : imageTweets) {
+//                if(count < 5)
+//                    break;
+//
+//                View v                  = mInflater.inflate(R.layout.new_grid_item, horizontalView, false);
+//                SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+//                TextView name           = (TextView) v.findViewById(R.id.picturetext);
+//
+//                picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+//                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>") + "\n" + t.text);
+//                horizontalView.addView(v);
+//
+//                ++count;
+//            }
+//            System.out.println("pranjal view added");
+//            newsrows.addView(horizontalView);
+//        }
         return view;
     }
 

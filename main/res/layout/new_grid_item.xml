@@ -11,12 +11,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="centerCrop"/>
-
-    <!--android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-    -->
     <TextView
         android:id="@+id/picturetext"
         android:layout_width="fill_parent"
