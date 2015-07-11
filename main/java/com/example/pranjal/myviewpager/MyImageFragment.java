@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.text.Html;
 import android.text.Layout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -88,22 +89,29 @@ public class MyImageFragment extends BaseFragment {
             final View v = mInflater.inflate(R.layout.new_grid_item, container, false);
             final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
             final TextView name           = (TextView) v.findViewById(R.id.picturetext);
+            name.setTag(0);
             name.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    //int flag = (int)v.getTag();
-                    //if(flag == 0) {
+                    int flag = (int)v.getTag();
+                    if(flag == 0) {
                         Layout t = name.getLayout();
-                        //name.setGravity(Gravit.);
                         //name.setMaxLines(5);
-                        name.layout(0, 0, t.getWidth(), t.getHeight());
+                        System.out.println("pranjal LAYOUT 0 width = "+t.getWidth()+" height "+t.getHeight());
+                        int top = 0;
+                        name.layout(0, top, t.getWidth(), 150);
+                        name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(1);
-                    //}
-//                    else{
-//                        Layout t = name.getLayout();
-//                        v.layout(0, 0, t.getWidth(), t.getHeight());
-//                        v.setTag(1);
-//                    }
+                    }
+                    else{
+                        Layout t = name.getLayout();
+                        //name.setMaxLines(2);
+                        System.out.println("pranjal LAYOUT 1 width = "+t.getWidth()+" height "+t.getHeight());
+                        int top = 110;
+                        name.layout(0, top, t.getWidth(), top+40);
+                        name.setGravity(Gravity.NO_GRAVITY);
+                        name.setTag(0);
+                    }
                     return false;
                 }
             });
