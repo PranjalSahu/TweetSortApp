@@ -22,11 +22,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.text.Html;
+import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mopub.volley.RequestQueue;
@@ -61,7 +62,7 @@ public class MyImageFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout view  = (LinearLayout)inflater.inflate(R.layout.all_news, container, false);
+        View view  = inflater.inflate(R.layout.image_list, container, false);
         storedView = view;
 
         parentActivity = getActivity();
@@ -81,45 +82,37 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
+        ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
 
-        ViewGroup mytemp = (ViewGroup)view.findViewById(R.id.newsrows);
-
-        int count =0;
-        for (Tweet t : imageTweets) {
-            if (count < 5)
-                break;
-
-            View v                  = mInflater.inflate(R.layout.new_grid_item, mytemp, true);
-            SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
-            TextView name           = (TextView) v.findViewById(R.id.picturetext);
+        for(Tweet t:imageTweets) {
+            final View v = mInflater.inflate(R.layout.new_grid_item, container, false);
+            final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+            final TextView name           = (TextView) v.findViewById(R.id.picturetext);
+            name.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    //int flag = (int)v.getTag();
+                    //if(flag == 0) {
+                        Layout t = name.getLayout();
+                        //name.setGravity(Gravit.);
+                        //name.setMaxLines(5);
+                        name.layout(0, 0, t.getWidth(), t.getHeight());
+                        name.setTag(1);
+                    //}
+//                    else{
+//                        Layout t = name.getLayout();
+//                        v.layout(0, 0, t.getWidth(), t.getHeight());
+//                        v.setTag(1);
+//                    }
+                    return false;
+                }
+            });
 
             picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>") + "\n" + t.text);
-
-            ++count;
-            mytemp.addView(v);
-            //newsrows.addView(v);
+            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
+            imageviews.addView(v);
         }
-//        for(int i=0;i<5;++i) {
-//            ViewGroup horizontalView = (ViewGroup)mInflater.inflate(R.layout.image_list, newsrows, false);
-//            int count =0;
-//            for (Tweet t : imageTweets) {
-//                if(count < 5)
-//                    break;
-//
-//                View v                  = mInflater.inflate(R.layout.new_grid_item, horizontalView, false);
-//                SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
-//                TextView name           = (TextView) v.findViewById(R.id.picturetext);
-//
-//                picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-//                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b>") + "\n" + t.text);
-//                horizontalView.addView(v);
-//
-//                ++count;
-//            }
-//            System.out.println("pranjal view added");
-//            newsrows.addView(horizontalView);
-//        }
+
         return view;
     }
 
