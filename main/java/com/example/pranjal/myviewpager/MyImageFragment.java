@@ -40,6 +40,7 @@ public class MyImageFragment extends BaseFragment {
     ImageAdapter imageAdapter;
 
     Activity storedActivity;
+    LayoutInflater mInflater;
 
     boolean loading        = false;
     private RequestQueue mRequestQueue;
@@ -62,12 +63,13 @@ public class MyImageFragment extends BaseFragment {
         storedView = view;
 
         parentActivity = getActivity();
+        mInflater      = LayoutInflater.from(parentActivity);
 
         //imageUrls = TweetBank.getAllImageUrls();
         imageTweets =  TweetBank.getAllImageUrls();
 
         mRequestQueue = Volley.newRequestQueue(parentActivity);
-        mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+        mImageLoader  = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
@@ -77,59 +79,16 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        imageAdapter = new ImageAdapter(getActivity());
-        HorizontalListView listview = (HorizontalListView) view.findViewById(R.id.HorizontalListView);
-        listview.setAdapter(imageAdapter);
+        ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
 
-
-        //listview.setAdapter(mAdapter);
-
-//        GridView gridView = (GridView) view.findViewById(R.id.imagegridview);
-//        imageAdapter = new ImageAdapter(getActivity());
-//        gridView.setAdapter(imageAdapter);
-//        gridView.setNumColumns(imageTweets.size());
-
-        /*AbsListView.OnScrollListener listenerObject = null;
-
-        if(listenerObject == null) {
-            listenerObject = new AbsListView.OnScrollListener() {
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                }
-
-                public void onScroll(AbsListView view, int firstVisibleItem,
-                                     int visibleItemCount, int totalItemCount) {
-
-                    int visibleThreshold = 2;
-                    long currentTimeStamp = System.currentTimeMillis();
-                    //System.out.println("firstVisibleItem "+firstVisibleItem+" visibleItemCount "+visibleItemCount+" totalItemCount "+totalItemCount+" (totalItemCount - visibleItemCount) "+(totalItemCount - visibleItemCount)+" (firstVisibleItem + visibleThreshold) "+(firstVisibleItem + visibleThreshold));
-                    if ((currentTimeStamp - lastTimeStamp)/1000 >10 && loading == false && totalItemCount > 5 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                        imageTweets =  TweetBank.getAllImageUrls();
-                        imageAdapter.notifyDataSetChanged();
-                        loading       = true;
-                        lastTimeStamp = System.currentTimeMillis();
-
-                        //LoadOldTweets();
-                        //footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 70));
-                    }
-                }
-            };
+        for(Tweet t:imageTweets) {
+            View v = mInflater.inflate(R.layout.new_grid_item, container, false);
+            SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+            TextView name           = (TextView) v.findViewById(R.id.picturetext);
+            picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+            name.setText("@" + t.user.screenName+"\n"+t.text);
+            imageviews.addView(v);
         }
-
-//        gridView.setOnScrollListener(listenerObject);
-//
-//        gridView.setOnItemClickListener(
-//                new AdapterView.OnItemClickListener(){
-//                    public void onItemClick(AdapterView<?> arg0, View view, int arg2, long arg3) {
-//
-//                        Intent it = new Intent(parentActivity, ShowImage.class);
-//                        startActivity(it);
-//                        //Toast.makeText(parentActivity,  ((TextView)(view.getTag(R.id.picturetext))).getText() , Toast.LENGTH_SHORT).show();
-//                        //imageAdapter.notifyDataSetChanged();
-//                        //Toast.makeText(parentActivity, "Hello", Toast.LENGTH_SHORT).show();
-//                        //((Image)view.setSelected(!(Image)view.getSelected()));
-//                    }
-//                });
-    */
 
         return view;
     }
