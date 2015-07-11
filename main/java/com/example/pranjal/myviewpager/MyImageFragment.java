@@ -90,6 +90,7 @@ public class MyImageFragment extends BaseFragment {
             final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
             final TextView name           = (TextView) v.findViewById(R.id.picturetext);
             name.setTag(0);
+
             name.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -99,7 +100,12 @@ public class MyImageFragment extends BaseFragment {
                         //name.setMaxLines(5);
                         System.out.println("pranjal LAYOUT 0 width = "+t.getWidth()+" height "+t.getHeight());
                         int top = 0;
-                        name.layout(0, top, t.getWidth(), 150);
+                        int left    = name.getLeft();
+                        int right   = name.getRight();
+                        int bottom  = name.getBottom();
+
+                        // l t r b
+                        name.layout(left, top, right, picture.getBottom());
                         name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(1);
                     }
@@ -107,8 +113,13 @@ public class MyImageFragment extends BaseFragment {
                         Layout t = name.getLayout();
                         //name.setMaxLines(2);
                         System.out.println("pranjal LAYOUT 1 width = "+t.getWidth()+" height "+t.getHeight());
-                        int top = 110;
-                        name.layout(0, top, t.getWidth(), top+40);
+                        int top     = 110;
+                        int left    = name.getLeft();
+                        int right   = name.getRight();
+                        int bottom  = name.getBottom();
+
+                        // l t r b
+                        name.layout(left, top, right, picture.getBottom());
                         name.setGravity(Gravity.NO_GRAVITY);
                         name.setTag(0);
                     }
