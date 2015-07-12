@@ -65,6 +65,7 @@ public class MyImageFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.image_list, container, false);
+        
         storedView = view;
 
         parentActivity = getActivity();
