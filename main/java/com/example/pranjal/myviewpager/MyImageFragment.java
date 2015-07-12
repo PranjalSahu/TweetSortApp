@@ -94,6 +94,9 @@ public class MyImageFragment extends BaseFragment {
         for (Tweet t : imageTweets) {
             if(count == 0) {
                 horizontalView = inflater.inflate(R.layout.myhorizontalscrollviewa, container, false);
+                TextView    tv = new TextView(parentActivity);
+                tv.setText("POLITICS");
+                newsrowslist.addView(tv);
                 newsrowslist.addView(horizontalView);
                 imageviews     = (ViewGroup) horizontalView.findViewById(R.id.imageviews);
             }
@@ -113,9 +116,9 @@ public class MyImageFragment extends BaseFragment {
                     int flag = (int) v.getTag();
                     Layout t = name.getLayout();
 
-                    int left    = name.getLeft();
-                    int right   = name.getRight();
-                    int bottom  = name.getBottom();
+                    int left = name.getLeft();
+                    int right = name.getRight();
+                    int bottom = name.getBottom();
 
                     if (flag == 0) {
                         //name.setMaxLines(5);
@@ -143,7 +146,11 @@ public class MyImageFragment extends BaseFragment {
             });
 
             picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
+            String temp  = t.text;
+            temp = temp+"\n";
+            String temp1 = temp.replaceAll("http.*?\\s", " ").replaceAll("http.*?\\n", "");
+            System.out.println("STRING1 "+temp+ " STRING2 "+temp1);
+            name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + temp1));
             imageviews.addView(v);
         }
         return view;
