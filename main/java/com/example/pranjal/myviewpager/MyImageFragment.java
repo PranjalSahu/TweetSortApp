@@ -19,12 +19,8 @@ package com.example.pranjal.myviewpager;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
-import android.text.Html;
-import android.text.Layout;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.mopub.volley.RequestQueue;
 import com.mopub.volley.toolbox.ImageLoader;
 import com.mopub.volley.toolbox.Volley;
@@ -64,9 +61,10 @@ public class MyImageFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //View view  = inflater.inflate(R.layout.image_list, container, false);
         View view  = inflater.inflate(R.layout.image_list, container, false);
-        
-        storedView = view;
+
+        storedView     = view;
 
         parentActivity = getActivity();
         mInflater      = LayoutInflater.from(parentActivity);
@@ -85,15 +83,49 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        ViewGroup newsrowslist = (ViewGroup)view.findViewById(R.id.newsrowslist);
-        //ViewGroup imageviews = (ViewGroup)view.findViewById(R.id.imageviews);
-        //
+
+        ObservableListView listView = (ObservableListView) view.findViewById(R.id.mylist);
+
+        //ViewGroup newsrowslist  = (ViewGroup)inflater.inflate(R.layout.newsrowslistlayout, null);//, false);
+        View newsrowslist  = (View)inflater.inflate(R.layout.newsrowslistlayout, listView, false);
+        //ViewGroup newsrowslist  = (ViewGroup)view.findViewById(R.id.newsrowslist);
+        //ViewGroup imageviews    = (ViewGroup)view.findViewById(R.id.imageviews);
+
+        newsrowslist.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                System.out.println("pranjal danger");
+                return false;
+            }
+        });
+
+        View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, (ViewGroup)view, false);
+
+        ViewGroup view1 = (ViewGroup)view.findViewById(R.id.testing);
+
+        view1.addView(imageviewcheck);
+
+        //listView.addHeaderView(newsrowslist, null, false);
+        //listView.addHeaderView(imageviewcheck, (ViewGroup)view, false);
+
+        //((ObservableListView)view).addHeaderView(new TextView(parentActivity));
+
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                System.out.println("hello pranjal how are you");
+                return false;
+            }
+        });
+
+        /*
         View horizontalView  = null;
         ViewGroup imageviews = null;
-        int count = 0;
+        int count            = 0;
 
         for (Tweet t : imageTweets) {
             if(count == 0) {
+                //horizontalView = inflater.inflate(R.layout.myhorizontalscrollviewa, null);//, true);
                 horizontalView = inflater.inflate(R.layout.myhorizontalscrollviewa, container, false);
                 TextView    tv = new TextView(parentActivity);
                 tv.setText("POLITICS");
@@ -101,9 +133,11 @@ public class MyImageFragment extends BaseFragment {
                 newsrowslist.addView(horizontalView);
                 imageviews     = (ViewGroup) horizontalView.findViewById(R.id.imageviews);
             }
+
             ++count;
             count = count%5;
 
+            //final View v = mInflater.inflate(R.layout.new_grid_item, null);
             final View v = mInflater.inflate(R.layout.new_grid_item, container, false);
             final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
             final TextView name = (TextView) v.findViewById(R.id.picturetext);
@@ -153,7 +187,7 @@ public class MyImageFragment extends BaseFragment {
             System.out.println("STRING1 "+temp+ " STRING2 "+temp1);
             name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + temp1));
             imageviews.addView(v);
-        }
+        }*/
         return view;
     }
 
