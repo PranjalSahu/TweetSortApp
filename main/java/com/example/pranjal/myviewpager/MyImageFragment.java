@@ -91,7 +91,7 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        listView = (ObservableListView) view.findViewById(R.id.myImagelist);
+        listView = (ObservableListView) view.findViewById(R.id.mylist);
 
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
             // Scroll to the specified position after layout
@@ -132,7 +132,7 @@ public class MyImageFragment extends BaseFragment {
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                System.out.println("hello pranjal how are you");
+                //System.out.println("hello pranjal how are you");
                 return false;
             }
         });
