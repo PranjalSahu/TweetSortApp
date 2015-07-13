@@ -21,12 +21,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
@@ -57,9 +59,14 @@ public class MyImageFragment extends BaseFragment {
     View storedView;
     Activity parentActivity;
 
+    SwipeRefreshLayout mSwipeLayout;
     ObservableListView listView;
 
     public static final String ARG_INITIAL_POSITION = "ARG_INITIAL_POSITION";
+
+    void setmydata(ListView listView, View headerView){
+        listView.addHeaderView(headerView);
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -71,6 +78,9 @@ public class MyImageFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //View view  = inflater.inflate(R.layout.image_list, container, false);
         View view  = inflater.inflate(R.layout.image_list, container, false);
+
+        mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeLayout.setProgressViewOffset(false, 150, 200);
 
         storedView     = view;
 
@@ -126,6 +136,8 @@ public class MyImageFragment extends BaseFragment {
 
         imageAdapter              = new ImageAdapter(parentActivity);
         imageAdapterHorizontal    = new ImageAdapterHorizontal(parentActivity);
+
+        setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
 
         listView.setAdapter(imageAdapterHorizontal);
 

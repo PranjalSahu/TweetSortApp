@@ -147,7 +147,7 @@ public class MyFragment extends BaseFragment {
                 MoPubNativeAdPositioning.serverPositioning();
         MoPubNativeAdRenderer adRenderer = new MoPubNativeAdRenderer(viewBinder);
 
-        footer           = (View)activity.getLayoutInflater().inflate(R.layout.listview_footer_row, null);
+        footer          = (View)activity.getLayoutInflater().inflate(R.layout.listview_footer_row, null);
 
         tweetadapter    = new MyAdapter(activity, this.statusesService, this.favoriteService);
         mAdAdapter      = new MoPubAdAdapter(activity, tweetadapter, adPositioning);
