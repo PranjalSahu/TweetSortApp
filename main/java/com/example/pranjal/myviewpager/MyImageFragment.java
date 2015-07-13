@@ -137,9 +137,13 @@ public class MyImageFragment extends BaseFragment {
 
         //view1.addView(imageviewcheck);
 
-        listView.addHeaderView(imageviewcheck);
-        listView.deferNotifyDataSetChanged();
+        imageAdapter    = new ImageAdapter(parentActivity);
 
+        listView.addHeaderView(imageviewcheck);
+
+        listView.setAdapter(imageAdapter);
+
+        //listView.setAdapter(imageAdapter);
         //listView.addHeaderView(newsrowslist);//, null, false);
         //listView.addHeaderView(imageviewcheck, (ViewGroup)view, false);
 
@@ -237,9 +241,14 @@ public class MyImageFragment extends BaseFragment {
         }
 
         @Override
+        public boolean isEmpty() {
+            return false;
+        }
+
+        @Override
         public int getCount() {
+            //return 0; //imageTweets.size();
             return imageTweets.size();
-            //return imageUrls.size();
         }
 
         @Override
