@@ -22,6 +22,6 @@ public class SquareImageView extends NetworkImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
-        setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()*7/10); //Snap to width
+        setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()*55/100); //Snap to width
     }
 }

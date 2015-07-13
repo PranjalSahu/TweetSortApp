@@ -67,7 +67,7 @@ public class MyImageFragment extends BaseFragment {
     void setmydata(ListView listView, View headerView){
         listView.addHeaderView(headerView);
     }
-    
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -333,7 +333,13 @@ public class MyImageFragment extends BaseFragment {
                 final TextView name           = (TextView) v.findViewById(R.id.picturetext);
 
                 picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
-                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
+                //name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
+                String temp  = t.text;
+                temp = temp+"\n";
+                String temp1 = temp.replaceAll("http.*?\\s", " ").replaceAll("http.*?\\n", "");
+                //System.out.println("STRING1 "+temp+ " STRING2 "+temp1);
+
+                name.setText(Html.fromHtml(temp1));
                 imageViews.addView(v);
                 ++start;
             }
