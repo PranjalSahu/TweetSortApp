@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +43,7 @@ public class MyImageFragment extends BaseFragment {
     //List<String> imageUrls;
     List<Tweet> imageTweets;
     ImageAdapter imageAdapter;
+    ImageAdapterHorizontal imageAdapterHorizontal;
 
     Activity storedActivity;
     LayoutInflater mInflater;
@@ -137,11 +139,10 @@ public class MyImageFragment extends BaseFragment {
 
         //view1.addView(imageviewcheck);
 
-        imageAdapter    = new ImageAdapter(parentActivity);
+        imageAdapter              = new ImageAdapter(parentActivity);
+        imageAdapterHorizontal    = new ImageAdapterHorizontal(parentActivity);
 
-        listView.addHeaderView(imageviewcheck);
-
-        listView.setAdapter(imageAdapter);
+        listView.setAdapter(imageAdapterHorizontal);
 
         //listView.setAdapter(imageAdapter);
         //listView.addHeaderView(newsrowslist);//, null, false);
@@ -293,4 +294,60 @@ public class MyImageFragment extends BaseFragment {
         }
     }
 
+
+
+    public class ImageAdapterHorizontal extends BaseAdapter {
+        private Context localContext;
+        private final LayoutInflater mInflater;
+
+        ImageAdapterHorizontal(Context ct){
+            this.localContext = ct;
+            mInflater = LayoutInflater.from(localContext);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return false;
+        }
+
+        @Override
+        public int getCount() {
+            return (imageTweets.size())/5;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View horizontalView  = mInflater.inflate(R.layout.myhorizontalscrollviewa, parent, false);
+            ViewGroup imageViews = (ViewGroup) horizontalView.findViewById(R.id.imageviews);
+
+            int size  = imageTweets.size();
+            int start = position*5;
+            int end   = start+5;
+
+            while(start < size && start < end) {
+                Tweet t = imageTweets.get(start);
+
+                final View v                  = mInflater.inflate(R.layout.new_grid_item, parent, false);
+                final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
+                final TextView name           = (TextView) v.findViewById(R.id.picturetext);
+
+                picture.setImageUrl(t.entities.media.get(0).mediaUrl, mImageLoader);
+                name.setText(Html.fromHtml("<b>@" + t.user.screenName + "</b><br>" + t.text));
+                imageViews.addView(v);
+                ++start;
+            }
+
+            return horizontalView;
+        }
+    }
 }
