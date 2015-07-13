@@ -134,9 +134,6 @@ public class MyImageFragment extends BaseFragment {
         //View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, listView, false);
 
         View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, null);
-
-        ViewGroup view1 = (ViewGroup)view.findViewById(R.id.testing);
-
         //view1.addView(imageviewcheck);
 
         imageAdapter              = new ImageAdapter(parentActivity);

@@ -33,13 +33,4 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <!--android:listSelector="@android:color/holo_blue_dark"/>-->
-
-    <!--<ListView
-        android:id="@+id/mopub_sample_list_view"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-        -->
-
 </LinearLayout>
