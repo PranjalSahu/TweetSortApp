@@ -67,7 +67,7 @@ public class MyImageFragment extends BaseFragment {
     void setmydata(ListView listView, View headerView){
         listView.addHeaderView(headerView);
     }
-
+    
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
