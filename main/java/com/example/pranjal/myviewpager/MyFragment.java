@@ -230,6 +230,10 @@ public class MyFragment extends BaseFragment {
 
         setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
 
+        //View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, null);
+
+        //listView.addHeaderView(imageviewcheck);
+
         listView.setAdapter(tweetadapter);
 
         linlaHeaderProgress.setBackgroundColor(-1);
