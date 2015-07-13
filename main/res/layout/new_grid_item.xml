@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="140dp"
     android:layout_height="140dp"
     android:padding="3dp">
@@ -22,4 +22,4 @@
         android:maxLines="2"
         android:ellipsize="end" />
 
-</RelativeLayout>
+</FrameLayout>
