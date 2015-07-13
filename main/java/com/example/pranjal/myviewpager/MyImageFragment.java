@@ -91,7 +91,7 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        listView = (ObservableListView) view.findViewById(R.id.mylist);
+        listView = (ObservableListView) view.findViewById(R.id.myImagelist);
 
         if (parentActivity instanceof ObservableScrollViewCallbacks) {
             // Scroll to the specified position after layout
@@ -111,15 +111,10 @@ public class MyImageFragment extends BaseFragment {
             // This is a workaround for the issue #117:
             // https://github.com/ksoichiro/Android-ObservableScrollView/issues/117
             listView.setTouchInterceptionViewGroup((ViewGroup) parentActivity.findViewById(R.id.root));
-
             listView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
         }
 
-
-        //ViewGroup newsrowslist  = (ViewGroup)inflater.inflate(R.layout.newsrowslistlayout, null);//, false);
         View newsrowslist         = (View)inflater.inflate(R.layout.newsrowslistlayout, listView, false);
-        //ViewGroup newsrowslist  = (ViewGroup)view.findViewById(R.id.newsrowslist);
-        //ViewGroup imageviews    = (ViewGroup)view.findViewById(R.id.imageviews);
 
         newsrowslist.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -129,23 +124,10 @@ public class MyImageFragment extends BaseFragment {
             }
         });
 
-        //View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, (ViewGroup)view, false);
-
-        //View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, listView, false);
-
-        View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, null);
-        //view1.addView(imageviewcheck);
-
         imageAdapter              = new ImageAdapter(parentActivity);
         imageAdapterHorizontal    = new ImageAdapterHorizontal(parentActivity);
 
         listView.setAdapter(imageAdapterHorizontal);
-
-        //listView.setAdapter(imageAdapter);
-        //listView.addHeaderView(newsrowslist);//, null, false);
-        //listView.addHeaderView(imageviewcheck, (ViewGroup)view, false);
-
-        //((ObservableListView)view).addHeaderView(new TextView(parentActivity));
 
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
