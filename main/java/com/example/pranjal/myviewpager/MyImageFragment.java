@@ -140,7 +140,7 @@ public class MyImageFragment extends BaseFragment {
         imageAdapter              = new ImageAdapter(parentActivity);
         imageAdapterHorizontal    = new ImageAdapterHorizontal(parentActivity);
 
-        setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
+        setmydata(listView, inflater.inflate(R.layout.paddingnews, listView, false));
 
         listView.setAdapter(imageAdapterHorizontal);
 
@@ -332,7 +332,7 @@ public class MyImageFragment extends BaseFragment {
             TextView heading = new TextView(parentActivity);
 
             // ltrb
-            heading.setPadding(0, 3, 0, 2);
+            heading.setPadding(0, 8, 0, 2);
             heading.setTextColor(Color.BLACK);
             heading.setTypeface(null, Typeface.BOLD);
             heading.setTextSize(20);
