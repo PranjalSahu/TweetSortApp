@@ -69,7 +69,6 @@ public class MyFragment extends BaseFragment {
     MyApplication appState;
 
     TwitterSession ts = null;
-    LinearLayout        mLayout;
 
     Long lastDisplayTweetId  = Long.MAX_VALUE;
     Long firstDisplayTweetId = Long.MIN_VALUE;

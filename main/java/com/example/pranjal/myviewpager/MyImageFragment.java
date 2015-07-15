@@ -19,6 +19,8 @@ package com.example.pranjal.myviewpager;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -318,8 +321,40 @@ public class MyImageFragment extends BaseFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
+            LinearLayout lv1 = new LinearLayout(parentActivity, null);
+
+            lv1.setOrientation(LinearLayout.VERTICAL);
+
             View horizontalView  = mInflater.inflate(R.layout.myhorizontalscrollviewa, parent, false);
             ViewGroup imageViews = (ViewGroup) horizontalView.findViewById(R.id.imageviews);
+
+            TextView heading = new TextView(parentActivity);
+
+            // ltrb
+            heading.setPadding(0, 3, 0, 2);
+            heading.setTextColor(Color.BLACK);
+            heading.setTypeface(null, Typeface.BOLD);
+            heading.setTextSize(20);
+
+            lv1.addView(heading);
+            lv1.addView(horizontalView);
+
+            switch (position){
+                case 0:                 heading.setText("POLITICS");
+                    break;
+                case 1 :                heading.setText("MUSIC");
+                    break;
+                case 2:                 heading.setText("SPORTS");
+                    break;
+                case 3:                 heading.setText("TECHNOLOGY");
+                    break;
+                case 4:                 heading.setText("CELEBRITIES");
+                    break;
+                case 5:                 heading.setText("BUSINESS");
+                    break;
+            }
+
 
             int size  = imageTweets.size();
             int start = position*5;
@@ -344,7 +379,8 @@ public class MyImageFragment extends BaseFragment {
                 ++start;
             }
 
-            return horizontalView;
+            return lv1;
+            //return horizontalView;
         }
     }
 }
