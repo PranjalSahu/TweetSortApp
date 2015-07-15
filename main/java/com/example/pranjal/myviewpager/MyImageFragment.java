@@ -18,6 +18,7 @@ package com.example.pranjal.myviewpager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -322,6 +323,7 @@ public class MyImageFragment extends BaseFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+            //if(convertView == null){
             LinearLayout lv1 = new LinearLayout(parentActivity, null);
 
             lv1.setOrientation(LinearLayout.VERTICAL);
@@ -332,7 +334,7 @@ public class MyImageFragment extends BaseFragment {
             TextView heading = new TextView(parentActivity);
 
             // ltrb
-            heading.setPadding(0, 8, 0, 2);
+            heading.setPadding(8, 8, 0, 2);
             heading.setTextColor(Color.BLACK);
             heading.setTypeface(null, Typeface.BOLD);
             heading.setTextSize(20);
@@ -361,9 +363,25 @@ public class MyImageFragment extends BaseFragment {
             int end   = start+5;
 
             while(start < size && start < end) {
-                Tweet t = imageTweets.get(start);
+                final Tweet t = imageTweets.get(start);
 
                 final View v                  = mInflater.inflate(R.layout.new_grid_item, parent, false);
+
+                v.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction() == MotionEvent.ACTION_UP) {
+                            Intent it = new Intent();
+                            //it.
+                            Intent intent = new Intent(parentActivity, ShowImage.class);
+                            intent.putExtra("tweetstring", HelperFunctions.gson.toJson(t));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            //Toast.makeText(parentActivity, "TOUCHED", Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    }
+                });
                 final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
                 final TextView name           = (TextView) v.findViewById(R.id.picturetext);
 
