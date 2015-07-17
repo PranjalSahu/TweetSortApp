@@ -367,9 +367,14 @@ public class MyImageFragment extends BaseFragment {
 
                 final View v                  = mInflater.inflate(R.layout.new_grid_item, parent, false);
 
+                v.setClickable(true);
+
                 v.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
+
+                        v.setBackgroundColor(Color.BLUE);
+
                         if(event.getAction() == MotionEvent.ACTION_UP) {
                             Intent it = new Intent();
                             //it.

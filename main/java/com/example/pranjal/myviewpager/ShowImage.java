@@ -3,6 +3,7 @@ package com.example.pranjal.myviewpager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -58,6 +59,17 @@ public class ShowImage extends Activity {
             url = "http://javatechig.com";
         }
         webView.getSettings().setJavaScriptEnabled(true);
+
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                //activity.setTitle("Loading...");
+                //activity.setProgress(progress * 100);
+
+                //if (progress == 100)
+                //    activity.setTitle(R.string.app_name);
+            }
+        });
+
         webView.loadUrl(url);
 
 
