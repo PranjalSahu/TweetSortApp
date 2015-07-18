@@ -18,7 +18,6 @@ package com.example.pranjal.myviewpager;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -375,15 +374,22 @@ public class MyImageFragment extends BaseFragment {
 
                         v.setBackgroundColor(Color.BLUE);
 
-                        if(event.getAction() == MotionEvent.ACTION_UP) {
-                            Intent it = new Intent();
-                            //it.
-                            Intent intent = new Intent(parentActivity, ShowImage.class);
-                            intent.putExtra("tweetstring", HelperFunctions.gson.toJson(t));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            //Toast.makeText(parentActivity, "TOUCHED", Toast.LENGTH_SHORT).show();
-                        }
+                        v.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Toast.makeText(ForegroundLayoutActivity.this, R.string.item_pressed, Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+//                        if(event.getAction() == MotionEvent.ACTION_UP) {
+//                            Intent it = new Intent();
+//                            //it.
+//                            Intent intent = new Intent(parentActivity, ShowImage.class);
+//                            intent.putExtra("tweetstring", HelperFunctions.gson.toJson(t));
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            startActivity(intent);
+//                            //Toast.makeText(parentActivity, "TOUCHED", Toast.LENGTH_SHORT).show();
+//                        }
                         return false;
                     }
                 });
