@@ -215,7 +215,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
 
-        slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.accent));
+        slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.underlinecolor));
 
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setViewPager(mPager);
