@@ -368,18 +368,18 @@ public class MyImageFragment extends BaseFragment {
 
                 v.setClickable(true);
 
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast.makeText(ForegroundLayoutActivity.this, R.string.item_pressed, Toast.LENGTH_LONG).show();
+                    }
+                });
+
                 v.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
 
-                        v.setBackgroundColor(Color.BLUE);
-
-                        v.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //Toast.makeText(ForegroundLayoutActivity.this, R.string.item_pressed, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        //v.setBackgroundColor(Color.BLUE);
 
 //                        if(event.getAction() == MotionEvent.ACTION_UP) {
 //                            Intent it = new Intent();
@@ -393,6 +393,8 @@ public class MyImageFragment extends BaseFragment {
                         return false;
                     }
                 });
+
+
                 final SquareImageView picture = (SquareImageView) v.findViewById(R.id.picture);
                 final TextView name           = (TextView) v.findViewById(R.id.picturetext);
 
