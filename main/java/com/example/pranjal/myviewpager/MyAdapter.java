@@ -110,10 +110,12 @@ public class MyAdapter extends TweetViewAdapter {
         if(convertView == null) {
             rowView          = this.getTweetView(this.context, tweet);
 
-            final ImageButton iv1      = new ImageButton(this.context);
+            final ImageButton iv1  = new ImageButton(this.context);
             final ImageButton iv2  = new ImageButton(this.context);
             final ImageButton iv3  = new ImageButton(this.context);
 
+            // ltrb
+            iv1.setPadding(100, 0, 0, 0);
             iv1.setBackgroundColor(0);
             iv2.setBackgroundColor(0);
             iv3.setBackgroundColor(0);
@@ -148,7 +150,7 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     Tweet tempTweet = (Tweet) v.getTag();
-                    Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -166,11 +168,11 @@ public class MyAdapter extends TweetViewAdapter {
                                 //updateTweet(result.data);
                                 iv2.setTag(tempTweet.id);
 
-                                Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_LONG).show();
                             }
                             @Override
                             public void failure(TwitterException e) {
-                                Toast.makeText(context, "Retweet Not done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -181,12 +183,12 @@ public class MyAdapter extends TweetViewAdapter {
                                 updateTweet(result.data);
                                 iv2.setTag(result.data);
                                 iv2.setImageResource(R.drawable.retweet);
-                                Toast.makeText(context, "UnRetweet done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "UnRetweet done", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void failure(TwitterException e) {
-                                Toast.makeText(context, "UnRetweet Not done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "UnRetweet Not done", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -201,6 +203,7 @@ public class MyAdapter extends TweetViewAdapter {
                     Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
                     if(!tempTweet.favorited) {
+                        iv3.setImageResource(R.drawable.favorite_on);
                         favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
@@ -208,11 +211,11 @@ public class MyAdapter extends TweetViewAdapter {
                                 iv3.setTag(result.data);
                                 iv3.setImageResource(R.drawable.favorite_on);
 
-                                Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_LONG).show();
                             }
                             @Override
                             public void failure(TwitterException e) {
-                                Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -223,11 +226,11 @@ public class MyAdapter extends TweetViewAdapter {
                                 updateTweet(result.data);
                                 iv3.setTag(result.data);
                                 iv3.setImageResource(R.drawable.favorite);
-                                Toast.makeText(context, "UnFavorite Done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "UnFavorite Done", Toast.LENGTH_LONG).show();
                             }
                             @Override
                             public void failure(TwitterException e) {
-                                Toast.makeText(context, "UnFavorite Not Done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "UnFavorite Not Done", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -303,7 +306,7 @@ public class MyAdapter extends TweetViewAdapter {
                     Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
                     if (tempTweet.favorited) {
-                        Toast.makeText(context, "Favorite Already Done ", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "Favorite Already Done ", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -427,11 +430,11 @@ public class MyAdapter extends TweetViewAdapter {
 
             if(tweet.favorited) {
                 child2.setImageResource(R.drawable.favorite_on);
-                System.out.println("0pranjalupdate favoriteon " + tweet.id);
+                //System.out.println("0pranjalupdate favoriteon " + tweet.id);
             }
             else {
-                System.out.println("0pranjalupdate favorite "+tweet.id);
-                child2.setImageResource(R.drawable.favorite);
+                System.out.println("0pranjalupdate favorite " + tweet.id);
+                //child2.setImageResource(R.drawable.favorite);
             }
 
             /*for(int i=0;i<3;++i) {
@@ -453,9 +456,10 @@ public class MyAdapter extends TweetViewAdapter {
                @Override
                public void onClick(View v) {
                    Tweet tempTweet = (Tweet) v.getTag();
-                   Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                   //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
                    if(!tempTweet.favorited) {
+                       child2.setImageResource(R.drawable.favorite_on);
                        favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                            @Override
                            public void success(Result<Tweet> result) {
@@ -482,7 +486,7 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
                     statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
                         @Override

@@ -56,54 +56,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 >
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tweetsorttext"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="6dp"
                     android:textSize="23dp"
                     android:fontFamily="Arial"
                     android:textColor="#FFFFFF"
-                    android:text="Tweet SORT"/>
+                    android:text="Tweet SORT"/>-->
 
-
-                <Switch
-                    android:id="@+id/togglebutton"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tweetsorttext"
-                    android:gravity="left"
-                    android:showText="true"
-                    android:textOn="ON"
-                    android:textOff="OFF" />
            </RelativeLayout>
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/myRadioGroup"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:checkedButton="@+id/retweetsort">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/favoritesort"
-                    android:textColor="#FFFFFF"
-                    android:text="Favourite" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/retweetsort"
-                    android:textColor="#FFFFFF"
-                    android:text="Retweet" />
-
-            </RadioGroup>
 
         </android.support.v7.widget.Toolbar>
 

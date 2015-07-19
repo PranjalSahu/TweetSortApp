@@ -44,7 +44,7 @@ import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.List;
 
-public class MyImageFragment extends BaseFragment {
+public class AddSegment extends BaseFragment {
     //List<String> imageUrls;
     List<Tweet> imageTweets;
     ImageAdapter imageAdapter;
