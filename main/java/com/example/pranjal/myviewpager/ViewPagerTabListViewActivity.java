@@ -119,9 +119,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                     ObservableListView olv  = fg.listView;
                     List<Tweet> tList       = fg.tweetlist;
                     MyAdapter mya           = fg.tweetadapter;
-                    List<Tweet> tListTemp   = new ArrayList<Tweet>(fg.tweetlist);
-                    HelperFunctions.sortTweets(2, tListTemp, mya, olv);
-                    fg.tweetadapter.setTweets(tListTemp);
+                    fg.tempTweetList        = new ArrayList<Tweet>(fg.tweetlist);
+                    HelperFunctions.sortTweets(2, fg.tempTweetList, mya, olv);
+                    fg.tweetadapter.setTweets(fg.tempTweetList);
                     fg.tweetadapter.notifyDataSetChanged();
                     olv.smoothScrollToPosition(0);
                 }
@@ -135,9 +135,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 ObservableListView olv  = fg.listView;
                 List<Tweet> tList       = fg.tweetlist;
                 MyAdapter mya           = fg.tweetadapter;
-                List<Tweet> tListTemp   = new ArrayList<Tweet>(fg.tweetlist);
-                HelperFunctions.sortTweets(1, tListTemp, mya, olv);
-                fg.tweetadapter.setTweets(tListTemp);
+                fg.tempTweetList        = new ArrayList<Tweet>(fg.tweetlist);
+                HelperFunctions.sortTweets(1, fg.tempTweetList, mya, olv);
+                fg.tweetadapter.setTweets(fg.tempTweetList);
                 fg.tweetadapter.notifyDataSetChanged();
                 olv.smoothScrollToPosition(0);
             }

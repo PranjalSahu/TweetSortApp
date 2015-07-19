@@ -81,7 +81,7 @@ public class MyFragment extends BaseFragment {
     TwitterFactory      twitterFactory;
 
     LinearLayout linlaHeaderProgress;
-    MyAdapter         tweetadapter;
+    MyAdapter      tweetadapter;
     MoPubAdAdapter mAdAdapter;
 
     long lastTimeStamp;
@@ -397,6 +397,7 @@ public class MyFragment extends BaseFragment {
     public void displayTweetsRecent(){
         List<Tweet> filteredTweets = getFilteredRecent();
         tweetlist.addAll(0, filteredTweets);
+        tempTweetList.addAll(0, filteredTweets);
         //tweetadapter.setTweets(tweetlist);
         tweetadapter.notifyDataSetChanged();
         mSwipeLayout.setRefreshing(false);
@@ -444,6 +445,7 @@ public class MyFragment extends BaseFragment {
     public void displayTweets(){
         List<Tweet> filteredTweets = getFiltered();
         tweetlist.addAll(filteredTweets);
+        tempTweetList.addAll(filteredTweets);
         tweetadapter.notifyDataSetChanged();
         mySetOnScrollListener(storedActivity);
     }
