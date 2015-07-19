@@ -136,7 +136,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 List<Tweet> tList       = fg.tweetlist;
                 MyAdapter mya           = fg.tweetadapter;
                 List<Tweet> tListTemp   = new ArrayList<Tweet>(fg.tweetlist);
-                HelperFunctions.sortTweets(2, tListTemp, mya, olv);
+                HelperFunctions.sortTweets(1, tListTemp, mya, olv);
                 fg.tweetadapter.setTweets(tListTemp);
                 fg.tweetadapter.notifyDataSetChanged();
                 olv.smoothScrollToPosition(0);

@@ -194,10 +194,6 @@ public class MyFragment extends BaseFragment {
         super.onPause();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 
     @Override
     public void onDestroyView() {
@@ -401,6 +397,7 @@ public class MyFragment extends BaseFragment {
     public void displayTweetsRecent(){
         List<Tweet> filteredTweets = getFilteredRecent();
         tweetlist.addAll(0, filteredTweets);
+        //tweetadapter.setTweets(tweetlist);
         tweetadapter.notifyDataSetChanged();
         mSwipeLayout.setRefreshing(false);
     }
