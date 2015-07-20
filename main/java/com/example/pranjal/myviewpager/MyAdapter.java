@@ -1,6 +1,7 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class MyAdapter extends TweetViewAdapter {
 
         //System.out.println("pranjalsahuretweeted: "+temp.id);
         this.setTweets(tl);
-        this.notifyDataSetChanged();
+        //this.notifyDataSetChanged();
         return;
     }
 
@@ -131,16 +132,20 @@ public class MyAdapter extends TweetViewAdapter {
             iv2.setBackgroundColor(0);
             iv3.setBackgroundColor(0);
 
-            if(tweet.retweeted)
+            if(tweet.retweeted) {
+                t1.setTextColor(Color.parseColor("#77B255"));
                 iv2.setImageResource(R.drawable.retweet_on);
-            if(tweet.favorited)
+            }
+            if(tweet.favorited) {
+                t2.setTextColor(Color.parseColor("#FFAC33"));
                 iv3.setImageResource(R.drawable.favorite_on);
+            }
 
             iv2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    Toast.makeText(context, "iv2 "+tempTweet.user.name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "iv2 " + tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
 //                    if (!tempTweet.retweeted) {
 //                        statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
@@ -177,10 +182,10 @@ public class MyAdapter extends TweetViewAdapter {
             iv3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Tweet tempTweet = (Tweet)v.getTag();
+                    Tweet tempTweet = (Tweet) v.getTag();
                     //Toast.makeText(context, tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
-                    if(!tempTweet.favorited) {
+                    if (!tempTweet.favorited) {
                         //iv3.setImageResource(R.drawable.favorite_on);
                         favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
@@ -190,13 +195,13 @@ public class MyAdapter extends TweetViewAdapter {
                                 iv3.setImageResource(R.drawable.favorite_on);
                                 //Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_SHORT).show();
                             }
+
                             @Override
                             public void failure(TwitterException e) {
                                 //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }
-                    else{
+                    } else {
                         favoriteService.destroy(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
@@ -205,6 +210,7 @@ public class MyAdapter extends TweetViewAdapter {
                                 iv3.setImageResource(R.drawable.favorite);
                                 //Toast.makeText(context, "UnFavorite Done", Toast.LENGTH_SHORT).show();
                             }
+
                             @Override
                             public void failure(TwitterException e) {
                                 //Toast.makeText(context, "UnFavorite Not Done", Toast.LENGTH_SHORT).show();
@@ -222,7 +228,6 @@ public class MyAdapter extends TweetViewAdapter {
 
             rowView = (View)lv1;
 
-
             t1.setEnabled(true);
             t2.setEnabled(true);
 
@@ -233,17 +238,6 @@ public class MyAdapter extends TweetViewAdapter {
                     .setTweet(tweet);
 
 
-            /*for(int i=0;i<5;++i) {
-                View temp = (View)((LinearLayout) (((LinearLayout) convertView).getChildAt(1)))
-                        .getChildAt(i);
-                    temp.setTag(tweet);
-            }*/
-
-            //disable subviews to avoid links are clickable
-            if(convertView instanceof ViewGroup){
-                HelperFunctions.disableViewAndSubViews((ViewGroup) convertView);
-            }
-
             ((BaseTweetView)(((LinearLayout) convertView)
                     .getChildAt(0)))
                     .setEnabled(true);
@@ -251,14 +245,6 @@ public class MyAdapter extends TweetViewAdapter {
             ((BaseTweetView)(((LinearLayout) convertView)
                     .getChildAt(0)))
                     .setTag(tweet);
-
-
-            /*for(int i=0;i<5;++i) {
-                ((LinearLayout) (((LinearLayout) rowView)
-                        .getChildAt(1)))
-                        .getChildAt(i)
-                        .setEnabled(true);
-            }*/
 
             View btnRow              = ((LinearLayout)(((LinearLayout) rowView).getChildAt(1)));
             final ImageButton child1 = (ImageButton)btnRow.findViewById(R.id.retweetimagebutton);
@@ -279,12 +265,16 @@ public class MyAdapter extends TweetViewAdapter {
             t1.setText(Integer.toString(((Tweet) t1.getTag()).retweetCount));
             t2.setText(Integer.toString(((Tweet) t2.getTag()).favoriteCount));
 
-            if(tweet.retweeted)
+            if(tweet.retweeted) {
+                t1.setTextColor(Color.parseColor("#77B255"));
                 child1.setImageResource(R.drawable.retweet_on);
-            else
+            }
+            else {
                 child1.setImageResource(R.drawable.retweet);
+            }
 
             if(tweet.favorited) {
+                t2.setTextColor(Color.parseColor("#FFAC33"));
                 child2.setImageResource(R.drawable.favorite_on);
                 //System.out.println("0pranjalupdate favoriteon " + tweet.id);
             }
@@ -308,7 +298,8 @@ public class MyAdapter extends TweetViewAdapter {
                                updateTweet(result.data);
                                child2.setTag(result.data);
                                child2.setImageResource(R.drawable.favorite_on);
-                               System.out.println("5pranjalupdate favoriteon " + result.data.id);
+                               t2.setTextColor(Color.parseColor("#FFAC33"));
+                               //System.out.println("5pranjalupdate favoriteon " + result.data.id);
                                //Toast.makeText(context, "Favorite Done " + result.data.favorited, Toast.LENGTH_SHORT).show();
                            }
 
@@ -327,19 +318,20 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    Toast.makeText(context, "new child1 "+tempTweet.user.name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "new child1 "+tempTweet.user.name +" retweeted = "+tempTweet.retweeted, Toast.LENGTH_SHORT).show();
+                    if(!tempTweet.retweeted)
+                        child1.setImageResource(R.drawable.retweet_on);
 
                     statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
                         @Override
                         public void success(Result<Tweet> result) {
                             child1.setImageResource(R.drawable.retweet_on);
-                            //System.out.println("pranjalupdate retweet " + result.data.id);
+                            t1.setTextColor(Color.parseColor("#77B255"));
                             child1.setTag(result.data);
                             child2.setTag(result.data);
                             updateTweet(tempTweet.id);
                             Toast.makeText(context, "Retweet done new"+result.data.retweeted, Toast.LENGTH_SHORT).show();
                         }
-                        
 
                         @Override
                         public void failure(TwitterException e) {

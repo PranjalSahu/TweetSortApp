@@ -20,18 +20,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.crashlytics.android.Crashlytics;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
-import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import io.fabric.sdk.android.Fabric;
 import twitter4j.TwitterFactory;
+
+//import com.crashlytics.android.Crashlytics;
 
 
 public class MyMainActivity extends AppCompatActivity {
@@ -67,7 +67,7 @@ public class MyMainActivity extends AppCompatActivity {
         authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         Fabric.with(this, new TweetUi());
-        Fabric.with(this, new TweetComposer(), new Crashlytics());
+        //Fabric.with(this, new TweetComposer(), new Crashlytics());
 
         MyApplication appState = ((MyApplication) getApplicationContext());
         currentSession = Twitter.getSessionManager().getActiveSession();

@@ -468,6 +468,9 @@ public class MyFragment extends BaseFragment {
         linlaHeaderProgress.setVisibility(View.GONE);
     }
 
+    //#FFAC33 golden color
+    //#77B255 green button
+
     public void LoadOldTweetsFirst() {
         downloading = true;
         loading     = true;

@@ -4,6 +4,15 @@
     tools:context="com.example.toolbar.MainActivity" >
 
     <item
+        android:id="@+id/originaltimeline"
+        android:icon="@drawable/ic_format_line_spacing_white_24dp"
+        android:title="sort_items"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        android:menuCategory="secondary"/>
+
+
+    <item
         android:id="@+id/sortitemsbytweet"
         android:icon="@drawable/ic_repeat_white_24dp"
         android:title="sort_items"

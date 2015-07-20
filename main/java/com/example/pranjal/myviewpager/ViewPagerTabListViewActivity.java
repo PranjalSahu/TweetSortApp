@@ -112,7 +112,18 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.sortitemsbyfavorites){
+        if(id == R.id.originaltimeline){
+            Fragment fgT = getCurrentFragment();
+            if(fgT instanceof MyFragment) {
+                MyFragment fg           = (MyFragment) fgT;
+                ObservableListView olv  = fg.listView;
+                fg.tweetadapter.setTweets(fg.tweetlist);
+                fg.tweetadapter.notifyDataSetChanged();
+                olv.smoothScrollToPosition(0);
+            }
+            return true;
+        }
+        else if(id == R.id.sortitemsbyfavorites){
                 Fragment fgT = getCurrentFragment();
                 if(fgT instanceof MyFragment) {
                     MyFragment fg           = (MyFragment) fgT;
@@ -125,7 +136,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                     fg.tweetadapter.notifyDataSetChanged();
                     olv.smoothScrollToPosition(0);
                 }
-
             return true;
         }
         else if(id == R.id.sortitemsbytweet){
