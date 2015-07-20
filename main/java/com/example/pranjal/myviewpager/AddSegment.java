@@ -91,7 +91,7 @@ public class AddSegment extends BaseFragment {
         mInflater      = LayoutInflater.from(parentActivity);
 
         //imageUrls = TweetBank.getAllImageUrls();
-        imageTweets =  TweetBank.getAllImageUrls();
+        imageTweets =  TweetBank.getAllNewsTweets();
 
         mRequestQueue = Volley.newRequestQueue(parentActivity);
         mImageLoader  = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {

@@ -1,9 +1,6 @@
 package com.example.pranjal.myviewpager;
 
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.google.gson.Gson;
@@ -37,31 +34,31 @@ public class HelperFunctions {
     //helper method to disable subviews
     public static void disableViewAndSubViews(ViewGroup layout) {
 
-        layout.setEnabled(false);
-        layout.setClickable(false);
-        layout.setLongClickable(false);
-
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            View child = layout.getChildAt(i);
-
-            if (child instanceof ViewGroup) {
-                disableViewAndSubViews((ViewGroup) child);
-            } else {
-
-                if(child instanceof TextView) {
-                    TextView tmp = ((TextView) child);
-                    return;
-                }
-                if(child instanceof ImageView){
-                    ImageView tmp = ((ImageView) child);
-                    //System.out.println("pranjaldisable : checking ImageView " + child.getId());
-                    //return;
-                }
-                child.setEnabled(false);
-                child.setClickable(false);
-                child.setLongClickable(false);
-            }
-        }
+//        layout.setEnabled(false);
+//        layout.setClickable(false);
+//        layout.setLongClickable(false);
+//
+//        for (int i = 0; i < layout.getChildCount(); i++) {
+//            View child = layout.getChildAt(i);
+//
+//            if (child instanceof ViewGroup) {
+//                disableViewAndSubViews((ViewGroup) child);
+//            } else {
+//
+//                if(child instanceof TextView) {
+//                    TextView tmp = ((TextView) child);
+//                    return;
+//                }
+//                if(child instanceof ImageView){
+//                    ImageView tmp = ((ImageView) child);
+//                    //System.out.println("pranjaldisable : checking ImageView " + child.getId());
+//                    //return;
+//                }
+//                child.setEnabled(false);
+//                child.setClickable(false);
+//                child.setLongClickable(false);
+//            }
+//        }
     }
 
     public static void sortTweets(int type,  List<Tweet> tweetlist, MyAdapter tweetadapter){
@@ -70,7 +67,8 @@ public class HelperFunctions {
         else if(type == 2)
             Collections.sort(tweetlist, comparatorFavoriteCount);
 
-        tweetadapter.notifyDataSetChanged();
+        if(tweetadapter != null)
+            tweetadapter.notifyDataSetChanged();
         //lv.setSelectionAfterHeaderView();
         //lv.smoothScrollToPosition(0);
 

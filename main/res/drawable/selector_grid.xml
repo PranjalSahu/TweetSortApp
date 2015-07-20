@@ -4,6 +4,6 @@
         <color android:color="#FF0000" />
     </item>     <!-- pressed -->
     <item android:state_focused="true">
-        <color android:color="#000000" />
+        <color android:color="#D3D3D3" />
     </item>                                     <!-- focused -->
 </selector>

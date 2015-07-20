@@ -31,6 +31,24 @@ public class TweetBank {
         return tempList;
     }
 
+    public static List<Tweet> getAllNewsTweets(){
+        List<Tweet> tempList = new ArrayList<Tweet>();
+        List<Tweet> finalList = new ArrayList<Tweet>();
+
+        for(Tweet t: tweetlist){
+            if(HelperFunctions.checkit(t) && t.entities != null &&  t.entities.media != null &&  t.entities.media.size() > 0 && t.entities.urls.size() > 0)
+                //tempList.add(t.entities.media.get(0).mediaUrl);
+                tempList.add(t);
+        }
+
+        HelperFunctions.sortTweets(1, tempList, null);
+//        int count = 30;
+//        while(count > 0 && count < tempList.size()){
+//            finalList.add(tempList.get(count));
+//
+//        }
+        return finalList;
+    }
 
     public static List<Tweet> getAllTweets(){
         List<Tweet> tempList = new ArrayList<Tweet>(tweetlist);

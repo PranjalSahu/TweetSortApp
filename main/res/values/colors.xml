@@ -20,5 +20,6 @@
     <color name="accent">#18376a</color>
     <color name="underlinecolor">#FFFFFF</color>
     <color name="accentLight">#18376a</color>
+    <color name="selectcolor">#D3D3D3</color>
 
 </resources>

@@ -17,4 +17,5 @@
     <item android:state_pressed="true"
           android:color="#ff0000"/> <!-- pressed -->
     <item android:color="#ffffff"/> <!-- default -->
+    <item android:color="#D3D3D3"/> <!-- default -->
 </selector>

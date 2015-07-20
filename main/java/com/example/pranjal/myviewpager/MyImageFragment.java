@@ -18,6 +18,7 @@ package com.example.pranjal.myviewpager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -91,7 +92,7 @@ public class MyImageFragment extends BaseFragment {
         mInflater      = LayoutInflater.from(parentActivity);
 
         //imageUrls = TweetBank.getAllImageUrls();
-        imageTweets =  TweetBank.getAllImageUrls();
+        imageTweets =  TweetBank.getAllNewsTweets();
 
         mRequestQueue = Volley.newRequestQueue(parentActivity);
         mImageLoader  = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
@@ -378,18 +379,14 @@ public class MyImageFragment extends BaseFragment {
                 v.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-
-                        //v.setBackgroundColor(Color.BLUE);
-
-//                        if(event.getAction() == MotionEvent.ACTION_UP) {
-//                            Intent it = new Intent();
-//                            //it.
-//                            Intent intent = new Intent(parentActivity, ShowImage.class);
-//                            intent.putExtra("tweetstring", HelperFunctions.gson.toJson(t));
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            startActivity(intent);
-//                            //Toast.makeText(parentActivity, "TOUCHED", Toast.LENGTH_SHORT).show();
-//                        }
+                        if(event.getAction() == MotionEvent.ACTION_UP) {
+                            Intent it = new Intent();
+                            //it.
+                            Intent intent = new Intent(parentActivity, ShowImage.class);
+                            intent.putExtra("tweetstring", HelperFunctions.gson.toJson(t));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
                         return false;
                     }
                 });

@@ -119,6 +119,9 @@ public class MyAdapter extends TweetViewAdapter {
             final TextView     t1 = (TextView)buttonsRow.findViewById(R.id.retweetcounttext);
             final TextView     t2 = (TextView)buttonsRow.findViewById(R.id.favoritecounttext);
 
+            iv2.setTag(tweet);
+            iv3.setTag(tweet);
+
             t1.setText(Integer.toString(tweet.retweetCount));
             t2.setText(Integer.toString(tweet.favoriteCount));
 
@@ -126,12 +129,10 @@ public class MyAdapter extends TweetViewAdapter {
             iv2.setBackgroundColor(0);
             iv3.setBackgroundColor(0);
 
-            iv2.setTag(tweet);
             iv2.setTag(R.string.tweetposition, position);
             if(tweet.retweeted)
                 iv2.setImageResource(R.drawable.retweet_on);
 
-            iv3.setTag(tweet);
             iv3.setTag(R.string.tweetposition, position);
             if(tweet.favorited)
                 iv3.setImageResource(R.drawable.favorite_on);
@@ -313,7 +314,7 @@ public class MyAdapter extends TweetViewAdapter {
                     .getChildAt(0)))
                     .setTweet(tweet);
 
-            
+
             /*for(int i=0;i<5;++i) {
                 View temp = (View)((LinearLayout) (((LinearLayout) convertView).getChildAt(1)))
                         .getChildAt(i);
@@ -369,8 +370,8 @@ public class MyAdapter extends TweetViewAdapter {
                 //System.out.println("0pranjalupdate favoriteon " + tweet.id);
             }
             else {
-                System.out.println("0pranjalupdate favorite " + tweet.id);
-                //child2.setImageResource(R.drawable.favorite);
+                //System.out.println("0pranjalupdate favorite " + tweet.id);
+                child2.setImageResource(R.drawable.favorite);
             }
 
 
