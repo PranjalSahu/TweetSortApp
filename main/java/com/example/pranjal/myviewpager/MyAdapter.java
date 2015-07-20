@@ -132,13 +132,21 @@ public class MyAdapter extends TweetViewAdapter {
             iv2.setBackgroundColor(0);
             iv3.setBackgroundColor(0);
 
+            System.out.println("Default color "+t1.getTextColors().getDefaultColor());
+
             if(tweet.retweeted) {
                 t1.setTextColor(Color.parseColor("#77B255"));
                 iv2.setImageResource(R.drawable.retweet_on);
             }
+            else{
+                t1.setTextColor(t1.getTextColors().getDefaultColor());
+            }
             if(tweet.favorited) {
                 t2.setTextColor(Color.parseColor("#FFAC33"));
                 iv3.setImageResource(R.drawable.favorite_on);
+            }
+            else{
+                t2.setTextColor(t2.getTextColors().getDefaultColor());
             }
 
             iv2.setOnClickListener(new View.OnClickListener() {
@@ -265,11 +273,14 @@ public class MyAdapter extends TweetViewAdapter {
             t1.setText(Integer.toString(((Tweet) t1.getTag()).retweetCount));
             t2.setText(Integer.toString(((Tweet) t2.getTag()).favoriteCount));
 
+            System.out.println("Default color " + t1.getTextColors().getDefaultColor());
+
             if(tweet.retweeted) {
                 t1.setTextColor(Color.parseColor("#77B255"));
                 child1.setImageResource(R.drawable.retweet_on);
             }
             else {
+                t1.setTextColor(t1.getTextColors().getDefaultColor());
                 child1.setImageResource(R.drawable.retweet);
             }
 
@@ -280,6 +291,7 @@ public class MyAdapter extends TweetViewAdapter {
             }
             else {
                 //System.out.println("0pranjalupdate favorite " + tweet.id);
+                t2.setTextColor(t2.getTextColors().getDefaultColor());
                 child2.setImageResource(R.drawable.favorite);
             }
 
@@ -289,6 +301,9 @@ public class MyAdapter extends TweetViewAdapter {
                public void onClick(View v) {
                    Tweet tempTweet = (Tweet) v.getTag();
                    //Toast.makeText(context, tempTweet.user.name, Toast.LENGTH_SHORT).show();
+
+                   if(!tempTweet.favorited)
+                       child2.setImageResource(R.drawable.favorite_on);
 
                    if (!tempTweet.favorited) {
                        //child2.setImageResource(R.drawable.favorite_on);
