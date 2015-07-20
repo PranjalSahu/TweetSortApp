@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -119,60 +120,58 @@ public class MyAdapter extends TweetViewAdapter {
             final TextView     t1 = (TextView)buttonsRow.findViewById(R.id.retweetcounttext);
             final TextView     t2 = (TextView)buttonsRow.findViewById(R.id.favoritecounttext);
 
+            t1.setTag(tweet);
+            t2.setTag(tweet);
             iv2.setTag(tweet);
             iv3.setTag(tweet);
+
 
             t1.setText(Integer.toString(tweet.retweetCount));
             t2.setText(Integer.toString(tweet.favoriteCount));
 
-
             iv2.setBackgroundColor(0);
             iv3.setBackgroundColor(0);
 
-            iv2.setTag(R.string.tweetposition, position);
             if(tweet.retweeted)
                 iv2.setImageResource(R.drawable.retweet_on);
-
-            iv3.setTag(R.string.tweetposition, position);
             if(tweet.favorited)
                 iv3.setImageResource(R.drawable.favorite_on);
 
+            
             iv2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "iv2 "+tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
-                    if (!tempTweet.retweeted) {
-                        statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
-                            @Override
-                            public void success(Result<Tweet> result) {
-                                //updateTweet(result.data);
-                                iv2.setTag(tempTweet.id);
-                                //Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void failure(TwitterException e) {
-                                //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } else {
-                        statusesService.destroy(tempTweet.id, false, new Callback<Tweet>() {
-                            @Override
-                            public void success(Result<Tweet> result) {
-                                updateTweet(result.data);
-                                iv2.setTag(result.data);
-                                iv2.setImageResource(R.drawable.retweet);
-                                //Toast.makeText(context, "UnRetweet done", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void failure(TwitterException e) {
-                                //Toast.makeText(context, "UnRetweet Not done", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
+//                    if (!tempTweet.retweeted) {
+//                        statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
+//                            @Override
+//                            public void success(Result<Tweet> result) {
+//                                //updateTweet(result.data);
+//                                iv2.setTag(tempTweet.id);
+//                                //Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_SHORT).show();
+//                            }
+//                            @Override
+//                            public void failure(TwitterException e) {
+//                                //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    } else {
+//                        statusesService.destroy(tempTweet.id, false, new Callback<Tweet>() {
+//                            @Override
+//                            public void success(Result<Tweet> result) {
+//                                updateTweet(result.data);
+//                                iv2.setTag(result.data);
+//                                iv2.setImageResource(R.drawable.retweet);
+//                                Toast.makeText(context, "UnRetweet done", Toast.LENGTH_SHORT).show();
+//                            }
+//                            @Override
+//                            public void failure(TwitterException e) {
+//                                //Toast.makeText(context, "UnRetweet Not done", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
                 }
             });
 
@@ -181,7 +180,7 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     Tweet tempTweet = (Tweet)v.getTag();
-                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
                     if(!tempTweet.favorited) {
                         //iv3.setImageResource(R.drawable.favorite_on);
@@ -191,11 +190,11 @@ public class MyAdapter extends TweetViewAdapter {
                                 updateTweet(result.data);
                                 iv3.setTag(result.data);
                                 iv3.setImageResource(R.drawable.favorite_on);
-                                //Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void failure(TwitterException e) {
-                                //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -206,11 +205,11 @@ public class MyAdapter extends TweetViewAdapter {
                                 updateTweet(result.data);
                                 iv3.setTag(result.data);
                                 iv3.setImageResource(R.drawable.favorite);
-                                //Toast.makeText(context, "UnFavorite Done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "UnFavorite Done", Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void failure(TwitterException e) {
-                                //Toast.makeText(context, "UnFavorite Not Done", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context, "UnFavorite Not Done", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -256,10 +255,10 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     Tweet tempTweet = (Tweet) v.getTag();
-                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
                     if (tempTweet.favorited) {
-                        //Toast.makeText(context, "Favorite Already Done ", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "Favorite Already Done ", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -273,7 +272,7 @@ public class MyAdapter extends TweetViewAdapter {
 
                         @Override
                         public void failure(TwitterException e) {
-                            //Toast.makeText(context, "Favorite Not Done " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(context, "Favorite Not Done " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -283,22 +282,22 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "old child1 "+tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
-                    statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
-                        @Override
-                        public void success(Result<Tweet> result) {
-                            updateTweet(tempTweet.id);
-                            child1.setTag(result.data);
-                            child1.setImageResource(R.drawable.retweet_on);
-                            //Toast.makeText(context, "Retweet done1 " + result.data.retweeted, Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void failure(TwitterException e) {
-                            //Toast.makeText(context, "Retweet Not done1", Toast.LENGTH_LONG).show();
-                        }
-                    });
+//                    statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
+//                        @Override
+//                        public void success(Result<Tweet> result) {
+//                            updateTweet(tempTweet.id);
+//                            child1.setTag(result.data);
+//                            child1.setImageResource(R.drawable.retweet_on);
+//                            //Toast.makeText(context, "Retweet done1 " + result.data.retweeted, Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        @Override
+//                        public void failure(TwitterException e) {
+//                            //Toast.makeText(context, "Retweet Not done1", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
 
                 }
             });
@@ -353,12 +352,13 @@ public class MyAdapter extends TweetViewAdapter {
             t1.setEnabled(true);
             t2.setEnabled(true);
 
+            child1.setTag(tweet);
+            child2.setTag(tweet);
             t1.setTag(tweet);
             t2.setTag(tweet);
 
             t1.setText(Integer.toString(((Tweet) t1.getTag()).retweetCount));
             t2.setText(Integer.toString(((Tweet) t2.getTag()).favoriteCount));
-
 
             if(tweet.retweeted)
                 child1.setImageResource(R.drawable.retweet_on);
@@ -379,7 +379,7 @@ public class MyAdapter extends TweetViewAdapter {
                @Override
                public void onClick(View v) {
                    Tweet tempTweet = (Tweet) v.getTag();
-                   //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                   //Toast.makeText(context, tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
                    if (!tempTweet.favorited) {
                        //child2.setImageResource(R.drawable.favorite_on);
@@ -390,12 +390,12 @@ public class MyAdapter extends TweetViewAdapter {
                                child2.setTag(result.data);
                                child2.setImageResource(R.drawable.favorite_on);
                                System.out.println("5pranjalupdate favoriteon " + result.data.id);
-                               //Toast.makeText(context, "Favorite Done " + result.data.favorited, Toast.LENGTH_LONG).show();
+                               //Toast.makeText(context, "Favorite Done " + result.data.favorited, Toast.LENGTH_SHORT).show();
                            }
 
                            @Override
                            public void failure(TwitterException e) {
-                               //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
+                               //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_SHORT).show();
                            }
                        });
                    } else {
@@ -408,24 +408,24 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "new child1 "+tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
-                    statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
-                        @Override
-                        public void success(Result<Tweet> result) {
-                            child1.setImageResource(R.drawable.retweet_on);
-                            System.out.println("pranjalupdate retweet " + result.data.id);
-                            child1.setTag(result.data);
-                            child2.setTag(result.data);
-                            updateTweet(tempTweet.id);
-                            //Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void failure(TwitterException e) {
-                            //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_LONG).show();
-                        }
-                    });
+//                    statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
+//                        @Override
+//                        public void success(Result<Tweet> result) {
+//                            child1.setImageResource(R.drawable.retweet_on);
+//                            //System.out.println("pranjalupdate retweet " + result.data.id);
+//                            child1.setTag(result.data);
+//                            child2.setTag(result.data);
+//                            updateTweet(tempTweet.id);
+//                            Toast.makeText(context, "Retweet done new"+result.data.retweeted, Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        @Override
+//                        public void failure(TwitterException e) {
+//                            //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
 
                 }
             });
