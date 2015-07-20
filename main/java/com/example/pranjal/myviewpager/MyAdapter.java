@@ -116,6 +116,15 @@ public class MyAdapter extends TweetViewAdapter {
 
             final ImageButton iv2 = (ImageButton)buttonsRow.findViewById(R.id.retweetimagebutton);
             final ImageButton iv3 = (ImageButton)buttonsRow.findViewById(R.id.favoriteimagebutton);
+            final TextView     t1 = (TextView)buttonsRow.findViewById(R.id.retweetcounttext);
+            final TextView     t2 = (TextView)buttonsRow.findViewById(R.id.favoritecounttext);
+
+            t1.setText(Integer.toString(tweet.retweetCount));
+            t2.setText(Integer.toString(tweet.favoriteCount));
+
+
+            iv2.setBackgroundColor(0);
+            iv3.setBackgroundColor(0);
 
             iv2.setTag(tweet);
             iv2.setTag(R.string.tweetposition, position);
@@ -293,12 +302,18 @@ public class MyAdapter extends TweetViewAdapter {
                 }
             });
 
+            child1.setEnabled(true);
+            child2.setEnabled(true);
+            t1.setEnabled(true);
+            t2.setEnabled(true);
+
         } else {
 
             ((BaseTweetView)(((LinearLayout) convertView)
                     .getChildAt(0)))
                     .setTweet(tweet);
 
+            
             /*for(int i=0;i<5;++i) {
                 View temp = (View)((LinearLayout) (((LinearLayout) convertView).getChildAt(1)))
                         .getChildAt(i);
@@ -331,6 +346,11 @@ public class MyAdapter extends TweetViewAdapter {
             final ImageButton child2 = (ImageButton)btnRow.findViewById(R.id.favoriteimagebutton);
             final TextView t1        = (TextView)btnRow.findViewById(R.id.retweetcounttext);
             final TextView t2        = (TextView)btnRow.findViewById(R.id.favoritecounttext);
+
+            child1.setEnabled(true);
+            child2.setEnabled(true);
+            t1.setEnabled(true);
+            t2.setEnabled(true);
 
             t1.setTag(tweet);
             t2.setTag(tweet);
