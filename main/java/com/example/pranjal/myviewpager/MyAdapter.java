@@ -1,8 +1,7 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -28,12 +27,14 @@ public class MyAdapter extends TweetViewAdapter {
 
     StatusesService statusesService = null;
     FavoriteService favoriteService = null;
-
+    LayoutInflater inflater         = null;
 
     public MyAdapter(Context context, StatusesService ss, FavoriteService fs){
         super(context);
         statusesService = ss;
         favoriteService = fs;
+        inflater = LayoutInflater.from(context);
+
     }
 
     private void updateTweet(Tweet updateTweet){
@@ -111,98 +112,42 @@ public class MyAdapter extends TweetViewAdapter {
 
         if(convertView == null) {
             rowView          = this.getTweetView(this.context, tweet);
+            View buttonsRow  = inflater.inflate(R.layout.buttons_row, parent, false);
 
-            final ImageButton iv1  = new ImageButton(this.context);
-            final ImageButton iv2  = new ImageButton(this.context);
-            final ImageButton iv3  = new ImageButton(this.context);
-
-            final TextView ti1  = new TextView(this.context);
-            final TextView ti2  = new TextView(this.context);
-
-            ti1.setTextSize(15);
-            ti1.setTypeface(null, Typeface.BOLD);
-            ti2.setTextSize(15);
-            ti2.setTypeface(null, Typeface.BOLD);
-
-            // ltrb
-            iv1.setPadding(60, 0, 0, 0);
-
-            iv2.setPadding(0, 0, 0, 0);
-            iv3.setPadding(0, 0, 0, 0);
-
-            iv1.setBackgroundColor(0);
-            iv2.setBackgroundColor(0);
-            iv3.setBackgroundColor(0);
-
-            iv1.setTag(tweet);
-            iv1.setTag(R.string.tweetposition, position);
+            final ImageButton iv2 = (ImageButton)buttonsRow.findViewById(R.id.retweetimagebutton);
+            final ImageButton iv3 = (ImageButton)buttonsRow.findViewById(R.id.favoriteimagebutton);
 
             iv2.setTag(tweet);
             iv2.setTag(R.string.tweetposition, position);
-
-            ti1.setTag(tweet);
-            ti2.setTag(tweet);
-
-            ti1.setPadding(0, 0, 10, 4);
-            ti2.setPadding(0, 0, 0, 4);
-
-            ti1.setTextColor(Color.GREEN);
-            ti2.setTextColor(Color.YELLOW);
-            ti1.setText(Integer.toString(tweet.retweetCount));
-            ti2.setText(Integer.toString(tweet.favoriteCount));
-
-            if (!tweet.retweeted) {
-                iv2.setImageResource(R.drawable.retweet);
-            }
-            else {
+            if(tweet.retweeted)
                 iv2.setImageResource(R.drawable.retweet_on);
-                //System.out.println("pranjalupdate retweeton "+tweet.id);
-            }
 
             iv3.setTag(tweet);
             iv3.setTag(R.string.tweetposition, position);
-            if (!tweet.favorited) {
-                iv3.setImageResource(R.drawable.favorite);
-                //System.out.println("1pranjalupdate favorite " + tweet.id);
-            }
-            else {
+            if(tweet.favorited)
                 iv3.setImageResource(R.drawable.favorite_on);
-                //System.out.println("1pranjalupdate favoriteon " + tweet.id);
-            }
 
-            iv1.setImageResource(R.drawable.abc_item_background_holo_dark);
-
-            iv1.setOnClickListener(new View.OnClickListener() {
+            iv2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Tweet tempTweet = (Tweet) v.getTag();
-                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
-                }
-            });
-
-            iv2.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    final Tweet tempTweet = (Tweet)v.getTag();
+                    final Tweet tempTweet = (Tweet) v.getTag();
                     //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
-                    if(!tempTweet.retweeted) {
-
+                    if (!tempTweet.retweeted) {
                         statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
                                 //updateTweet(result.data);
                                 iv2.setTag(tempTweet.id);
-
                                 //Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_LONG).show();
                             }
+
                             @Override
                             public void failure(TwitterException e) {
                                 //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_LONG).show();
                             }
                         });
-                    }
-                    else{
+                    } else {
                         statusesService.destroy(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
@@ -236,7 +181,6 @@ public class MyAdapter extends TweetViewAdapter {
                                 updateTweet(result.data);
                                 iv3.setTag(result.data);
                                 iv3.setImageResource(R.drawable.favorite_on);
-
                                 //Toast.makeText(context, "Favorite Done "+result.data.favorited, Toast.LENGTH_LONG).show();
                             }
                             @Override
@@ -263,30 +207,15 @@ public class MyAdapter extends TweetViewAdapter {
                 }
             });
 
-
             LinearLayout lv1 = new LinearLayout(this.context, null);
             lv1.setOrientation(LinearLayout.VERTICAL);
 
-            //lv1.removeAllViews();
-
             lv1.addView((View) rowView, 0);
-
-            LinearLayout lv2 = new LinearLayout(this.context, null);
-            lv2.setOrientation(LinearLayout.HORIZONTAL);
-            lv2.setBackgroundColor(-1);
-
-            lv2.addView((View) iv1, 0);
-
-            lv2.addView((View) iv2, 1);
-            lv2.addView((View) ti1, 2);
-            lv2.addView((View) iv3, 3);
-            lv2.addView((View) ti2, 4);
-
-            lv1.addView((View) lv2, 1);
+            lv1.addView((View) buttonsRow, 1);
 
             rowView = (View)lv1;
 
-            //disable subviews to avoid links are clickable
+           //disable subviews to avoid links are clickable
             if(rowView instanceof ViewGroup){
                 System.out.println("Disabling views while creating view");
                 HelperFunctions.disableViewAndSubViews((ViewGroup) rowView);
@@ -301,32 +230,17 @@ public class MyAdapter extends TweetViewAdapter {
                     .getChildAt(0)))
                     .setTag(tweet);
 
-            /*((BaseTweetView)(((LinearLayout) rowView)
-                    .getChildAt(0)))
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Tweet tempTweet = (Tweet) v.getTag();
-                            Intent intent = new Intent(v.getContext(), ShowTweet.class);
-                            intent.putExtra("tweetid", tempTweet.id);
-                            context.startActivity(intent);
-                        }
-                    });
-            */
-            for(int i=0;i<5;++i) {
+
+            /*for(int i=0;i<5;++i) {
                 ((LinearLayout) (((LinearLayout) rowView)
                         .getChildAt(1)))
                         .getChildAt(i)
                         .setEnabled(true);
-            }
+            }*/
 
-            final ImageButton child1 = (ImageButton)((LinearLayout)(((LinearLayout) rowView)
-                    .getChildAt(1)))
-                    .getChildAt(1);
-
-            final ImageButton child2 = (ImageButton)((LinearLayout)(((LinearLayout) rowView)
-                    .getChildAt(1)))
-                    .getChildAt(3);
+            View btnRow              = ((LinearLayout)(((LinearLayout) rowView).getChildAt(1)));
+            final ImageButton child1 = (ImageButton)btnRow.findViewById(R.id.retweetimagebutton);
+            final ImageButton child2 = (ImageButton)btnRow.findViewById(R.id.favoriteimagebutton);
 
             child2.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -385,11 +299,11 @@ public class MyAdapter extends TweetViewAdapter {
                     .getChildAt(0)))
                     .setTweet(tweet);
 
-            for(int i=0;i<5;++i) {
+            /*for(int i=0;i<5;++i) {
                 View temp = (View)((LinearLayout) (((LinearLayout) convertView).getChildAt(1)))
                         .getChildAt(i);
                     temp.setTag(tweet);
-            }
+            }*/
 
             //disable subviews to avoid links are clickable
             if(convertView instanceof ViewGroup){
@@ -404,43 +318,19 @@ public class MyAdapter extends TweetViewAdapter {
                     .getChildAt(0)))
                     .setTag(tweet);
 
-            /*((BaseTweetView)(((LinearLayout) convertView)
-                    .getChildAt(0)))
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Tweet tempTweet = (Tweet) v.getTag();
-                            Intent intent = new Intent(v.getContext(), ShowTweet.class);
-                            intent.putExtra("tweetid", tempTweet.id);
-                            context.startActivity(intent);
-                        }
-                    });
-               */
-            for(int i=0;i<5;++i) {
+
+            /*for(int i=0;i<5;++i) {
                 ((LinearLayout) (((LinearLayout) rowView)
                         .getChildAt(1)))
                         .getChildAt(i)
                         .setEnabled(true);
-            }
+            }*/
 
-            final ImageButton child1 = (ImageButton)((LinearLayout)(((LinearLayout) rowView)
-                    .getChildAt(1)))
-                    .getChildAt(1);
-
-            final ImageButton child2 = (ImageButton)((LinearLayout)(((LinearLayout) rowView)
-                    .getChildAt(1)))
-                    .getChildAt(3);
-
-            final TextView t1 = (TextView)((LinearLayout)(((LinearLayout) rowView)
-                    .getChildAt(1)))
-                    .getChildAt(2);
-
-            final TextView t2 = (TextView)((LinearLayout)(((LinearLayout) rowView)
-                    .getChildAt(1)))
-                    .getChildAt(4);
-
-//            t1.setText("50");
-//            t2.setText("10");
+            View btnRow              = ((LinearLayout)(((LinearLayout) rowView).getChildAt(1)));
+            final ImageButton child1 = (ImageButton)btnRow.findViewById(R.id.retweetimagebutton);
+            final ImageButton child2 = (ImageButton)btnRow.findViewById(R.id.favoriteimagebutton);
+            final TextView t1        = (TextView)btnRow.findViewById(R.id.retweetcounttext);
+            final TextView t2        = (TextView)btnRow.findViewById(R.id.favoritecounttext);
 
             t1.setTag(tweet);
             t2.setTag(tweet);
@@ -448,8 +338,6 @@ public class MyAdapter extends TweetViewAdapter {
             t1.setText(Integer.toString(((Tweet) t1.getTag()).retweetCount));
             t2.setText(Integer.toString(((Tweet) t2.getTag()).favoriteCount));
 
-            //Tweet temp1 = (Tweet)child1.getTag();
-            //Tweet temp2 = (Tweet)child2.getTag();
 
             if(tweet.retweeted)
                 child1.setImageResource(R.drawable.retweet_on);
@@ -465,20 +353,6 @@ public class MyAdapter extends TweetViewAdapter {
                 //child2.setImageResource(R.drawable.favorite);
             }
 
-            /*for(int i=0;i<3;++i) {
-                ((LinearLayout) (((LinearLayout) rowView)
-                        .getChildAt(1)))
-                        .getChildAt(i)
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Tweet tempTweet = (Tweet) v.getTag();
-                                String tweetId = "click tweetId1:" + tempTweet.idStr;
-                                Toast.makeText(context, tweetId, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }*/
-
 
            child2.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -486,7 +360,7 @@ public class MyAdapter extends TweetViewAdapter {
                    Tweet tempTweet = (Tweet) v.getTag();
                    //Toast.makeText(context, tempTweet.idStr, Toast.LENGTH_LONG).show();
 
-                   if(!tempTweet.favorited) {
+                   if (!tempTweet.favorited) {
                        //child2.setImageResource(R.drawable.favorite_on);
                        favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                            @Override
@@ -503,8 +377,7 @@ public class MyAdapter extends TweetViewAdapter {
                                //Toast.makeText(context, "Favorite Not Done", Toast.LENGTH_LONG).show();
                            }
                        });
-                   }
-                   else{
+                   } else {
 
                    }
                }
@@ -540,13 +413,3 @@ public class MyAdapter extends TweetViewAdapter {
         return (View)rowView;
     }
 }
-
-
-
-/*
-            TextView tv = new TextView(this.context);
-            tv.setHeight(50);
-            tv.setWidth(50);
-            tv.setBackgroundColor(-1);
-            tv.setTextColor(Color.BLUE);
-            */
