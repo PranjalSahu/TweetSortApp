@@ -166,6 +166,12 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     protected void onResume() {
         super.onResume();
+        /*for(int i =0;i<3;++i) {
+            MyFragment fg = (MyFragment)mPagerAdapter.getItemAt(0);
+            if(fg !=  null){
+                fg.setAppState(baseContext, statusesService, accountService, favoriteService);
+            }
+        }*/
     }
 
     @Override
@@ -518,7 +524,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
                 if(baseContext == null || statusesService == null || accountService == null || favoriteService == null) {
                     System.out.println("nullpranjal baseContext: " + baseContext+ "statusesService: " + statusesService);
-                    System.out.println("nullpranjal accountService: " + accountService+ "favoriteService: " + favoriteService);
+                    System.out.println("nullpranjal accountService: " + accountService + "favoriteService: " + favoriteService);
                 }
 
                 f.setAppState(baseContext, statusesService, accountService, favoriteService);
