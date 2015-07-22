@@ -90,6 +90,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     static MyApplication appState;
 
     public static StatusesService statusesService;
+    
     public static AccountService accountService;
     public static FavoriteService favoriteService;
     public static TwitterAuthConfig   authConfig     = null;
