@@ -31,6 +31,8 @@ public class MyAdapter extends TweetViewAdapter {
     FavoriteService favoriteService = null;
     LayoutInflater inflater         = null;
 
+    int defaultColor = 0;
+
     public MyAdapter(Context context, StatusesService ss, FavoriteService fs){
         super(context);
         statusesService = ss;
@@ -79,7 +81,7 @@ public class MyAdapter extends TweetViewAdapter {
     }
 
     private void updateTweet(long id){
-        statusesService.lookup(Long.toString(id), false, false, false, new Callback<List<Tweet>>() {
+        statusesService.lookup(Long.toString(id), true, false, false, new Callback<List<Tweet>>() {
             @Override
             public void success(Result<List<Tweet>> result) {
                 updateTweet(result.data.get(0), 0);
@@ -132,6 +134,8 @@ public class MyAdapter extends TweetViewAdapter {
             iv2.setBackgroundColor(0);
             iv3.setBackgroundColor(0);
 
+            defaultColor = t1.getTextColors().getDefaultColor();
+
             System.out.println("Default color "+t1.getTextColors().getDefaultColor());
 
             if(tweet.retweeted) {
@@ -139,14 +143,14 @@ public class MyAdapter extends TweetViewAdapter {
                 iv2.setImageResource(R.drawable.retweet_on);
             }
             else{
-                t1.setTextColor(t1.getTextColors().getDefaultColor());
+                t1.setTextColor(defaultColor);
             }
             if(tweet.favorited) {
                 t2.setTextColor(Color.parseColor("#FFAC33"));
                 iv3.setImageResource(R.drawable.favorite_on);
             }
             else{
-                t2.setTextColor(t2.getTextColors().getDefaultColor());
+                t2.setTextColor(defaultColor);
             }
 
             iv2.setOnClickListener(new View.OnClickListener() {
@@ -280,18 +284,16 @@ public class MyAdapter extends TweetViewAdapter {
                 child1.setImageResource(R.drawable.retweet_on);
             }
             else {
-                t1.setTextColor(t1.getTextColors().getDefaultColor());
+                t1.setTextColor(defaultColor);
                 child1.setImageResource(R.drawable.retweet);
             }
 
             if(tweet.favorited) {
                 t2.setTextColor(Color.parseColor("#FFAC33"));
                 child2.setImageResource(R.drawable.favorite_on);
-                //System.out.println("0pranjalupdate favoriteon " + tweet.id);
             }
             else {
-                //System.out.println("0pranjalupdate favorite " + tweet.id);
-                t2.setTextColor(t2.getTextColors().getDefaultColor());
+                t2.setTextColor(defaultColor);     // TODO : testing favorite bug
                 child2.setImageResource(R.drawable.favorite);
             }
 
@@ -299,7 +301,7 @@ public class MyAdapter extends TweetViewAdapter {
            child2.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   Tweet tempTweet = (Tweet) v.getTag();
+                   final Tweet tempTweet = (Tweet) v.getTag();
                    //Toast.makeText(context, tempTweet.user.name, Toast.LENGTH_SHORT).show();
 
                    if(!tempTweet.favorited)
@@ -310,9 +312,13 @@ public class MyAdapter extends TweetViewAdapter {
                        favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                            @Override
                            public void success(Result<Tweet> result) {
+                               System.out.println("vani temp:"+HelperFunctions.gson.toJson(tempTweet));
+                               System.out.println("vani result:"+HelperFunctions.gson.toJson(result.data));
+
                                updateTweet(result.data);
                                child2.setTag(result.data);
                                child2.setImageResource(R.drawable.favorite_on);
+
                                t2.setTextColor(Color.parseColor("#FFAC33"));
                                //System.out.println("5pranjalupdate favoriteon " + result.data.id);
                                //Toast.makeText(context, "Favorite Done " + result.data.favorited, Toast.LENGTH_SHORT).show();
@@ -342,6 +348,7 @@ public class MyAdapter extends TweetViewAdapter {
                         public void success(Result<Tweet> result) {
                             child1.setImageResource(R.drawable.retweet_on);
                             t1.setTextColor(Color.parseColor("#77B255"));
+
                             child1.setTag(result.data);
                             child2.setTag(result.data);
                             updateTweet(tempTweet.id);

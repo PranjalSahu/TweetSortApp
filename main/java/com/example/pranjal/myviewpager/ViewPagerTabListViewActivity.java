@@ -516,6 +516,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                     f.setArguments(args);
                 }
 
+                if(baseContext == null || statusesService == null || accountService == null || favoriteService == null) {
+                    System.out.println("nullpranjal baseContext: " + baseContext+ "statusesService: " + statusesService);
+                    System.out.println("nullpranjal accountService: " + accountService+ "favoriteService: " + favoriteService);
+                }
+
                 f.setAppState(baseContext, statusesService, accountService, favoriteService);
                 return f;
             }
