@@ -17,6 +17,7 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -49,6 +50,7 @@ import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
@@ -160,6 +162,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             }
             return true;
         }
+        else if(id == R.id.addsegment){
+            Intent intent = new Intent(ViewPagerTabListViewActivity.this, AddSegmentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivityForResult(intent, 1);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -186,13 +193,25 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         protected String doInBackground(String... params) {
             long nextCursor = -1;
             IDs friendIds   = null;
-
             do{
                 ResponseList<User> followers = null;
                 try {
                     friendIds = twitter.getFriendsIDs(nextCursor);
-                    followers = twitter.lookupUsers(friendIds.getIDs());
+                    long arr[] = friendIds.getIDs();
+                    int cur    = 0;
+
+                    while(cur+100<arr.length) {
+                        followers = twitter.lookupUsers(Arrays.copyOfRange(arr, cur, cur+100));
+                        HelperFunctions.friends.addAll(followers);
+                        for(User follower : followers) {
+                            HelperFunctions.users.add(follower.getName());
+                            System.out.println("FRIEND " + follower.getId()+" " +follower.getScreenName()+" "+follower.getName());
+                        }
+                        cur = cur+100;
+                    }
+                    followers = twitter.lookupUsers(Arrays.copyOfRange(arr, cur, arr.length));
                     for(User follower : followers) {
+                        HelperFunctions.friends.addAll(followers);
                         System.out.println("FRIEND "+follower.getId()+" "+follower.getScreenName()+" "+follower.getName());
                     }
                 } catch (TwitterException e) {

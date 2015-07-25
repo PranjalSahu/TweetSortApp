@@ -16,12 +16,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import twitter4j.User;
+
 /**
  * Created by pranjal on 29/04/15.
  */
 public class HelperFunctions {
 
     public static boolean animate = true;                  // if 0 then don't animate else animate
+
+    public static ArrayList<User> friends = new ArrayList<User>();
+    public static ArrayList<String> users = new ArrayList<String>();
 
     public static StatusesService statusesService;
     public static AccountService accountService;
