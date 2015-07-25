@@ -43,11 +43,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.core.services.AccountService;
-import com.twitter.sdk.android.core.services.FavoriteService;
-import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
@@ -89,12 +85,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private NavigationAdapter mPagerAdapter;
     static MyApplication appState;
 
-    public static StatusesService statusesService;
-    
-    public static AccountService accountService;
-    public static FavoriteService favoriteService;
-    public static TwitterAuthConfig   authConfig     = null;
-    public static TwitterSession currentSession = null;
     public static Context baseContext = null;
 
     String TWITTER_KEY    = "i8lsarVzM1RLdQli7JvGibJya";
@@ -218,12 +208,12 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         baseContext = this.getApplication().getBaseContext();
 
-        authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        HelperFunctions.authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(HelperFunctions.authConfig));
         Fabric.with(this, new TweetUi());
         Fabric.with(this, new TweetComposer());
 
-        currentSession = Twitter.getSessionManager().getActiveSession();
+        HelperFunctions.currentSession = Twitter.getSessionManager().getActiveSession();
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -291,12 +281,12 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 //        });
 
 
-        username = currentSession.getUserName();
+        username = HelperFunctions.currentSession.getUserName();
 
-        twitterApiClient = new MyTwitterApiClient(currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
-        accountService   = twitterApiClient.getAccountService();
-        statusesService  = twitterApiClient.getStatusesService();
-        favoriteService  = twitterApiClient.getFavoriteService();
+        twitterApiClient = new MyTwitterApiClient(HelperFunctions.currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
+        HelperFunctions.accountService   = twitterApiClient.getAccountService();
+        HelperFunctions.statusesService  = twitterApiClient.getStatusesService();
+        HelperFunctions.favoriteService  = twitterApiClient.getFavoriteService();
 
         mHeaderView = findViewById(R.id.header);
         ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));
@@ -523,12 +513,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                     f.setArguments(args);
                 }
 
-                if(baseContext == null || statusesService == null || accountService == null || favoriteService == null) {
-                    System.out.println("nullpranjal baseContext: " + baseContext+ "statusesService: " + statusesService);
-                    System.out.println("nullpranjal accountService: " + accountService + "favoriteService: " + favoriteService);
-                }
-
-                f.setAppState(baseContext, statusesService, accountService, favoriteService);
                 return f;
             }
         }

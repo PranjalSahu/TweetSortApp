@@ -105,9 +105,6 @@ public class MyFragment extends BaseFragment {
     String accesstoken  = "163158983-PcgEMJBfxFQBSK2JHcnKYfZhGTyPio6jt23z3FBh";
     String accesssecret = "BIf9DohxN21Y3jF1m3LP3JAgR2gA673Ywwe20QjVFyCnZ";
 
-    StatusesService statusesService;
-    AccountService accountService;
-    FavoriteService favoriteService;
     ObservableListView listView;
     Context baseContext;
 
@@ -149,7 +146,7 @@ public class MyFragment extends BaseFragment {
 
         footer          = (View)activity.getLayoutInflater().inflate(R.layout.listview_footer_row, null);
 
-        tweetadapter    = new MyAdapter(activity, this.statusesService, this.favoriteService);
+        tweetadapter    = new MyAdapter(activity, HelperFunctions.statusesService, HelperFunctions.favoriteService);
         mAdAdapter      = new MoPubAdAdapter(activity, tweetadapter, adPositioning);
         mAdAdapter.registerAdRenderer(adRenderer);
 
@@ -161,9 +158,7 @@ public class MyFragment extends BaseFragment {
     public void setAppState( Context baseContext, StatusesService statusesService,
             AccountService accountService,
             FavoriteService favoriteService) {
-        this.statusesService  = statusesService;
-        this.accountService   = accountService;
-        this.favoriteService  = favoriteService;
+
         this.baseContext      = baseContext;
 
         if(baseContext == null)
@@ -366,7 +361,7 @@ public class MyFragment extends BaseFragment {
     }
 
     void LoadRecentTweets(){
-        statusesService.homeTimeline(50, TweetBank.firsttweetid, null, false, true, false, true,
+        HelperFunctions.statusesService.homeTimeline(50, TweetBank.firsttweetid, null, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
                     public void success(Result<List<Tweet>> result) {
@@ -480,7 +475,7 @@ public class MyFragment extends BaseFragment {
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(new Runnable() {
             public void run() {
-                statusesService.homeTimeline(150, null, TweetBank.lasttweetid, false, true, false, true,
+                HelperFunctions.statusesService.homeTimeline(150, null, TweetBank.lasttweetid, false, true, false, true,
                         new Callback<List<Tweet>>() {
                             @Override
                             public void success(Result<List<Tweet>> result) {
@@ -518,7 +513,7 @@ public class MyFragment extends BaseFragment {
                         }
                 );
             }
-        }, 20000);
+        }, 2000);
 
 
 
@@ -530,12 +525,12 @@ public class MyFragment extends BaseFragment {
         listView.addFooterView(footer);
 
         System.out.println("LOADING LOADING LOADING LOADING");
-        statusesService.homeTimeline(150, null, TweetBank.lasttweetid, false, true, false, true,
+        HelperFunctions.statusesService.homeTimeline(150, null, TweetBank.lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
                     public void success(Result<List<Tweet>> result) {
                         List<Tweet> ls = result.data;
-                        if(ls.size() > 0) {
+                        if (ls.size() > 0) {
                             for (int i = 0; i < ls.size(); ++i) {
                                 Tweet t = ls.get(i);
                                 TweetBank.insertTweet(t);
@@ -544,7 +539,7 @@ public class MyFragment extends BaseFragment {
                         lastTimeStamp = System.currentTimeMillis();
                         displayTweets();
                         listView.removeFooterView(footer);
-                        loading     = false;
+                        loading = false;
                         downloading = false;
                     }
 
@@ -555,7 +550,7 @@ public class MyFragment extends BaseFragment {
                         lastTimeStamp = System.currentTimeMillis();
                         displayTweets();
                         listView.removeFooterView(footer);
-                        loading     = false;
+                        loading = false;
                         downloading = false;
                     }
 

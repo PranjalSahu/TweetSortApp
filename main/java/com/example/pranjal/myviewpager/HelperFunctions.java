@@ -4,7 +4,12 @@ import android.view.ViewGroup;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.google.gson.Gson;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.AccountService;
+import com.twitter.sdk.android.core.services.FavoriteService;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +20,12 @@ import java.util.List;
  * Created by pranjal on 29/04/15.
  */
 public class HelperFunctions {
+
+    public static StatusesService statusesService;
+    public static AccountService accountService;
+    public static FavoriteService favoriteService;
+    public static TwitterAuthConfig authConfig     = null;
+    public static TwitterSession currentSession = null;
 
     public static Gson gson = new Gson();
 

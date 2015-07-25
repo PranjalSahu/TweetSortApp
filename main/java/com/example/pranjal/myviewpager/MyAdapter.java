@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +32,8 @@ public class MyAdapter extends TweetViewAdapter {
     StatusesService statusesService = null;
     FavoriteService favoriteService = null;
     LayoutInflater inflater         = null;
+
+    private int mLastPosition = -1;
 
     int defaultColor = 0;
 
@@ -364,6 +368,23 @@ public class MyAdapter extends TweetViewAdapter {
                 }
             });
         }
+
+        TranslateAnimation animation = null;
+        if (position > mLastPosition) {
+            animation = new TranslateAnimation(
+                    Animation.RELATIVE_TO_SELF,
+                    0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+                    Animation.RELATIVE_TO_SELF, 1.0f,
+                    Animation.RELATIVE_TO_SELF, 0.0f);
+
+            animation.setDuration(400);
+            ((View)rowView).startAnimation(animation);
+            mLastPosition = position;
+        }
+
+//        Animation animation = AnimationUtils.loadAnimation(context, (position > mLastPosition) ? R.anim.up_from_bottom : R.anim.down_from_bottom);
+//        ((View)rowView).startAnimation(animation);
+//        mLastPosition = position;
 
         return (View)rowView;
     }
