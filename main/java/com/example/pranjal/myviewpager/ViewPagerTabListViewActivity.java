@@ -19,6 +19,7 @@ package com.example.pranjal.myviewpager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +52,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
+import twitter4j.IDs;
+import twitter4j.ResponseList;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  * SlidingTabLayout and SlidingTabStrip are from google/iosched:
@@ -99,6 +106,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     protected ImageLoader imageLoader;
     DisplayImageOptions options;
 
+
+    private twitter4j.Twitter twitter;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -106,17 +116,20 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         if(id == R.id.originaltimeline){
             Fragment fgT = getCurrentFragment();
             if(fgT instanceof MyFragment) {
+                HelperFunctions.animate = false;
                 MyFragment fg           = (MyFragment) fgT;
                 ObservableListView olv  = fg.listView;
                 fg.tweetadapter.setTweets(fg.tweetlist);
                 fg.tweetadapter.notifyDataSetChanged();
                 olv.smoothScrollToPosition(0);
+                HelperFunctions.animate = true;
             }
             return true;
         }
         else if(id == R.id.sortitemsbyfavorites){
                 Fragment fgT = getCurrentFragment();
                 if(fgT instanceof MyFragment) {
+                    HelperFunctions.animate = false;
                     MyFragment fg           = (MyFragment) fgT;
                     ObservableListView olv  = fg.listView;
                     List<Tweet> tList       = fg.tweetlist;
@@ -126,12 +139,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                     fg.tweetadapter.setTweets(fg.tempTweetList);
                     fg.tweetadapter.notifyDataSetChanged();
                     olv.smoothScrollToPosition(0);
+                    HelperFunctions.animate = true;
                 }
             return true;
         }
         else if(id == R.id.sortitemsbytweet){
             Fragment fgT = getCurrentFragment();
             if(fgT instanceof MyFragment) {
+                HelperFunctions.animate = false;
                 MyFragment fg           = (MyFragment) fgT;
                 ObservableListView olv  = fg.listView;
                 List<Tweet> tList       = fg.tweetlist;
@@ -141,6 +156,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 fg.tweetadapter.setTweets(fg.tempTweetList);
                 fg.tweetadapter.notifyDataSetChanged();
                 olv.smoothScrollToPosition(0);
+                HelperFunctions.animate = true;
             }
             return true;
         }
@@ -165,24 +181,36 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         }*/
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+    public class LoadFriends extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            long nextCursor = -1;
+            IDs friendIds   = null;
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
+            do{
+                ResponseList<User> followers = null;
+                try {
+                    friendIds = twitter.getFriendsIDs(nextCursor);
+                    followers = twitter.lookupUsers(friendIds.getIDs());
+                    for(User follower : followers) {
+                        System.out.println("FRIEND "+follower.getId()+" "+follower.getScreenName()+" "+follower.getName());
+                    }
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+            }while((nextCursor = friendIds.getNextCursor()) != 0);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+            return null;
+        }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
     }
 
     @Override
@@ -217,69 +245,15 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-//        rg1 = (RadioGroup)findViewById(R.id.myRadioGroup);
-//        Switch toggle = (Switch) findViewById(R.id.togglebutton);
-//
-//        rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        ConfigurationBuilder config = new ConfigurationBuilder();
+        config.setOAuthConsumerKey(TWITTER_KEY);
+        config.setOAuthConsumerSecret(TWITTER_SECRET);
+        config.setOAuthAccessToken(HelperFunctions.currentSession.getAuthToken().token);
+        config.setOAuthAccessTokenSecret(HelperFunctions.currentSession.getAuthToken().secret);
 
-//            @Override
+        twitter = new TwitterFactory(config.build()).getInstance();
 
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//
-//                Fragment fgT = getCurrentFragment();
-//                if(fgT instanceof MyFragment) {
-//
-//                    MyFragment fg = (MyFragment) fgT;
-//                    ObservableListView olv = fg.listView;
-//                    List<Tweet> tList = fg.tweetlist;
-//                    MyAdapter mya = fg.tweetadapter;
-//
-//                    if (currentState == 1) {
-//                        List<Tweet> tListTemp = new ArrayList<Tweet>(fg.tweetlist);
-//                        if (checkedId == R.id.favoritesort)
-//                            HelperFunctions.sortTweets(2, tListTemp, mya, olv);
-//                        else if (checkedId == R.id.retweetsort)
-//                            HelperFunctions.sortTweets(1, tListTemp, mya, olv);
-//                        fg.tweetadapter.setTweets(tListTemp);
-//                        fg.tweetadapter.notifyDataSetChanged();
-//                        olv.smoothScrollToPosition(0);
-//                    }
-//                }
-//            }
-//        });
-
-//        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//
-//                Fragment fgT = getCurrentFragment();
-//                if(fgT instanceof MyFragment) {
-//                    MyFragment fg = (MyFragment)fgT;
-//                    ObservableListView olv = fg.listView;
-//                    List<Tweet> tList      = fg.tweetlist;
-//                    MyAdapter mya          = fg.tweetadapter;
-//
-//                    if (isChecked) {
-//                        currentState = 1;
-//
-//                        int sortBy = rg1.getCheckedRadioButtonId();
-//                        if (sortBy == R.id.retweetsort)
-//                            sortBy = 1;
-//                        else
-//                            sortBy = 2;
-//
-//                        List<Tweet> tListTemp = new ArrayList<Tweet>(fg.tweetlist);
-//                        HelperFunctions.sortTweets(sortBy, tListTemp, mya, olv);
-//                        fg.tweetadapter.setTweets(tListTemp);
-//                    } else {
-//                        currentState = 0;
-//                        fg.tweetadapter.setTweets(fg.tweetlist);
-//                    }
-//                    fg.tweetadapter.notifyDataSetChanged();
-//                    olv.smoothScrollToPosition(0);
-//                }
-//            }
-//        });
-
+        new LoadFriends().execute("0", "1");
 
         username = HelperFunctions.currentSession.getUserName();
 
@@ -527,4 +501,5 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             return TITLES[position];
         }
     }
+
 }

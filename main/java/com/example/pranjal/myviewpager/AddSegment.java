@@ -42,13 +42,10 @@ import com.mopub.volley.toolbox.ImageLoader;
 import com.mopub.volley.toolbox.Volley;
 import com.twitter.sdk.android.core.models.Tweet;
 
-import java.util.List;
-
 public class AddSegment extends BaseFragment {
-    //List<String> imageUrls;
-    List<Tweet> imageTweets;
-    ImageAdapter imageAdapter;
-    ImageAdapterHorizontal imageAdapterHorizontal;
+
+
+
 
     Activity storedActivity;
     LayoutInflater mInflater;
@@ -91,7 +88,7 @@ public class AddSegment extends BaseFragment {
         mInflater      = LayoutInflater.from(parentActivity);
 
         //imageUrls = TweetBank.getAllImageUrls();
-        imageTweets =  TweetBank.getAllNewsTweets();
+        //imageTweets =  TweetBank.getAllNewsTweets();
 
         mRequestQueue = Volley.newRequestQueue(parentActivity);
         mImageLoader  = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
@@ -137,12 +134,12 @@ public class AddSegment extends BaseFragment {
             }
         });
 
-        imageAdapter              = new ImageAdapter(parentActivity);
-        imageAdapterHorizontal    = new ImageAdapterHorizontal(parentActivity);
+        //imageAdapter              = new ImageAdapter(parentActivity);
+        //imageAdapterHorizontal    = new ImageAdapterHorizontal(parentActivity);
 
         setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
 
-        listView.setAdapter(imageAdapterHorizontal);
+        //listView.setAdapter(imageAdapterHorizontal);
 
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -242,8 +239,8 @@ public class AddSegment extends BaseFragment {
 
         @Override
         public int getCount() {
-            //return 0; //imageTweets.size();
-            return imageTweets.size();
+            return 0; //imageTweets.size();
+            //return imageTweets.size();
         }
 
         @Override
@@ -281,8 +278,8 @@ public class AddSegment extends BaseFragment {
             name    = (TextView) v.getTag(R.id.picturetext);
 
             //picture.setImageUrl(imageUrls.get(position), mImageLoader);
-            picture.setImageUrl(imageTweets.get(position).entities.media.get(0).mediaUrl, mImageLoader);
-            name.setText("@" + imageTweets.get(position).user.screenName);
+            //picture.setImageUrl(imageTweets.get(position).entities.media.get(0).mediaUrl, mImageLoader);
+            //name.setText("@" + imageTweets.get(position).user.screenName);
 
             return v;
         }
@@ -306,7 +303,8 @@ public class AddSegment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return (imageTweets.size())/5;
+               return 0;
+            //return (imageTweets.size())/5;
         }
 
         @Override
@@ -357,12 +355,12 @@ public class AddSegment extends BaseFragment {
             }
 
 
-            int size  = imageTweets.size();
+            int size  = 0;//imageTweets.size();
             int start = position*5;
             int end   = start+5;
 
             while(start < size && start < end) {
-                final Tweet t = imageTweets.get(start);
+                final Tweet t = null;//imageTweets.get(start);
 
                 final View v                  = mInflater.inflate(R.layout.new_grid_item, parent, false);
 

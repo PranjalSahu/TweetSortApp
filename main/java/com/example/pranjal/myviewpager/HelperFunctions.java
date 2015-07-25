@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class HelperFunctions {
 
+    public static boolean animate = true;                  // if 0 then don't animate else animate
+
     public static StatusesService statusesService;
     public static AccountService accountService;
     public static FavoriteService favoriteService;

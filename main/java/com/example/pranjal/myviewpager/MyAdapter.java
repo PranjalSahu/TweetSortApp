@@ -140,8 +140,6 @@ public class MyAdapter extends TweetViewAdapter {
 
             defaultColor = t1.getTextColors().getDefaultColor();
 
-            System.out.println("Default color "+t1.getTextColors().getDefaultColor());
-
             if(tweet.retweeted) {
                 t1.setTextColor(Color.parseColor("#77B255"));
                 iv2.setImageResource(R.drawable.retweet_on);
@@ -281,8 +279,6 @@ public class MyAdapter extends TweetViewAdapter {
             t1.setText(Integer.toString(((Tweet) t1.getTag()).retweetCount));
             t2.setText(Integer.toString(((Tweet) t2.getTag()).favoriteCount));
 
-            System.out.println("Default color " + t1.getTextColors().getDefaultColor());
-
             if(tweet.retweeted) {
                 t1.setTextColor(Color.parseColor("#77B255"));
                 child1.setImageResource(R.drawable.retweet_on);
@@ -369,17 +365,19 @@ public class MyAdapter extends TweetViewAdapter {
             });
         }
 
-        TranslateAnimation animation = null;
-        if (position > mLastPosition) {
-            animation = new TranslateAnimation(
-                    Animation.RELATIVE_TO_SELF,
-                    0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-                    Animation.RELATIVE_TO_SELF, 1.0f,
-                    Animation.RELATIVE_TO_SELF, 0.0f);
+        if(HelperFunctions.animate) {
+            TranslateAnimation animation = null;
+            if (position > mLastPosition) {
+                animation = new TranslateAnimation(
+                        Animation.RELATIVE_TO_SELF,
+                        0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+                        Animation.RELATIVE_TO_SELF, 1.0f,
+                        Animation.RELATIVE_TO_SELF, 0.0f);
 
-            animation.setDuration(400);
-            ((View)rowView).startAnimation(animation);
-            mLastPosition = position;
+                animation.setDuration(400);
+                ((View) rowView).startAnimation(animation);
+                mLastPosition = position;
+            }
         }
 
 //        Animation animation = AnimationUtils.loadAnimation(context, (position > mLastPosition) ? R.anim.up_from_bottom : R.anim.down_from_bottom);

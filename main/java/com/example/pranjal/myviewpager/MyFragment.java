@@ -471,7 +471,6 @@ public class MyFragment extends BaseFragment {
         downloading = true;
         loading     = true;
 
-
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(new Runnable() {
             public void run() {
