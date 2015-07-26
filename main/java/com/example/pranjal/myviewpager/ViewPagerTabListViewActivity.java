@@ -240,12 +240,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getSupportActionBar().hide();
         setContentView(R.layout.activity_viewpagertab);
 
-        System.out.println("zooweemama1");
-
-        // Create global configuration and initialize ImageLoader with this config
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 

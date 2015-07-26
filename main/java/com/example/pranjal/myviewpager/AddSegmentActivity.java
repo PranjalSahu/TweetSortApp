@@ -21,13 +21,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -42,12 +42,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import twitter4j.User;
-
 //import com.crashlytics.android.Crashlytics;
 
 
-public class AddSegmentActivity extends AppCompatActivity {
+public class AddSegmentActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -69,6 +67,10 @@ public class AddSegmentActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addsegmentlayout);
+
+        //setSupportActionBar((Toolbar) findViewById(R.id.toolbara));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().hide();
 
         lv = (ListView) findViewById(R.id.user_list_view);
 
@@ -98,7 +100,8 @@ public class AddSegmentActivity extends AppCompatActivity {
         private RequestQueue mRequestQueue;
         private ImageLoader  mImageLoader;
 
-        private ArrayList<User> filteredfriends = new ArrayList<User>();
+        private ArrayList<UserItem> filteredfriends  = new ArrayList<UserItem>();
+        private ArrayList<UserItem> originalfriends  = new ArrayList<UserItem>();
 
         @Override
         public Filter getFilter() {
@@ -106,7 +109,7 @@ public class AddSegmentActivity extends AppCompatActivity {
                 @SuppressWarnings("unchecked")
                 @Override
                 protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
-                    filteredfriends = (ArrayList<User>) results.values;
+                    filteredfriends = (ArrayList<UserItem>) results.values;
                     notifyDataSetChanged();
                 }
 
@@ -115,18 +118,18 @@ public class AddSegmentActivity extends AppCompatActivity {
                     String filterString   = constraint.toString().toLowerCase();
 
                     FilterResults results = new FilterResults();
-                    final List<User> list = HelperFunctions.friends;
+                    final List<UserItem> list = originalfriends;
 
                     int count                   = list.size();
-                    final ArrayList<User> nlist = new ArrayList<User>(count);
+                    final ArrayList<UserItem> nlist = new ArrayList<UserItem>(count);
 
                     String filterableString;
 
                     for (int i = 0; i < count; i++) {
-                        User temp = list.get(i);
-                        if(temp.getName().toLowerCase().contains(filterString)){
+                        UserItem temp = list.get(i);
+                        if(temp.user.getName().toLowerCase().contains(filterString)){
                             nlist.add(temp);
-                            System.out.println("Adding User " + temp.getName());
+                            //System.out.println("Adding User " + temp.getName());
                         }
                     }
 
@@ -152,7 +155,13 @@ public class AddSegmentActivity extends AppCompatActivity {
                 }
             });
 
-            filteredfriends = HelperFunctions.friends;
+            for(int i=0;i<HelperFunctions.friends.size();++i){
+                UserItem ui = new UserItem();
+                ui.user     = HelperFunctions.friends.get(i);
+                originalfriends.add(i, ui);
+                filteredfriends.add(i, ui);
+
+            }
         }
 
         @Override
@@ -180,20 +189,41 @@ public class AddSegmentActivity extends AppCompatActivity {
             View v;
             SquareImageView picture;
             TextView name;
+            TextView description;
+            CheckBox checkbox;
+            final UserItem useritem = (UserItem)this.getItem(position);
 
             if (convertView == null) {
                 v = mInflater.inflate(R.layout.user_item_twitter, parent, false);
                 v.setTag(R.id.userpicture,  v.findViewById(R.id.userpicture));
-                v.setTag(R.id.product_name, v.findViewById(R.id.product_name));
-            } else
+                v.setTag(R.id.twitterusername, v.findViewById(R.id.twitterusername));
+                v.setTag(R.id.twitteruserdescription, v.findViewById(R.id.twitteruserdescription));
+                v.setTag(R.id.checkBox1, v.findViewById(R.id.checkBox1));
+
+                checkbox = (CheckBox)v.findViewById(R.id.checkBox1);
+                checkbox.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v;
+                        useritem.selected = cb.isChecked();
+                    }
+                });
+
+                v.setTag(useritem);
+
+            } else {
                 v = convertView;
+                v.setTag(useritem);
+            }
 
-            picture = (SquareImageView) v.getTag(R.id.userpicture);
-            name    = (TextView) v.getTag(R.id.product_name);
+            picture        = (SquareImageView) v.getTag(R.id.userpicture);
+            name           = (TextView) v.getTag(R.id.twitterusername);
+            description    = (TextView) v.getTag(R.id.twitteruserdescription);
+            checkbox       = (CheckBox) v.getTag(R.id.checkBox1);
 
-            picture.setImageUrl(filteredfriends.get(position).getBiggerProfileImageURL(), mImageLoader);
-            name.setText("@" + filteredfriends.get(position).getName());
-
+            picture.setImageUrl(((UserItem)v.getTag()).user.getBiggerProfileImageURL(), mImageLoader);
+            name.setText(((UserItem)v.getTag()).user.getName());
+            description.setText(((UserItem)v.getTag()).user.getDescription());
+            checkbox.setChecked(((UserItem)v.getTag()).selected);
             return v;
         }
     }
