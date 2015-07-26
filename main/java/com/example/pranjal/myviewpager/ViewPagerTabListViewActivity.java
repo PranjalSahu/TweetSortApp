@@ -205,14 +205,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                         HelperFunctions.friends.addAll(followers);
                         for(User follower : followers) {
                             HelperFunctions.users.add(follower.getName());
-                            System.out.println("FRIEND " + follower.getId()+" " +follower.getScreenName()+" "+follower.getName());
+                            System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
                         }
                         cur = cur+100;
                     }
                     followers = twitter.lookupUsers(Arrays.copyOfRange(arr, cur, arr.length));
                     for(User follower : followers) {
                         HelperFunctions.friends.addAll(followers);
-                        System.out.println("FRIEND "+follower.getId()+" "+follower.getScreenName()+" "+follower.getName());
+                        System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
                     }
                 } catch (TwitterException e) {
                     e.printStackTrace();
