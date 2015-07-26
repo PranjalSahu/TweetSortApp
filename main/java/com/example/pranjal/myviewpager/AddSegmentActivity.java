@@ -190,7 +190,7 @@ public class AddSegmentActivity extends BaseActivity {
             SquareImageView picture;
             TextView name;
             TextView description;
-            CheckBox checkbox;
+            CheckBox checkbox = null;
             final UserItem useritem = (UserItem)this.getItem(position);
 
             if (convertView == null) {
@@ -199,20 +199,8 @@ public class AddSegmentActivity extends BaseActivity {
                 v.setTag(R.id.twitterusername, v.findViewById(R.id.twitterusername));
                 v.setTag(R.id.twitteruserdescription, v.findViewById(R.id.twitteruserdescription));
                 v.setTag(R.id.checkBox1, v.findViewById(R.id.checkBox1));
-
-                checkbox = (CheckBox)v.findViewById(R.id.checkBox1);
-                checkbox.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        CheckBox cb = (CheckBox) v;
-                        useritem.selected = cb.isChecked();
-                    }
-                });
-
-                v.setTag(useritem);
-
             } else {
                 v = convertView;
-                v.setTag(useritem);
             }
 
             picture        = (SquareImageView) v.getTag(R.id.userpicture);
@@ -220,10 +208,18 @@ public class AddSegmentActivity extends BaseActivity {
             description    = (TextView) v.getTag(R.id.twitteruserdescription);
             checkbox       = (CheckBox) v.getTag(R.id.checkBox1);
 
-            picture.setImageUrl(((UserItem)v.getTag()).user.getBiggerProfileImageURL(), mImageLoader);
-            name.setText(((UserItem)v.getTag()).user.getName());
-            description.setText(((UserItem)v.getTag()).user.getDescription());
-            checkbox.setChecked(((UserItem)v.getTag()).selected);
+            checkbox = (CheckBox)v.findViewById(R.id.checkBox1);
+            checkbox.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    CheckBox cb       = (CheckBox) v;
+                    useritem.selected = cb.isChecked();
+                }
+            });
+
+            picture.setImageUrl(useritem.user.getBiggerProfileImageURL(), mImageLoader);
+            name.setText(useritem.user.getName());
+            description.setText(useritem.user.getDescription());
+            checkbox.setChecked(useritem.selected);
             return v;
         }
     }
