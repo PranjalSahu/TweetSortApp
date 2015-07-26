@@ -18,21 +18,31 @@ package com.example.pranjal.myviewpager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mopub.volley.RequestQueue;
+import com.mopub.volley.toolbox.ImageLoader;
+import com.mopub.volley.toolbox.Volley;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import twitter4j.User;
 
 //import com.crashlytics.android.Crashlytics;
 
@@ -50,7 +60,7 @@ public class AddSegmentActivity extends AppCompatActivity {
     }
 
     private ListView lv;
-    ArrayAdapter<String> adapter;
+    UserAdapter adapter;
     EditText inputSearch;
 
     ArrayList<HashMap<String, String>> productList;
@@ -77,21 +87,72 @@ public class AddSegmentActivity extends AppCompatActivity {
             }
         });
 
-        // Adding items to listview
-        adapter = new ArrayAdapter<String>(this, R.layout.user_item_twitter, R.id.product_name, HelperFunctions.users);
-
-        //adapter.getf
+        adapter = new UserAdapter(this);
         lv.setAdapter(adapter);
-
     }
 
-    public class UserAdapter extends BaseAdapter {
+    public class UserAdapter extends BaseAdapter implements Filterable {
         private Context localContext;
         private final LayoutInflater mInflater;
+
+        private RequestQueue mRequestQueue;
+        private ImageLoader  mImageLoader;
+
+        private ArrayList<User> filteredfriends = new ArrayList<User>();
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @SuppressWarnings("unchecked")
+                @Override
+                protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
+                    filteredfriends = (ArrayList<User>) results.values;
+                    notifyDataSetChanged();
+                }
+
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    String filterString   = constraint.toString().toLowerCase();
+
+                    FilterResults results = new FilterResults();
+                    final List<User> list = HelperFunctions.friends;
+
+                    int count                   = list.size();
+                    final ArrayList<User> nlist = new ArrayList<User>(count);
+
+                    String filterableString;
+
+                    for (int i = 0; i < count; i++) {
+                        User temp = list.get(i);
+                        if(temp.getName().toLowerCase().contains(filterString)){
+                            nlist.add(temp);
+                            System.out.println("Adding User " + temp.getName());
+                        }
+                    }
+
+                    results.values = nlist;
+                    results.count  = nlist.size();
+                    return results;
+                }
+            };
+        }
 
         UserAdapter(Context ct){
             this.localContext = ct;
             mInflater = LayoutInflater.from(localContext);
+
+            mRequestQueue = Volley.newRequestQueue(ct);
+            mImageLoader  = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+                private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
+                public void putBitmap(String url, Bitmap bitmap) {
+                    mCache.put(url, bitmap);
+                }
+                public Bitmap getBitmap(String url) {
+                    return mCache.get(url);
+                }
+            });
+
+            filteredfriends = HelperFunctions.friends;
         }
 
         @Override
@@ -101,12 +162,12 @@ public class AddSegmentActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return HelperFunctions.users.size();
+            return filteredfriends.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return filteredfriends.get(position);
         }
 
         @Override
@@ -121,25 +182,17 @@ public class AddSegmentActivity extends AppCompatActivity {
             TextView name;
 
             if (convertView == null) {
-                //LayoutInflater inflater = LayoutInflater.from(storedActivity);
-                //imageView  = new SquareImageView(storedActivity);
-
-                v = mInflater.inflate(R.layout.new_grid_item, parent, false);
-                v.setTag(R.id.picture, v.findViewById(R.id.picture));
-                v.setTag(R.id.picturetext,    v.findViewById(R.id.picturetext));
-
-                //imageView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 400));
-                //imageView = (NetworkImageView) storedView.inflate(parentActivity, R.id.networkimageview, null);
-                // .inflate(, false);
+                v = mInflater.inflate(R.layout.user_item_twitter, parent, false);
+                v.setTag(R.id.userpicture,  v.findViewById(R.id.userpicture));
+                v.setTag(R.id.product_name, v.findViewById(R.id.product_name));
             } else
                 v = convertView;
 
-            picture = (SquareImageView) v.getTag(R.id.picture);
-            name    = (TextView) v.getTag(R.id.picturetext);
+            picture = (SquareImageView) v.getTag(R.id.userpicture);
+            name    = (TextView) v.getTag(R.id.product_name);
 
-            //picture.setImageUrl(imageUrls.get(position), mImageLoader);
-            //picture.setImageUrl(imageTweets.get(position).entities.media.get(0).mediaUrl, mImageLoader);
-            //name.setText("@" + imageTweets.get(position).user.screenName);
+            picture.setImageUrl(filteredfriends.get(position).getBiggerProfileImageURL(), mImageLoader);
+            name.setText("@" + filteredfriends.get(position).getName());
 
             return v;
         }
