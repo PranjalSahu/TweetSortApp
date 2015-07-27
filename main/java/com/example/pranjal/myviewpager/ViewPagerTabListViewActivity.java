@@ -93,6 +93,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private ViewPager mPager;
     private NavigationAdapter mPagerAdapter;
     static MyApplication appState;
+    SlidingTabLayout slidingTabLayout;
 
     public static Context baseContext = null;
 
@@ -190,7 +191,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         mPager.setAdapter(null);
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-        mPagerAdapter.notifyDataSetChanged();
+        slidingTabLayout.setViewPager(mPager);
+        //mPagerAdapter.notifyDataSetChanged();
     }
 
     public class LoadFriends extends AsyncTask<String, Integer, String> {
@@ -295,15 +297,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
 
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-
-
         slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.underlinecolor));
-
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setViewPager(mPager);
-
         // When the page is selected, other fragments' scrollY should be adjusted
         // according to the toolbar status(shown/hidden)
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -493,6 +491,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         protected Fragment createItem(int position) {
+            System.out.println("PRANJAL CREATING ITEM POSITION "+position);
+
             if(position == 2){
                 MyImageFragment f = new MyImageFragment();
                 return f;
@@ -517,11 +517,13 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         public int getCount() {
+            System.out.println("PRANJAL SIZE OF TEXT TABS IS "+HelperFunctions.TITLES.size());
             return HelperFunctions.TITLES.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
+            System.out.println("PRANJAL PAGE TITLE IS "+HelperFunctions.TITLES.get(position));
             return HelperFunctions.TITLES.get(position);
         }
     }
