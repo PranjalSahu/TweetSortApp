@@ -105,7 +105,9 @@ public class AddSegmentActivity extends BaseActivity {
         mylist.add("NDTV");
         mylist.add("Mashable");
 
-
+        HelperFunctions.filterList.add(0, mylist);
+        HelperFunctions.filterList.add(1, mylist);
+        HelperFunctions.filterList.add(2, mylist);
         HelperFunctions.filterList.add(3, mylist);
     }
 

@@ -199,12 +199,16 @@ public class MyFragment extends BaseFragment {
         Fabric.with(getActivity(), new TweetUi());
 
         Bundle bd = getArguments();
-        if(bd != null && bd.getBoolean("filter"))
-            filterTweets = true;
-        else
+        if(bd != null){
+            filterTweets = bd.getBoolean("filter");
+            position     = bd.getInt("position");
+        }
+        else{
             filterTweets = false;
+            position     = 0;
+        }
 
-        position = bd.getInt("position");
+        System.out.println("Filter : "+filterTweets+" Position : "+position);
 
         linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
         listView            = (ObservableListView) view.findViewById(R.id.mylist);
@@ -379,8 +383,9 @@ public class MyFragment extends BaseFragment {
         temp   =   TweetBank.getNewThan(firstDisplayTweetId);
 
         for(Tweet t: temp) {
-            if ((!filterTweets || HelperFunctions.genericFilterFunction(t, position)))
-                filterTemp.add(t);
+            //if ((!filterTweets || HelperFunctions.genericFilterFunction(t, position)))
+            if ((HelperFunctions.genericFilterFunction(t, position)))
+                    filterTemp.add(t);
         }
         return filterTemp;
     }
@@ -399,7 +404,8 @@ public class MyFragment extends BaseFragment {
         temp   =   TweetBank.getOlderThan(lastDisplayTweetId);
 
         for(Tweet t: temp) {
-            if ((!filterTweets || HelperFunctions.genericFilterFunction(t, position)))
+            //if ((!filterTweets || HelperFunctions.genericFilterFunction(t, position)))
+            if ((HelperFunctions.genericFilterFunction(t, position)))
                 filterTemp.add(t);
         }
         return filterTemp;

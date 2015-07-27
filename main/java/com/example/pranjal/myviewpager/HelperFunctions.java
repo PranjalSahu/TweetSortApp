@@ -48,6 +48,7 @@ public class HelperFunctions {
         if(position == 1)                       // for verified tweets
             return t.user.verified;
 
+        System.out.println("YOYO "+t.user.name);
         boolean flag = false;
         ArrayList<String> userList = filterList.get(position);
         for(int i=0;i<userList.size();++i){
