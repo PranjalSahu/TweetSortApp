@@ -26,10 +26,9 @@ public class HelperFunctions {
     public static boolean animate = true;                  // if 0 then don't animate else animate
 
     public static ArrayList<String> TITLES = new ArrayList<String>();
-
-
-    public static ArrayList<User> friends = new ArrayList<User>();
-    public static ArrayList<String> users = new ArrayList<String>();
+    public static ArrayList<User> friends  = new ArrayList<User>();
+    public static ArrayList<String> users  = new ArrayList<String>();
+    public static ArrayList<ArrayList<String>> filterList = new ArrayList<ArrayList<String>>();
 
     public static StatusesService statusesService;
     public static AccountService accountService;
@@ -42,6 +41,24 @@ public class HelperFunctions {
     public static boolean checkit(Tweet t){
         return t.user.verified;
     }
+
+    public static boolean genericFilterFunction(Tweet t, int position){
+        if(position == 0 || position == 2)
+            return true;
+        if(position == 1)                       // for verified tweets
+            return t.user.verified;
+
+        boolean flag = false;
+        ArrayList<String> userList = filterList.get(position);
+        for(int i=0;i<userList.size();++i){
+            if(t.user.name.contains(userList.get(i))) {
+                System.out.println("PRANJAL match username : "+t.user.name+" userlist : "+userList.get(i));
+                return true;
+            }
+        }
+        return flag;
+    }
+
 
     public static List<Tweet> getFilteredList(List<Tweet> tList){
         List<Tweet> resultList = new ArrayList<Tweet>();

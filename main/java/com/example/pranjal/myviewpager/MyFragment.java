@@ -119,6 +119,8 @@ public class MyFragment extends BaseFragment {
 
     AbsListView.OnScrollListener listenerObject = null;
 
+    int position= 0;
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) storedActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -176,37 +178,6 @@ public class MyFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tweet_list, container, false);
 
@@ -233,10 +204,10 @@ public class MyFragment extends BaseFragment {
         else
             filterTweets = false;
 
+        position = bd.getInt("position");
+
         linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
         listView            = (ObservableListView) view.findViewById(R.id.mylist);
-
-        //listView.setBackgroundColor(getResources().getColor(R.color.mycolors));
 
 
         final EnumSet<RequestParameters.NativeAdAsset> desiredAssets = EnumSet.of(
@@ -254,10 +225,6 @@ public class MyFragment extends BaseFragment {
 
 
         setmydata(listView, inflater.inflate(R.layout.padding, listView, false));
-
-        //View imageviewcheck  = (View)inflater.inflate(R.layout.new_grid_item, null);
-
-        //listView.addHeaderView(imageviewcheck);
 
         listView.setAdapter(tweetadapter);
 
@@ -412,7 +379,7 @@ public class MyFragment extends BaseFragment {
         temp   =   TweetBank.getNewThan(firstDisplayTweetId);
 
         for(Tweet t: temp) {
-            if ((filterTweets && HelperFunctions.checkit(t)) || !filterTweets)
+            if ((!filterTweets || HelperFunctions.genericFilterFunction(t, position)))
                 filterTemp.add(t);
         }
         return filterTemp;
@@ -432,7 +399,7 @@ public class MyFragment extends BaseFragment {
         temp   =   TweetBank.getOlderThan(lastDisplayTweetId);
 
         for(Tweet t: temp) {
-            if ((filterTweets && HelperFunctions.checkit(t)) || !filterTweets)
+            if ((!filterTweets || HelperFunctions.genericFilterFunction(t, position)))
                 filterTemp.add(t);
         }
         return filterTemp;

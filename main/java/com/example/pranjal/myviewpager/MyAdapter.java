@@ -159,36 +159,7 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    Toast.makeText(context, "iv2 " + tempTweet.user.name, Toast.LENGTH_SHORT).show();
-
-//                    if (!tempTweet.retweeted) {
-//                        statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
-//                            @Override
-//                            public void success(Result<Tweet> result) {
-//                                //updateTweet(result.data);
-//                                iv2.setTag(tempTweet.id);
-//                                //Toast.makeText(context, "Retweet done "+result.data.retweeted, Toast.LENGTH_SHORT).show();
-//                            }
-//                            @Override
-//                            public void failure(TwitterException e) {
-//                                //Toast.makeText(context, "Retweet Not done", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    } else {
-//                        statusesService.destroy(tempTweet.id, false, new Callback<Tweet>() {
-//                            @Override
-//                            public void success(Result<Tweet> result) {
-//                                updateTweet(result.data);
-//                                iv2.setTag(result.data);
-//                                iv2.setImageResource(R.drawable.retweet);
-//                                Toast.makeText(context, "UnRetweet done", Toast.LENGTH_SHORT).show();
-//                            }
-//                            @Override
-//                            public void failure(TwitterException e) {
-//                                //Toast.makeText(context, "UnRetweet Not done", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    }
+                    //Toast.makeText(context, "iv2 " + tempTweet.user.name, Toast.LENGTH_SHORT).show();
                 }
             });
 

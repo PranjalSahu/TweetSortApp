@@ -493,27 +493,20 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         protected Fragment createItem(int position) {
+            MyFragment f = new MyFragment();
+            Bundle b     = new Bundle();
+            b.putInt("position", position);
 
-            if(position == 2){
-                MyImageFragment f = new MyImageFragment();
-                return f;
+            if (position == 0)
+                b.putBoolean("filter", false);
+            else
+                b.putBoolean("filter", true);
+
+            if (0 < mScrollY) {
+                b.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
+                f.setArguments(b);
             }
-            else {
-                MyFragment f = new MyFragment();
-                if (position == 1) {
-                    Bundle b = new Bundle();
-                    b.putBoolean("filter", true);
-                    f.setArguments(b);
-                }
-
-                if (0 < mScrollY) {
-                    Bundle args = new Bundle();
-                    args.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
-                    f.setArguments(args);
-                }
-
-                return f;
-            }
+            return f;
         }
 
         @Override

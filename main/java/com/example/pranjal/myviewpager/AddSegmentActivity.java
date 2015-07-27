@@ -95,6 +95,20 @@ public class AddSegmentActivity extends BaseActivity {
         lv.setAdapter(adapter);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ArrayList<String> mylist = new ArrayList<String>();
+        mylist.add("lady");
+        mylist.add("Insta");
+        mylist.add("Bruno");
+        mylist.add("NDTV");
+        mylist.add("Mashable");
+
+
+        HelperFunctions.filterList.add(3, mylist);
+    }
+
     public class UserAdapter extends BaseAdapter implements Filterable {
         private Context localContext;
         private final LayoutInflater mInflater;
