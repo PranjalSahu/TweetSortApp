@@ -187,7 +187,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             }
         }*/
 
-        mPagerAdapter = null;
+        mPager.setAdapter(null);
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPagerAdapter.notifyDataSetChanged();
