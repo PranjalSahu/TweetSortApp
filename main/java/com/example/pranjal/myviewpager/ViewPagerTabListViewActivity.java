@@ -186,6 +186,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 fg.setAppState(baseContext, statusesService, accountService, favoriteService);
             }
         }*/
+
+        mPagerAdapter = null;
+        mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        mPagerAdapter.notifyDataSetChanged();
     }
 
     public class LoadFriends extends AsyncTask<String, Integer, String> {
@@ -241,6 +246,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewpagertab);
+
+        HelperFunctions.TITLES.add(0, "TimeLine");
+        HelperFunctions.TITLES.add(1, "Verified");
+        HelperFunctions.TITLES.add(2, "Images");
+        HelperFunctions.TITLES.add(3, "Images Pranjal");
 
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -470,7 +480,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     //private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
     private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
-        private static final String[] TITLES = new String[]{"Timeline", "Verified", "Images"};
 
         private int mScrollY;
 
@@ -508,12 +517,12 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         public int getCount() {
-            return TITLES.length;
+            return HelperFunctions.TITLES.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return TITLES[position];
+            return HelperFunctions.TITLES.get(position);
         }
     }
 

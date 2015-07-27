@@ -25,6 +25,9 @@ public class HelperFunctions {
 
     public static boolean animate = true;                  // if 0 then don't animate else animate
 
+    public static ArrayList<String> TITLES = new ArrayList<String>();
+
+
     public static ArrayList<User> friends = new ArrayList<User>();
     public static ArrayList<String> users = new ArrayList<String>();
 

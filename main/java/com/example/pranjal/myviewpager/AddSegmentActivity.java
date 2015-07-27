@@ -68,6 +68,7 @@ public class AddSegmentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addsegmentlayout);
 
+        HelperFunctions.TITLES.add(3, "PRANJAL");
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbara));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().hide();
