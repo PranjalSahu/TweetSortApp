@@ -192,6 +192,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         slidingTabLayout.setViewPager(mPager);
+        mPager.setCurrentItem(HelperFunctions.TITLES.size()-1);
         //mPagerAdapter.notifyDataSetChanged();
     }
 
@@ -252,7 +253,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         HelperFunctions.TITLES.add(0, "TimeLine");
         HelperFunctions.TITLES.add(1, "Verified");
         HelperFunctions.TITLES.add(2, "Images");
-        HelperFunctions.TITLES.add(3, "Images Pranjal");
 
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -302,6 +302,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.underlinecolor));
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setViewPager(mPager);
+
+
         // When the page is selected, other fragments' scrollY should be adjusted
         // according to the toolbar status(shown/hidden)
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -491,7 +493,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         protected Fragment createItem(int position) {
-            System.out.println("PRANJAL CREATING ITEM POSITION "+position);
 
             if(position == 2){
                 MyImageFragment f = new MyImageFragment();
@@ -517,13 +518,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         public int getCount() {
-            System.out.println("PRANJAL SIZE OF TEXT TABS IS "+HelperFunctions.TITLES.size());
             return HelperFunctions.TITLES.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            System.out.println("PRANJAL PAGE TITLE IS "+HelperFunctions.TITLES.get(position));
             return HelperFunctions.TITLES.get(position);
         }
     }
