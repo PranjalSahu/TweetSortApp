@@ -41,11 +41,14 @@ import com.mopub.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 //import com.crashlytics.android.Crashlytics;
 
 
 public class AddSegmentActivity extends BaseActivity {
+
+    HashMap<String, String> selectedUsers = new HashMap<String, String>();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -99,11 +102,12 @@ public class AddSegmentActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         ArrayList<String> mylist = new ArrayList<String>();
-        mylist.add("lady");
-        mylist.add("Insta");
-        mylist.add("Bruno");
-        mylist.add("NDTV");
-        mylist.add("Mashable");
+
+        Set<String> suser = selectedUsers.keySet();
+        for(String s:suser) {
+            System.out.println("PRANJAL selected User is " + s);
+            mylist.add(s);
+        }
 
         HelperFunctions.filterList.add(0, mylist);
         HelperFunctions.filterList.add(1, mylist);
@@ -231,6 +235,11 @@ public class AddSegmentActivity extends BaseActivity {
                 public void onClick(View v) {
                     CheckBox cb       = (CheckBox) v;
                     useritem.selected = cb.isChecked();
+                    if(cb.isChecked())
+                        selectedUsers.put(useritem.user.getName(), "true");
+                    else if(selectedUsers.get(useritem.user.getName()) != null){
+                        selectedUsers.remove(useritem.user.getName());
+                    }
                 }
             });
 

@@ -208,7 +208,8 @@ public class MyFragment extends BaseFragment {
             position     = 0;
         }
 
-        System.out.println("Filter : "+filterTweets+" Position : "+position);
+        //Toast.makeText(this, "Filter : "+filterTweets+" Position : "+position, Toast.LENGTH_SHORT).show();
+        System.out.println("Filter : " + filterTweets + " Position : " + position);
 
         linlaHeaderProgress = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress);
         listView            = (ObservableListView) view.findViewById(R.id.mylist);

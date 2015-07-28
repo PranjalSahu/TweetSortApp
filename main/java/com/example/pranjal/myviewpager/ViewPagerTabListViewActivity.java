@@ -192,8 +192,11 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         slidingTabLayout.setViewPager(mPager);
+        slidingTabLayout.setDistributeEvenly(true);
         mPager.setCurrentItem(HelperFunctions.TITLES.size()-1);
+        //slidingTabLayout.c
         //mPagerAdapter.notifyDataSetChanged();
+        //mPagerAdapter.setPrimaryItem();
     }
 
     public class LoadFriends extends AsyncTask<String, Integer, String> {
@@ -493,7 +496,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         @Override
         protected Fragment createItem(int position) {
-            MyFragment f = new MyFragment();
             Bundle b     = new Bundle();
             b.putInt("position", position);
 
@@ -504,8 +506,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
             if (0 < mScrollY) {
                 b.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
-                f.setArguments(b);
             }
+            MyFragment f = new MyFragment();
+            f.setArguments(b);
             return f;
         }
 
