@@ -54,11 +54,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
+import twitter4j.DirectMessage;
 import twitter4j.IDs;
 import twitter4j.ResponseList;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
+import twitter4j.UserList;
+import twitter4j.UserStreamListener;
+import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -111,6 +120,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
 
     private twitter4j.Twitter twitter;
+    private TwitterStream twitterStream;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -202,6 +212,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public class LoadFriends extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
+
+            try {
+                System.out.println("PRANJALUSERNAMEIS " + twitterStream.getScreenName());
+            } catch (TwitterException e) {
+                System.out.println("PRANJALUSERNAMEIS EXCEPTION");
+                e.printStackTrace();
+            }
+
             long nextCursor = -1;
             IDs friendIds   = null;
             do{
@@ -248,6 +266,129 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         super.onDestroy();
     }
 
+
+    private static final UserStreamListener listener = new UserStreamListener() {
+        @Override
+        public void onStatus(Status status) {
+            //status.
+            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+        }
+
+        @Override
+        public void onFriendList(long[] friendIds) {
+
+        }
+
+        @Override
+        public void onFavorite(User source, User target, Status favoritedStatus) {
+            System.out.println("PRANJALUSERNAMEIS favorite some tweet");
+
+        }
+
+        @Override
+        public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
+
+        }
+
+        @Override
+        public void onFollow(User source, User followedUser) {
+            System.out.println("PRANJALUSERNAMEIS followed someone");
+
+        }
+
+        @Override
+        public void onUnfollow(User source, User unfollowedUser) {
+
+        }
+
+        @Override
+        public void onDirectMessage(DirectMessage directMessage) {
+
+        }
+
+        @Override
+        public void onUserListMemberAddition(User addedMember, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListMemberDeletion(User deletedMember, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListSubscription(User subscriber, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListUnsubscription(User subscriber, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListCreation(User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListUpdate(User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListDeletion(User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserProfileUpdate(User updatedUser) {
+
+        }
+
+        @Override
+        public void onBlock(User source, User blockedUser) {
+
+        }
+
+        @Override
+        public void onUnblock(User source, User unblockedUser) {
+
+        }
+
+        @Override
+        public void onException(Exception ex) {
+            System.out.println("PRANJALUSERNAMEIS exception");
+        }
+
+        @Override
+        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+            System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+        }
+
+        @Override
+        public void onDeletionNotice(long directMessageId, long userId) {
+            System.out.println("Got a direct message deletion notice id:" + directMessageId);
+        }
+
+        @Override
+        public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+            System.out.println("Got a track limitation notice:" + numberOfLimitedStatuses);
+        }
+
+        @Override
+        public void onScrubGeo(long userId, long upToStatusId) {
+            System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+        }
+
+        @Override
+        public void onStallWarning(StallWarning warning) {
+            System.out.println("Got stall warning:" + warning);
+        }
+    };
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,7 +422,22 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         config.setOAuthAccessToken(HelperFunctions.currentSession.getAuthToken().token);
         config.setOAuthAccessTokenSecret(HelperFunctions.currentSession.getAuthToken().secret);
 
-        twitter = new TwitterFactory(config.build()).getInstance();
+        Configuration cf = config.build();
+        twitter = new TwitterFactory(cf).getInstance();
+
+        System.out.println("PRANJALUSERNAMEIS YOYO");
+
+        twitterStream = new TwitterStreamFactory(cf).getInstance();
+        twitterStream.addListener(listener);
+        // user() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
+        twitterStream.user();
+        //twitterStream.
+        /*try {
+            System.out.println("PRANJALUSERNAMEIS " + twitterStream.getScreenName());
+        } catch (TwitterException e) {
+            System.out.println("PRANJALUSERNAMEIS EXCEPTION");
+            e.printStackTrace();
+        }*/
 
         new LoadFriends().execute("0", "1");
 
