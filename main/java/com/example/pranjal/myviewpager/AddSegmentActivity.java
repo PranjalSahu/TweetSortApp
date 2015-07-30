@@ -105,23 +105,18 @@ public class AddSegmentActivity extends BaseActivity {
 
         Set<String> suser = selectedUsers.keySet();
 
-
-
-
-        HelperFunctions.filterList.add(0, mylist);
-        HelperFunctions.filterList.add(1, mylist);
-        HelperFunctions.filterList.add(2, mylist);
-
-        System.out.println("testingpranjal size = " + HelperFunctions.filterList.size());
-        System.out.println("testingpranjal ****************************************");
+        if(HelperFunctions.filterList.size() == 0){
+            HelperFunctions.filterList.add(0, mylist);
+            HelperFunctions.filterList.add(1, mylist);
+            HelperFunctions.filterList.add(2, mylist);
+        }
+        System.out.println("testingpranjal size = \"" + HelperFunctions.filterList.size() + " ****************************************");
         for(String s:suser) {
             System.out.println("testingpranjal " + s);
             mylist.add(s);
         }
-        System.out.println("testingpranjal ****************************************");
         HelperFunctions.filterList.add(HelperFunctions.filterList.size(), mylist);
-        System.out.println("testingpranjal new size is "+HelperFunctions.filterList.size());
-
+        System.out.println("testingpranjal +new size is " + HelperFunctions.filterList.size() + " ****************************************");
     }
 
     public class UserAdapter extends BaseAdapter implements Filterable {

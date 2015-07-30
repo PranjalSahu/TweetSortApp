@@ -1,5 +1,6 @@
 package com.example.pranjal.myviewpager;
 
+import android.os.Bundle;
 import android.view.ViewGroup;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
@@ -30,6 +31,13 @@ public class HelperFunctions {
     public static ArrayList<String> users  = new ArrayList<String>();
     public static ArrayList<ArrayList<String>> filterList = new ArrayList<ArrayList<String>>();
 
+    public static ArrayList<MyFragment> fragments  = new ArrayList<MyFragment>();
+    static{
+        fragments.add(0, null);
+        fragments.add(1, null);
+        fragments.add(2, null);
+    }
+
     public static StatusesService statusesService;
     public static AccountService accountService;
     public static FavoriteService favoriteService;
@@ -40,6 +48,19 @@ public class HelperFunctions {
 
     public static boolean checkit(Tweet t){
         return t.user.verified;
+    }
+
+    public static MyFragment getFragment(int position, Bundle b){
+//            if(fragments.get(position) != null) {
+//                System.out.println("pranjalsahu returning old fragment");
+//                return fragments.get(position);
+//            }
+//            else {
+                MyFragment myfg = new MyFragment();
+                myfg.setArguments(b);
+                fragments.add(position, myfg);
+                return myfg;
+            //}
     }
 
     public static boolean genericFilterFunction(Tweet t, int position){

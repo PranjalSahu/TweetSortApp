@@ -106,9 +106,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     public static Context baseContext = null;
 
-    String TWITTER_KEY    = "i8lsarVzM1RLdQli7JvGibJya";
-    String TWITTER_SECRET = "ivA141Pewjx3VYfKOUBMIRJZZnNhPQNW9gVdM1nlXrnsNmir29";
-
     String username                  = null;
 
     private RadioGroup rg1;
@@ -407,7 +404,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         baseContext = this.getApplication().getBaseContext();
 
-        HelperFunctions.authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        HelperFunctions.authConfig = new TwitterAuthConfig(Keys.TWITTER_KEY, Keys.TWITTER_SECRET);
         Fabric.with(this, new Twitter(HelperFunctions.authConfig));
         Fabric.with(this, new TweetUi());
         Fabric.with(this, new TweetComposer());
@@ -417,8 +414,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         ConfigurationBuilder config = new ConfigurationBuilder();
-        config.setOAuthConsumerKey(TWITTER_KEY);
-        config.setOAuthConsumerSecret(TWITTER_SECRET);
+        config.setOAuthConsumerKey(Keys.TWITTER_KEY);
+        config.setOAuthConsumerSecret(Keys.TWITTER_SECRET);
         config.setOAuthAccessToken(HelperFunctions.currentSession.getAuthToken().token);
         config.setOAuthAccessTokenSecret(HelperFunctions.currentSession.getAuthToken().secret);
 
@@ -663,8 +660,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             if (0 < mScrollY) {
                 b.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
             }
-            MyFragment f = new MyFragment();
-            f.setArguments(b);
+
+            MyFragment f = HelperFunctions.getFragment(position, b);
             return f;
         }
 
