@@ -297,11 +297,14 @@ public class MyAdapter extends TweetViewAdapter {
                                    jsonObjOriginal = new JSONObject(originalJson);
                                    jsonObjNew      = new JSONObject(newJson);
                                    jsonObjOriginal.put("favorite_count", jsonObjNew.get("favorite_count"));
+                                   jsonObjOriginal.put("favorited", jsonObjNew.get("favorited"));
+                                   jsonObjOriginal.put("retweet_count", jsonObjNew.get("retweet_count"));
+                                   jsonObjOriginal.put("retweeted", jsonObjNew.get("retweeted"));
                                } catch (JSONException e) {
                                    e.printStackTrace();
                                }
 
-                               Tweet updatedTweet  = HelperFunctions.gson.fromJson(jsonObjNew.toString(), Tweet.class);
+                               Tweet updatedTweet  = HelperFunctions.gson.fromJson(jsonObjOriginal.toString(), Tweet.class);
 
                                updateTweet(updatedTweet);
                                child2.setTag(updatedTweet);
