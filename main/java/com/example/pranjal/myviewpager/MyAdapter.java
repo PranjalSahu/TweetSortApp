@@ -23,6 +23,9 @@ import com.twitter.sdk.android.tweetui.TweetViewAdapter;
 
 import java.util.List;
 
+import twitter4j.JSONException;
+import twitter4j.JSONObject;
+
 /**
  * Created by pranjal on 29/04/15.
  */
@@ -284,10 +287,24 @@ public class MyAdapter extends TweetViewAdapter {
                            @Override
                            public void success(Result<Tweet> result) {
                                System.out.println("vani temp:"+HelperFunctions.gson.toJson(tempTweet));
-                               System.out.println("vani result:"+HelperFunctions.gson.toJson(result.data));
+                               System.out.println("vani result:" + HelperFunctions.gson.toJson(result.data));
 
-                               updateTweet(result.data);
-                               child2.setTag(result.data);
+                               String originalJson = HelperFunctions.gson.toJson(tempTweet);
+                               String newJson      = HelperFunctions.gson.toJson(result.data);
+                               JSONObject jsonObjOriginal = null;
+                               JSONObject jsonObjNew      = null;
+                               try {
+                                   jsonObjOriginal = new JSONObject(originalJson);
+                                   jsonObjNew      = new JSONObject(newJson);
+                                   jsonObjOriginal.put("favorite_count", jsonObjNew.get("favorite_count"));
+                               } catch (JSONException e) {
+                                   e.printStackTrace();
+                               }
+
+                               Tweet updatedTweet  = HelperFunctions.gson.fromJson(jsonObjNew.toString(), Tweet.class);
+
+                               updateTweet(updatedTweet);
+                               child2.setTag(updatedTweet);
                                child2.setImageResource(R.drawable.favorite_on);
 
                                t2.setTextColor(Color.parseColor("#FFAC33"));
