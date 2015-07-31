@@ -136,6 +136,8 @@ public class HelperFunctions {
             Collections.sort(tweetlist, comparatorTweetCount);
         else if(type == 2)
             Collections.sort(tweetlist, comparatorFavoriteCount);
+        else if(type == 3)
+            Collections.sort(tweetlist, comparatorId);
 
         if(tweetadapter != null)
             tweetadapter.notifyDataSetChanged();
@@ -153,6 +155,18 @@ public class HelperFunctions {
         else if(type == 2)
             Collections.sort(tweetlist, comparatorFavoriteCount);
     }
+
+    public static Comparator<Tweet> comparatorId = new Comparator<Tweet>() {
+        @Override
+        public int compare(Tweet lhs, Tweet rhs) {
+            if(lhs.id > rhs.id)
+                return -1;
+            else if(lhs.id == rhs.id)
+                return 0;
+            else
+                return 1;
+        }
+    };
 
     public static Comparator<Tweet> comparatorTweetCount = new Comparator<Tweet>() {
         @Override

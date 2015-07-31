@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
@@ -62,6 +63,7 @@ import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterObjectFactory;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
 import twitter4j.UserList;
@@ -127,6 +129,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 fg.tweetadapter.notifyDataSetChanged();
                 olv.smoothScrollToPosition(0);
                 HelperFunctions.animate = true;
+                Toast.makeText(this, "Sorted By Time", Toast.LENGTH_LONG).show();
             }
             return true;
         }
@@ -143,6 +146,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                     fg.tweetadapter.setTweets(fg.tempTweetList);
                     fg.tweetadapter.notifyDataSetChanged();
                     olv.smoothScrollToPosition(0);
+                    Toast.makeText(this, "Sorted By Favorite Count", Toast.LENGTH_LONG).show();
                     HelperFunctions.animate = true;
                 }
             return true;
@@ -160,6 +164,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 fg.tweetadapter.setTweets(fg.tempTweetList);
                 fg.tweetadapter.notifyDataSetChanged();
                 olv.smoothScrollToPosition(0);
+                Toast.makeText(this, "Sorted By Retweet Count", Toast.LENGTH_LONG).show();
                 HelperFunctions.animate = true;
             }
             return true;
@@ -261,8 +266,13 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private static final UserStreamListener listener = new UserStreamListener() {
         @Override
         public void onStatus(Status status) {
-            //status.
+            //TweetBank.insertTweet(t);
             System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+            String statusJson = TwitterObjectFactory.getRawJSON(status);
+            System.out.println("rawjson "+statusJson);
+            Tweet updatedTweet  = HelperFunctions.gson.fromJson(statusJson, Tweet.class);
+            System.out.println("rawjson updateTweet is "+updatedTweet.text);
+            TweetBank.insertTweet(updatedTweet);
         }
 
         @Override
@@ -408,6 +418,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         ConfigurationBuilder config = new ConfigurationBuilder();
+        config.setJSONStoreEnabled(true);
         config.setOAuthConsumerKey(Keys.TWITTER_KEY);
         config.setOAuthConsumerSecret(Keys.TWITTER_SECRET);
         config.setOAuthAccessToken(HelperFunctions.currentSession.getAuthToken().token);

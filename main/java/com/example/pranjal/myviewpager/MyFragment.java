@@ -378,8 +378,11 @@ public class MyFragment extends BaseFragment {
 
         System.out.println("inside loadrecent status A");
 
-        new LoadStatuses().execute("0", "1");
-
+        //new LoadStatuses().execute("0", "1");
+        lastTimeStamp = System.currentTimeMillis();
+        displayTweetsRecent();
+        downloading = false;
+        mSwipeLayout.setRefreshing(false);
 
         /*
         HelperFunctions.statusesService.homeTimeline(50, TweetBank.firsttweetid, null, false, true, false, true,
@@ -458,6 +461,8 @@ public class MyFragment extends BaseFragment {
             if ((HelperFunctions.genericFilterFunction(t, position)))
                 filterTemp.add(t);
         }
+
+        HelperFunctions.sortTweets(3,  filterTemp, null);
         return filterTemp;
     }
 
