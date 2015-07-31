@@ -62,7 +62,6 @@ import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
 import twitter4j.UserList;
@@ -94,8 +93,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     int currentState = 0;
 
-    MyTwitterApiClient  twitterApiClient;
-
     private View mHeaderView;
     private View mToolbarView;
     private int  mBaseTranslationY;
@@ -115,9 +112,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     protected ImageLoader imageLoader;
     DisplayImageOptions options;
 
-
-    private twitter4j.Twitter twitter;
-    private TwitterStream twitterStream;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -211,7 +205,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         protected String doInBackground(String... params) {
 
             try {
-                System.out.println("PRANJALUSERNAMEIS " + twitterStream.getScreenName());
+                System.out.println("PRANJALUSERNAMEIS " + HelperFunctions.twitterStream.getScreenName());
             } catch (TwitterException e) {
                 System.out.println("PRANJALUSERNAMEIS EXCEPTION");
                 e.printStackTrace();
@@ -222,12 +216,12 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             do{
                 ResponseList<User> followers = null;
                 try {
-                    friendIds = twitter.getFriendsIDs(nextCursor);
+                    friendIds = HelperFunctions.twitter.getFriendsIDs(nextCursor);
                     long arr[] = friendIds.getIDs();
                     int cur    = 0;
 
                     while(cur+100<arr.length) {
-                        followers = twitter.lookupUsers(Arrays.copyOfRange(arr, cur, cur+100));
+                        followers = HelperFunctions.twitter.lookupUsers(Arrays.copyOfRange(arr, cur, cur+100));
                         HelperFunctions.friends.addAll(followers);
                         for(User follower : followers) {
                             HelperFunctions.users.add(follower.getName());
@@ -235,7 +229,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                         }
                         cur = cur+100;
                     }
-                    followers = twitter.lookupUsers(Arrays.copyOfRange(arr, cur, arr.length));
+                    followers = HelperFunctions.twitter.lookupUsers(Arrays.copyOfRange(arr, cur, arr.length));
                     for(User follower : followers) {
                         HelperFunctions.friends.addAll(followers);
                         System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
@@ -420,14 +414,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         config.setOAuthAccessTokenSecret(HelperFunctions.currentSession.getAuthToken().secret);
 
         Configuration cf = config.build();
-        twitter = new TwitterFactory(cf).getInstance();
+        HelperFunctions.twitter = new TwitterFactory(cf).getInstance();
 
         System.out.println("PRANJALUSERNAMEIS YOYO");
 
-        twitterStream = new TwitterStreamFactory(cf).getInstance();
-        twitterStream.addListener(listener);
+        HelperFunctions.twitterStream = new TwitterStreamFactory(cf).getInstance();
+        HelperFunctions.twitterStream.addListener(listener);
         // user() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-        twitterStream.user();
+        HelperFunctions.twitterStream.user();
         //twitterStream.
         /*try {
             System.out.println("PRANJALUSERNAMEIS " + twitterStream.getScreenName());
@@ -436,14 +430,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             e.printStackTrace();
         }*/
 
-        new LoadFriends().execute("0", "1");
+        //new LoadFriends().execute("0", "1");
 
         username = HelperFunctions.currentSession.getUserName();
 
-        twitterApiClient = new MyTwitterApiClient(HelperFunctions.currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
-        HelperFunctions.accountService   = twitterApiClient.getAccountService();
-        HelperFunctions.statusesService  = twitterApiClient.getStatusesService();
-        HelperFunctions.favoriteService  = twitterApiClient.getFavoriteService();
+        HelperFunctions.twitterApiClient = new MyTwitterApiClient(HelperFunctions.currentSession); //TwitterCore.getInstance().getApiClient(currentSession);
+        HelperFunctions.accountService   = HelperFunctions.twitterApiClient.getAccountService();
+        HelperFunctions.statusesService  = HelperFunctions.twitterApiClient.getStatusesService();
+        HelperFunctions.favoriteService  = HelperFunctions.twitterApiClient.getFavoriteService();
 
         mHeaderView = findViewById(R.id.header);
         ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));

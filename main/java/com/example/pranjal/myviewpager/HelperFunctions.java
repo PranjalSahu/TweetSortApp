@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import twitter4j.TwitterStream;
 import twitter4j.User;
 
 /**
@@ -38,6 +39,10 @@ public class HelperFunctions {
         fragments.add(2, null);
     }
 
+
+    public static twitter4j.Twitter twitter;
+    public static TwitterStream twitterStream;
+    public static MyTwitterApiClient  twitterApiClient;
     public static StatusesService statusesService;
     public static AccountService accountService;
     public static FavoriteService favoriteService;

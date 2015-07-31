@@ -19,6 +19,7 @@ package com.example.pranjal.myviewpager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.text.Editable;
@@ -31,6 +32,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,12 +45,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import twitter4j.ResponseList;
+import twitter4j.TwitterException;
+import twitter4j.UserList;
+
 //import com.crashlytics.android.Crashlytics;
 
 
 public class AddSegmentActivity extends BaseActivity {
 
     HashMap<String, String> selectedUsers = new HashMap<String, String>();
+    LinearLayout linlaHeaderProgress;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -73,6 +80,10 @@ public class AddSegmentActivity extends BaseActivity {
 
         HelperFunctions.TITLES.add(HelperFunctions.TITLES.size(), "ADDED");
 
+        linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+        linlaHeaderProgress.setBackgroundColor(-1);
+        linlaHeaderProgress.setVisibility(View.VISIBLE);
+
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbara));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().hide();
@@ -96,7 +107,40 @@ public class AddSegmentActivity extends BaseActivity {
 
         adapter = new UserAdapter(this);
         lv.setAdapter(adapter);
+
+        new LoadUserLists().execute("0", "1");
     }
+
+    public class LoadUserLists extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            ResponseList<UserList> lists = null;
+            try {
+                System.out.println("pranjalsahulist inside load list");
+                lists = HelperFunctions.twitter.getUserLists(HelperFunctions.currentSession.getUserName());
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+
+            for (UserList list : lists) {
+
+                System.out.println("pranjalsahulist id:" + list.getId() + ", name:" + list.getName() + ", description:"
+                        + list.getDescription() + ", slug:" + list.getSlug() + "");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            linlaHeaderProgress.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     protected void onStop() {
