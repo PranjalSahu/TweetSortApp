@@ -10,6 +10,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.twitter.sdk.android.core.services.FavoriteService;
+import com.twitter.sdk.android.core.services.SearchService;
 import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class HelperFunctions {
     public static StatusesService statusesService;
     public static AccountService accountService;
     public static FavoriteService favoriteService;
+    public static SearchService searchService;
+
+    SearchService ss;
+
     public static TwitterAuthConfig authConfig     = null;
     public static TwitterSession currentSession = null;
 

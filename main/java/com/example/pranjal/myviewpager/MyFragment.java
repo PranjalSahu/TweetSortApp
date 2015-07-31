@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -157,6 +158,45 @@ public class MyFragment extends BaseFragment {
         LoadFirst();
     }
 
+    public class LoadStatuses extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            System.out.println("inside loadrecent status");
+            try {
+                List<twitter4j.Status> statuses = null;
+                String user;
+                try {
+                    statuses = HelperFunctions.twitter.getUserTimeline("ladygaga"/*HelperFunctions.currentSession.getUserName()*/);
+                    //twitter4j.Status.READ.
+                } catch (twitter4j.TwitterException e) {
+                    e.printStackTrace();
+                }
+                //System.out.println("Showing @" + user + "'s user timeline.");
+                for (twitter4j.Status status : statuses) {
+                    //status.
+                    System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText()+" vanitweet "+status.toString());
+                }
+            } catch (TwitterException te) {
+                te.printStackTrace();
+                System.out.println("Failed to get timeline: " + te.getMessage());
+                System.exit(-1);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mSwipeLayout.setRefreshing(false);
+        }
+    }
+
+
     public void setAppState( Context baseContext, StatusesService statusesService,
             AccountService accountService,
             FavoriteService favoriteService) {
@@ -189,8 +229,10 @@ public class MyFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 long currentTimeStamp = System.currentTimeMillis();
-                if((currentTimeStamp - lastTimeStamp)/1000 >10)
+                if((currentTimeStamp - lastTimeStamp)/1000 >10) {
+                    System.out.println("load recent pranjal");
                     LoadRecentTweets();
+                }
 
             }
         });
@@ -333,6 +375,13 @@ public class MyFragment extends BaseFragment {
     }
 
     void LoadRecentTweets(){
+
+        System.out.println("inside loadrecent status A");
+
+        new LoadStatuses().execute("0", "1");
+
+
+        /*
         HelperFunctions.statusesService.homeTimeline(50, TweetBank.firsttweetid, null, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override
@@ -359,7 +408,7 @@ public class MyFragment extends BaseFragment {
                         displayTweetsRecent();
                     }
                 }
-        );
+        );*/
     }
 
     public void displayTweetsRecent(){
@@ -498,6 +547,7 @@ public class MyFragment extends BaseFragment {
         listView.addFooterView(footer);
 
         System.out.println("LOADING LOADING LOADING LOADING");
+
         HelperFunctions.statusesService.homeTimeline(150, null, TweetBank.lasttweetid, false, true, false, true,
                 new Callback<List<Tweet>>() {
                     @Override

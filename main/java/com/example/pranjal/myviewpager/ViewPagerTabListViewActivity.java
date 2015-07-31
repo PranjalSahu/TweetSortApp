@@ -438,6 +438,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         HelperFunctions.accountService   = HelperFunctions.twitterApiClient.getAccountService();
         HelperFunctions.statusesService  = HelperFunctions.twitterApiClient.getStatusesService();
         HelperFunctions.favoriteService  = HelperFunctions.twitterApiClient.getFavoriteService();
+        HelperFunctions.searchService    = HelperFunctions.twitterApiClient.getSearchService();
 
         mHeaderView = findViewById(R.id.header);
         ViewCompat.setElevation(mHeaderView, getResources().getDimension(R.dimen.toolbar_elevation));
@@ -452,7 +453,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.underlinecolor));
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setViewPager(mPager);
-
 
         // When the page is selected, other fragments' scrollY should be adjusted
         // according to the toolbar status(shown/hidden)
