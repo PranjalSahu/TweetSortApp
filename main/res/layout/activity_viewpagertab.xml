@@ -38,14 +38,14 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55acee"
+        android:background="#3B6AA0"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#55acee"
+            android:background="#3B6AA0"
             android:minHeight="@dimen/abc_action_bar_default_height_material"
             app:popupTheme="@style/Theme.AppCompat.NoActionBar"
             app:theme="@style/Toolbar">
@@ -60,7 +60,7 @@
                 <ImageView
                     android:layout_height="40dp"
                     android:layout_width="40dp"
-                    android:src="@drawable/circle_twitter">
+                    android:src="@mipmap/ic_launcher">
                 </ImageView>
 
 
@@ -84,7 +84,7 @@
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
-            android:background="#55acee" />
+            android:background="#3B6AA0" />
     </LinearLayout>
 
 </FrameLayout>

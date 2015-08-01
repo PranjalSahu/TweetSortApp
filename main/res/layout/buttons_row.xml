@@ -3,7 +3,8 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="30dp"
-    android:id="@+id/newsrows">
+    android:id="@+id/newsrows"
+    android:background="#3B6AA0">
 
     <LinearLayout
         android:layout_width="60dp"
@@ -19,34 +20,39 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
                 android:src="@drawable/retweet"
-                android:id="@+id/retweetimagebutton">
+                android:id="@+id/retweetimagebutton"
+                android:background="#3B6AA0">
             </ImageButton>
             <TextView
                 android:layout_height="fill_parent"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:paddingTop="5dp"
-                android:id="@+id/retweetcounttext">
+                android:id="@+id/retweetcounttext"
+                android:background="#3B6AA0">
             </TextView>
             <ImageButton
                 android:layout_height="fill_parent"
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
                 android:src="@drawable/favorite"
-                android:id="@+id/favoriteimagebutton">
+                android:id="@+id/favoriteimagebutton"
+                android:background="#3B6AA0">
             </ImageButton>
             <TextView
                 android:layout_height="fill_parent"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:paddingTop="5dp"
-                android:id="@+id/favoritecounttext">
+                android:id="@+id/favoritecounttext"
+                android:background="#3B6AA0">
             </TextView>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="60dp"
-        android:layout_height="30dp">
+        android:layout_height="30dp"
+        android:background="#3B6AA0">
     </LinearLayout>
 
 </LinearLayout>

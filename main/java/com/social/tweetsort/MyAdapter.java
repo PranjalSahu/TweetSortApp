@@ -199,11 +199,14 @@ public class MyAdapter extends TweetViewAdapter {
                 }
             });
 
-            LinearLayout lv1 = new LinearLayout(this.context, null);
-            lv1.setOrientation(LinearLayout.VERTICAL);
 
-            lv1.addView((View) rowView, 0);
-            lv1.addView((View) buttonsRow, 1);
+
+            LinearLayout lv1 = (LinearLayout)inflater.inflate(R.layout.tweet_card_view, null);
+
+            //lv1.setOrientation(LinearLayout.VERTICAL);
+
+            ((LinearLayout)lv1.findViewById(R.id.card_view_linear)).addView((View) rowView, 0);
+            ((LinearLayout)lv1.findViewById(R.id.card_view_linear)).addView((View) buttonsRow, 1);
 
             rowView = (View)lv1;
 
@@ -212,20 +215,19 @@ public class MyAdapter extends TweetViewAdapter {
 
         } else {
 
-            ((BaseTweetView)(((LinearLayout) convertView)
-                    .getChildAt(0)))
+            ((BaseTweetView)((LinearLayout)((LinearLayout) convertView).findViewById(R.id.card_view_linear))
+                    .getChildAt(0))
                     .setTweet(tweet);
 
-
-            ((BaseTweetView)(((LinearLayout) convertView)
-                    .getChildAt(0)))
+            ((BaseTweetView)((LinearLayout)((LinearLayout) convertView).findViewById(R.id.card_view_linear))
+                    .getChildAt(0))
                     .setEnabled(true);
 
-            ((BaseTweetView)(((LinearLayout) convertView)
-                    .getChildAt(0)))
+            ((BaseTweetView)((LinearLayout)((LinearLayout) convertView).findViewById(R.id.card_view_linear))
+                    .getChildAt(0))
                     .setTag(tweet);
 
-            View btnRow              = ((LinearLayout)(((LinearLayout) rowView).getChildAt(1)));
+            View btnRow              = ((LinearLayout)((LinearLayout) rowView).findViewById(R.id.card_view_linear)).getChildAt(1);
             final ImageButton child1 = (ImageButton)btnRow.findViewById(R.id.retweetimagebutton);
             final ImageButton child2 = (ImageButton)btnRow.findViewById(R.id.favoriteimagebutton);
             final TextView t1        = (TextView)btnRow.findViewById(R.id.retweetcounttext);
@@ -367,6 +369,7 @@ public class MyAdapter extends TweetViewAdapter {
 //        Animation animation = AnimationUtils.loadAnimation(context, (position > mLastPosition) ? R.anim.up_from_bottom : R.anim.down_from_bottom);
 //        ((View)rowView).startAnimation(animation);
 //        mLastPosition = position;
+
 
         return (View)rowView;
     }
