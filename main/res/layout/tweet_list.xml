@@ -2,7 +2,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#3B6AA0">
 
     <LinearLayout
         android:id="@+id/linlaHeaderProgress"
@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="#3B6AA0"
             android:divider="#FFFFFF"
             android:drawSelectorOnTop="false"/>
     </android.support.v4.widget.SwipeRefreshLayout>
