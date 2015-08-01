@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.pranjal.myviewpager">
+    package="com.social.tweetsort">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,10 +18,10 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="My App1"
+        android:label="Tweet Sort"
         android:theme="@style/AppTheme"
         tools:replace="android:label"
-        android:name="com.example.pranjal.myviewpager.MyApplication">
+        android:name=".MyApplication">
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"> </meta-data>
@@ -58,7 +58,7 @@
 
         <activity
             android:name=".ViewPagerTabListViewActivity"
-            android:label="My App"
+            android:label="TweetSort"
             android:theme="@style/AppTheme.Toolbar"
             android:screenOrientation="portrait">
             <!--<intent-filter>
@@ -67,7 +67,7 @@
         </activity>
 
         <activity
-            android:name="com.example.pranjal.myviewpager.MyMainActivity"
+            android:name=".MyMainActivity"
             android:label="@string/my_app_name"
             android:theme="@style/AppTheme.Toolbar"
             android:screenOrientation="portrait">

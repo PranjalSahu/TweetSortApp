@@ -80,7 +80,7 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <com.example.pranjal.myviewpager.SlidingTabLayout
+        <com.social.tweetsort.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
