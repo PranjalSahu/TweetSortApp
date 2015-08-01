@@ -54,33 +54,18 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                >
-
-                <ImageView
-                    android:layout_height="40dp"
-                    android:layout_width="40dp"
-                    android:src="@mipmap/ic_launcher">
-                </ImageView>
-
-
-                <!--<TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tweetsorttext"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:layout_marginTop="6dp"
-                    android:textSize="23dp"
-                    android:fontFamily="Arial"
-                    android:textColor="#FFFFFF"
-                    android:text="Tweet SORT"/>-->
-
+                android:layout_marginLeft="10dp">
+                <com.social.solution.SquareImageView
+                    android:layout_height="50dp"
+                    android:layout_width="50dp"
+                    android:id="@+id/userimage"
+                    android:layout_gravity="center">
+                </com.social.solution.SquareImageView>
            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 
-        <com.social.tweetsort.SlidingTabLayout
+        <com.social.solution.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"

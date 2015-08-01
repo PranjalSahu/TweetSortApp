@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.social.tweetsort">
+    package="com.social.solution">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,7 +21,7 @@
         android:label="Tweet Sort"
         android:theme="@style/AppTheme"
         tools:replace="android:label"
-        android:name=".MyApplication">
+        android:name="com.social.solution.MyApplication">
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"> </meta-data>
@@ -31,13 +31,13 @@
             android:value="9f9445c111d388f9254fcf4c3385bfd827ce26e5" />
 
 
-        <activity android:name=".MainActivity" > </activity>
-        <activity android:name=".ShowTweet" android:theme="@android:style/Theme.Translucent"> </activity>
-        <activity android:name=".ShowImage" > </activity>
-        <activity android:name=".ShowUserProfile" > </activity>
-        <activity android:name=".StartActivity" > </activity>
-        <activity android:name=".LoginActivity" > </activity>
-        <activity android:name=".AddSegmentActivity" > </activity>
+        <activity android:name="com.social.solution.MainActivity" > </activity>
+        <activity android:name="com.social.solution.ShowTweet" android:theme="@android:style/Theme.Translucent"> </activity>
+        <activity android:name="com.social.solution.ShowImage" > </activity>
+        <activity android:name="com.social.solution.ShowUserProfile" > </activity>
+        <activity android:name="com.social.solution.StartActivity" > </activity>
+        <activity android:name="com.social.solution.LoginActivity" > </activity>
+        <activity android:name="com.social.solution.AddSegmentActivity" > </activity>
 
 
         <activity android:name="com.mopub.mobileads.MoPubActivity"
@@ -50,14 +50,14 @@
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity
-            android:name=".TrendingTweetsActivity"
+            android:name="com.social.solution.TrendingTweetsActivity"
             android:theme="@style/Toolbar"
             android:screenOrientation="portrait">
         </activity>
 
 
         <activity
-            android:name=".ViewPagerTabListViewActivity"
+            android:name="com.social.solution.ViewPagerTabListViewActivity"
             android:label="TweetSort"
             android:theme="@style/AppTheme.Toolbar"
             android:screenOrientation="portrait">
@@ -67,7 +67,7 @@
         </activity>
 
         <activity
-            android:name=".MyMainActivity"
+            android:name="com.social.solution.MyMainActivity"
             android:label="@string/my_app_name"
             android:theme="@style/AppTheme.Toolbar"
             android:screenOrientation="portrait">

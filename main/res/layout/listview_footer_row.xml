@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="70dp"
-    android:background="@color/tw__solid_white">
+    android:background="#3B6AA0">
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -13,6 +13,6 @@
         android:layout_centerInParent="true"
         style="@android:style/Widget.ProgressBar.Small"
         android:layout_marginRight="5dp"
-        android:background="@color/tw__solid_white"/>
+        android:background="#3B6AA0"/>
 
 </RelativeLayout>

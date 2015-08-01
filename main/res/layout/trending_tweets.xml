@@ -2,20 +2,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#3B6AA0">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff">
+        android:background="#3B6AA0">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#55acee"
+            android:background="#3B6AA0"
             android:minHeight="@dimen/abc_action_bar_default_height_material"
             app:popupTheme="@style/Theme.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
@@ -24,11 +25,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <com.social.solution.SquareImageView
                     android:layout_height="40dp"
                     android:layout_width="40dp"
-                    android:src="@drawable/circle_twitter">
-                </ImageView>
+                    android:id="@+id/userimageview">
+                </com.social.solution.SquareImageView>
 
             </RelativeLayout>
 
