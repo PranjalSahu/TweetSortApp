@@ -10,7 +10,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -324,7 +323,7 @@ public class MyAdapter extends TweetViewAdapter {
                 @Override
                 public void onClick(View v) {
                     final Tweet tempTweet = (Tweet) v.getTag();
-                    Toast.makeText(context, "new child1 "+tempTweet.user.name +" retweeted = "+tempTweet.retweeted, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "new child1 "+tempTweet.user.name +" retweeted = "+tempTweet.retweeted, Toast.LENGTH_SHORT).show();
                     if(!tempTweet.retweeted)
                         child1.setImageResource(R.drawable.retweet_on);
 
@@ -337,7 +336,7 @@ public class MyAdapter extends TweetViewAdapter {
                             child1.setTag(result.data);
                             child2.setTag(result.data);
                             updateTweet(tempTweet.id);
-                            Toast.makeText(context, "Retweet done new" + result.data.retweeted, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "Retweet done new" + result.data.retweeted, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

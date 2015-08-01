@@ -138,6 +138,12 @@ public class TrendingTweetsActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.animation_entry_right, R.anim.animation_exit_left);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -177,7 +183,9 @@ public class TrendingTweetsActivity extends BaseActivity {
             return true;
         }
         else if(id == android.R.id.home) {
+            System.out.println("pranjalsahu TrendingTweetsActivity");
             this.finish();
+            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
             return true;
         }
         return super.onOptionsItemSelected(item);
