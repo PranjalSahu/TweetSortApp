@@ -36,6 +36,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -44,14 +45,16 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:spinnerItemStyle">@style/AppTheme.SpinnerItemStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/AppTheme.SpinnerDropDownItemStyle</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <!--#009688-->
     <!---->
-    <style name="Toolbar" parent="Theme.AppCompat">
+    <style name="Toolbar" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#1684ca</item>
         <item name="colorPrimaryDark">#1684ca</item>
         <item name="colorAccent">#1684ca</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="Spinner" parent="Widget.AppCompat.Spinner">

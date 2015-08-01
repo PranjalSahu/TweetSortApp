@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -37,6 +39,7 @@
         <activity android:name=".LoginActivity" > </activity>
         <activity android:name=".AddSegmentActivity" > </activity>
 
+
         <activity android:name="com.mopub.mobileads.MoPubActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.mopub.mobileads.MraidActivity"
@@ -45,6 +48,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity
+            android:name=".TrendingTweetsActivity"
+            android:theme="@style/Toolbar"
+            android:screenOrientation="portrait">
+        </activity>
 
 
         <activity

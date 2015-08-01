@@ -16,8 +16,6 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.core.services.FavoriteService;
-import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetui.BaseTweetView;
 import com.twitter.sdk.android.tweetui.TweetViewAdapter;
 
@@ -32,18 +30,14 @@ import twitter4j.JSONObject;
 
 public class MyAdapter extends TweetViewAdapter {
 
-    StatusesService statusesService = null;
-    FavoriteService favoriteService = null;
     LayoutInflater inflater         = null;
 
     private int mLastPosition = -1;
 
     int defaultColor = 0;
 
-    public MyAdapter(Context context, StatusesService ss, FavoriteService fs){
+    public MyAdapter(Context context){
         super(context);
-        statusesService = ss;
-        favoriteService = fs;
         inflater = LayoutInflater.from(context);
 
     }
@@ -88,7 +82,7 @@ public class MyAdapter extends TweetViewAdapter {
     }
 
     private void updateTweet(long id){
-        statusesService.lookup(Long.toString(id), true, false, false, new Callback<List<Tweet>>() {
+        HelperFunctions.statusesService.lookup(Long.toString(id), true, false, false, new Callback<List<Tweet>>() {
             @Override
             public void success(Result<List<Tweet>> result) {
                 updateTweet(result.data.get(0), 0);
@@ -111,9 +105,6 @@ public class MyAdapter extends TweetViewAdapter {
     private Tweet getTweetAtPosition(int position){
         return this.getItem(position);
     }
-
-
-
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         Object rowView    = convertView;
@@ -175,7 +166,7 @@ public class MyAdapter extends TweetViewAdapter {
 
                     if (!tempTweet.favorited) {
                         //iv3.setImageResource(R.drawable.favorite_on);
-                        favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
+                        HelperFunctions.favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
                                 updateTweet(result.data);
@@ -190,7 +181,7 @@ public class MyAdapter extends TweetViewAdapter {
                             }
                         });
                     } else {
-                        favoriteService.destroy(tempTweet.id, false, new Callback<Tweet>() {
+                        HelperFunctions.favoriteService.destroy(tempTweet.id, false, new Callback<Tweet>() {
                             @Override
                             public void success(Result<Tweet> result) {
                                 updateTweet(result.data);
@@ -283,19 +274,19 @@ public class MyAdapter extends TweetViewAdapter {
 
                    if (!tempTweet.favorited) {
                        //child2.setImageResource(R.drawable.favorite_on);
-                       favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
+                       HelperFunctions.favoriteService.create(tempTweet.id, false, new Callback<Tweet>() {
                            @Override
                            public void success(Result<Tweet> result) {
-                               System.out.println("vani temp:"+HelperFunctions.gson.toJson(tempTweet));
+                               System.out.println("vani temp:" + HelperFunctions.gson.toJson(tempTweet));
                                System.out.println("vani result:" + HelperFunctions.gson.toJson(result.data));
 
                                String originalJson = HelperFunctions.gson.toJson(tempTweet);
-                               String newJson      = HelperFunctions.gson.toJson(result.data);
+                               String newJson = HelperFunctions.gson.toJson(result.data);
                                JSONObject jsonObjOriginal = null;
-                               JSONObject jsonObjNew      = null;
+                               JSONObject jsonObjNew = null;
                                try {
                                    jsonObjOriginal = new JSONObject(originalJson);
-                                   jsonObjNew      = new JSONObject(newJson);
+                                   jsonObjNew = new JSONObject(newJson);
                                    jsonObjOriginal.put("favorite_count", jsonObjNew.get("favorite_count"));
                                    jsonObjOriginal.put("favorited", jsonObjNew.get("favorited"));
                                    jsonObjOriginal.put("retweet_count", jsonObjNew.get("retweet_count"));
@@ -304,7 +295,7 @@ public class MyAdapter extends TweetViewAdapter {
                                    e.printStackTrace();
                                }
 
-                               Tweet updatedTweet  = HelperFunctions.gson.fromJson(jsonObjOriginal.toString(), Tweet.class);
+                               Tweet updatedTweet = HelperFunctions.gson.fromJson(jsonObjOriginal.toString(), Tweet.class);
 
                                updateTweet(updatedTweet);
                                child2.setTag(updatedTweet);
@@ -334,7 +325,7 @@ public class MyAdapter extends TweetViewAdapter {
                     if(!tempTweet.retweeted)
                         child1.setImageResource(R.drawable.retweet_on);
 
-                    statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
+                    HelperFunctions.statusesService.retweet(tempTweet.id, false, new Callback<Tweet>() {
                         @Override
                         public void success(Result<Tweet> result) {
                             child1.setImageResource(R.drawable.retweet_on);
@@ -343,7 +334,7 @@ public class MyAdapter extends TweetViewAdapter {
                             child1.setTag(result.data);
                             child2.setTag(result.data);
                             updateTweet(tempTweet.id);
-                            Toast.makeText(context, "Retweet done new"+result.data.retweeted, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Retweet done new" + result.data.retweeted, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

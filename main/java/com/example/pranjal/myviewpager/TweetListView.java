@@ -87,7 +87,7 @@ public class TweetListView {
         currentSession   = appState.currentSession;
         username         = appState.username;
 
-        tweetadapter     = new MyAdapter(fa.getBaseContext(), statusesService, favoriteService);
+        tweetadapter     = new MyAdapter(fa.getBaseContext());
         tweetlist        = new ArrayList<Tweet>();
 
         // Set up a ViewBinder and MoPubNativeAdRenderer as above.

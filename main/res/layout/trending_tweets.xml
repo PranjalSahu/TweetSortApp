@@ -1,0 +1,63 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#55acee"
+            android:minHeight="@dimen/abc_action_bar_default_height_material"
+            app:popupTheme="@style/Theme.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp">
+
+                <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/circle_twitter">
+                </ImageView>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/linlaHeaderProgress"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+            <ProgressBar
+                android:id="@+id/pbHeaderProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </ProgressBar>
+        </LinearLayout>
+
+        <com.github.ksoichiro.android.observablescrollview.ObservableListView
+            android:id="@+id/mylist"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawSelectorOnTop="false"/>
+
+    </LinearLayout>
+</FrameLayout>
+
+
+

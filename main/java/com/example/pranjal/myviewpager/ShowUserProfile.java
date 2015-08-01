@@ -48,7 +48,7 @@ public class ShowUserProfile extends Activity {
         statusesService = ((MyApplication)getApplicationContext()).statusesService;
         favoriteService = ((MyApplication)getApplicationContext()).favoriteService;
 
-        tweetadapter     = new MyAdapter(this, statusesService, favoriteService);
+        tweetadapter     = new MyAdapter(this);
 
         setContentView(R.layout.tweet_list);
         lv = (ListView)findViewById(R.id.mylist);

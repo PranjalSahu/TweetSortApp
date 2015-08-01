@@ -52,7 +52,7 @@ import twitter4j.UserList;
 //import com.crashlytics.android.Crashlytics;
 
 
-public class AddSegmentActivity extends BaseActivity {
+public class AddSeeFirst extends BaseActivity {
 
     HashMap<String, String> selectedUsers = new HashMap<String, String>();
     LinearLayout linlaHeaderProgress;
@@ -78,13 +78,10 @@ public class AddSegmentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addsegmentlayout);
 
-        HelperFunctions.TITLES.add(HelperFunctions.TITLES.size(), "ADDED");
-
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         linlaHeaderProgress.setBackgroundColor(-1);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
 
-        //setSupportActionBar((Toolbar) findViewById(R.id.toolbara));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().hide();
 
@@ -94,7 +91,7 @@ public class AddSegmentActivity extends BaseActivity {
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                AddSegmentActivity.this.adapter.getFilter().filter(cs);
+                AddSeeFirst.this.adapter.getFilter().filter(cs);
             }
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
@@ -148,19 +145,9 @@ public class AddSegmentActivity extends BaseActivity {
         ArrayList<String> mylist = new ArrayList<String>();
 
         Set<String> suser = selectedUsers.keySet();
-
-        if(HelperFunctions.filterList.size() == 0){
-            HelperFunctions.filterList.add(0, mylist);
-            HelperFunctions.filterList.add(1, mylist);
-            HelperFunctions.filterList.add(2, mylist);
-        }
-        System.out.println("testingpranjal size = \"" + HelperFunctions.filterList.size() + " ****************************************");
-        for(String s:suser) {
-            System.out.println("testingpranjal " + s);
+        for(String s:suser)
             mylist.add(s);
-        }
-        HelperFunctions.filterList.add(HelperFunctions.filterList.size(), mylist);
-        System.out.println("testingpranjal +new size is " + HelperFunctions.filterList.size() + " ****************************************");
+
     }
 
     public class UserAdapter extends BaseAdapter implements Filterable {
@@ -178,7 +165,7 @@ public class AddSegmentActivity extends BaseActivity {
             return new Filter() {
                 @SuppressWarnings("unchecked")
                 @Override
-                protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
+                protected void publishResults(CharSequence constraint, FilterResults results) {
                     filteredfriends = (ArrayList<UserItem>) results.values;
                     notifyDataSetChanged();
                 }

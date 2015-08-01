@@ -149,7 +149,7 @@ public class MyFragment extends BaseFragment {
 
         footer          = (View)activity.getLayoutInflater().inflate(R.layout.listview_footer_row, null);
 
-        tweetadapter    = new MyAdapter(activity, HelperFunctions.statusesService, HelperFunctions.favoriteService);
+        tweetadapter    = new MyAdapter(activity);
         mAdAdapter      = new MoPubAdAdapter(activity, tweetadapter, adPositioning);
         mAdAdapter.registerAdRenderer(adRenderer);
 

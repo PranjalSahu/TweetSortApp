@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:background="#55acee"
             android:minHeight="@dimen/abc_action_bar_default_height_material"
-            app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
+            app:popupTheme="@style/Theme.AppCompat.NoActionBar"
             app:theme="@style/Toolbar">
      <!--            android:background="#18376a"-->
 
@@ -56,6 +56,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 >
+
+                <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/circle_twitter">
+                </ImageView>
+
+
                 <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

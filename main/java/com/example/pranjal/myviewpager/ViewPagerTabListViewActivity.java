@@ -187,22 +187,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     @Override
     protected void onResume() {
         super.onResume();
-        /*for(int i =0;i<3;++i) {
-            MyFragment fg = (MyFragment)mPagerAdapter.getItemAt(0);
-            if(fg !=  null){
-                fg.setAppState(baseContext, statusesService, accountService, favoriteService);
-            }
-        }*/
-
-        mPager.setAdapter(null);
-        mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
-        slidingTabLayout.setViewPager(mPager);
-        slidingTabLayout.setDistributeEvenly(true);
-        mPager.setCurrentItem(HelperFunctions.TITLES.size()-1);
-        //slidingTabLayout.c
-        //mPagerAdapter.notifyDataSetChanged();
-        //mPagerAdapter.setPrimaryItem();
     }
 
     public class LoadFriends extends AsyncTask<String, Integer, String> {
@@ -397,7 +381,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         HelperFunctions.TITLES.add(0, "TimeLine");
         HelperFunctions.TITLES.add(1, "Verified");
-        HelperFunctions.TITLES.add(2, "Images");
+        HelperFunctions.TITLES.add(2, "Trending");
 
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -424,7 +408,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         config.setOAuthAccessToken(HelperFunctions.currentSession.getAuthToken().token);
         config.setOAuthAccessTokenSecret(HelperFunctions.currentSession.getAuthToken().secret);
 
-        Configuration cf = config.build();
+        Configuration cf        = config.build();
         HelperFunctions.twitter = new TwitterFactory(cf).getInstance();
 
         System.out.println("PRANJALUSERNAMEIS YOYO");
@@ -562,6 +546,10 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             MyImageFragment mif = (MyImageFragment) fg;
             return mif;
         }
+        else if(fg instanceof TrendingFragment){
+            TrendingFragment mif = (TrendingFragment) fg;
+            return mif;
+        }
         else{
             MyFragment mf = (MyFragment) fg;
             return mf;
@@ -666,7 +654,10 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 b.putInt(ViewPagerTabListViewFragment.ARG_INITIAL_POSITION, 1);
             }
 
-            MyFragment f = HelperFunctions.getFragment(position, b);
+            Fragment f = HelperFunctions.getFragment(position, b);
+
+            if(position == 2)
+                f = new TrendingFragment();
             return f;
         }
 
