@@ -21,9 +21,11 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.twitter.sdk.android.core.Callback;
@@ -42,8 +44,10 @@ public class TrendingTweetsActivity extends BaseActivity {
     ObservableListView listView;
     MyAdapter      tweetadapter;
     List<Tweet> tweetlist;
+    List<Tweet> tempTweetList;
     private View mHeaderView;
     private View mToolbarView;
+    String query;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -65,6 +69,8 @@ public class TrendingTweetsActivity extends BaseActivity {
 
         setContentView(R.layout.trending_tweets);
 
+        query               = getIntent().getStringExtra("query");
+        System.out.println("Query is " + query);
         listView            = (ObservableListView) findViewById(R.id.mylist);
 
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
@@ -72,12 +78,7 @@ public class TrendingTweetsActivity extends BaseActivity {
         linlaHeaderProgress.setVisibility(View.VISIBLE);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().hide();
-
-        //getSupportActionBar().setLogo(R.drawable.circle_twitter);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mToolbarView = findViewById(R.id.toolbar);
 
@@ -105,13 +106,16 @@ public class TrendingTweetsActivity extends BaseActivity {
     }
 
     public void LoadTrendingTweets() {
-        HelperFunctions.searchService.tweets("#LiesMenTell", null, null, null, "mixed", 80, null, null, null, true,
+        HelperFunctions.searchService.tweets(query, null, null, null, "popular", 80, null, null, null, true,
                 new Callback<Search>() {
                     @Override
                     public void success(Result<Search> result) {
                         List<Tweet> ls = result.data.tweets;
                         if (ls.size() > 0) {
                             tweetlist.addAll(ls);
+                            for(Tweet t:ls){
+                                System.out.println("vani temp:" + HelperFunctions.gson.toJson(t));
+                            }
                         }
                         displayTweets();
                     }
@@ -130,5 +134,47 @@ public class TrendingTweetsActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.mymenutrend, menu);
         System.out.println("pranjal menu has visible items " + menu.hasVisibleItems());
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.originaltimeline){
+            HelperFunctions.animate = false;
+            tweetadapter.setTweets(tweetlist);
+            tweetadapter.notifyDataSetChanged();
+            listView.smoothScrollToPosition(0);
+            HelperFunctions.animate = true;
+            Toast.makeText(this, "Sorted By Time", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        else if(id == R.id.sortitemsbyfavorites){
+            HelperFunctions.animate = false;
+            List<Tweet> tList       = tweetlist;
+            MyAdapter mya           = tweetadapter;
+            tempTweetList           = new ArrayList<Tweet>(tweetlist);
+            HelperFunctions.sortTweets(2, tempTweetList, mya, listView);
+            tweetadapter.setTweets(tempTweetList);
+            tweetadapter.notifyDataSetChanged();
+            listView.smoothScrollToPosition(0);
+            Toast.makeText(this, "Sorted By Favorite Count", Toast.LENGTH_LONG).show();
+            HelperFunctions.animate = true;
+            return true;
+        }
+        else if(id == R.id.sortitemsbytweet){
+            HelperFunctions.animate = false;
+            List<Tweet> tList       = tweetlist;
+            MyAdapter mya           = tweetadapter;
+            tempTweetList        = new ArrayList<Tweet>(tweetlist);
+            HelperFunctions.sortTweets(1, tempTweetList, mya, listView);
+            tweetadapter.setTweets(tempTweetList);
+            tweetadapter.notifyDataSetChanged();
+            listView.smoothScrollToPosition(0);
+            Toast.makeText(this, "Sorted By Retweet Count", Toast.LENGTH_LONG).show();
+            HelperFunctions.animate = true;
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

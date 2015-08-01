@@ -29,12 +29,4 @@
         android:orderInCategory="2"
         android:menuCategory="secondary" />
 
-    <item
-        android:id="@+id/addsegment"
-        android:icon="@drawable/ic_visibility_white_36dp"
-        android:title="Add Segment"
-        app:showAsAction="always"
-        android:orderInCategory="3"
-        android:menuCategory="secondary" />
-
 </menu>

@@ -214,8 +214,10 @@ public class TrendingFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(parentActivity, TrendingTweetsActivity.class);
+                intent.putExtra("query", trends.get(position-1));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                parentActivity.overridePendingTransition(R.anim.animation_entry_right, R.anim.animation_exit_left);
 
                 //TextView tv = (TextView)view.findViewById(android.R.id.text1);
                 //Toast.makeText(parentActivity.getBaseContext(), tv.getText()+" "+trends.get(position-1), Toast.LENGTH_SHORT).show();

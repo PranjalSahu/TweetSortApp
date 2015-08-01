@@ -17,7 +17,6 @@
 package com.example.pranjal.myviewpager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -168,11 +167,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 HelperFunctions.animate = true;
             }
             return true;
-        }
-        else if(id == R.id.addsegment){
-            Intent intent = new Intent(ViewPagerTabListViewActivity.this, AddSegmentActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivityForResult(intent, 1);
         }
         return super.onOptionsItemSelected(item);
     }
