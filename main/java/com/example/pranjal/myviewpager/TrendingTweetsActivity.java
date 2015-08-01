@@ -79,6 +79,7 @@ public class TrendingTweetsActivity extends BaseActivity {
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbarView = findViewById(R.id.toolbar);
 
@@ -173,6 +174,10 @@ public class TrendingTweetsActivity extends BaseActivity {
             listView.smoothScrollToPosition(0);
             Toast.makeText(this, "Sorted By Retweet Count", Toast.LENGTH_LONG).show();
             HelperFunctions.animate = true;
+            return true;
+        }
+        else if(id == android.R.id.home) {
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

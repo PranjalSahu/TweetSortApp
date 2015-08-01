@@ -126,6 +126,7 @@ public class MyAdapter extends TweetViewAdapter {
             iv2.setTag(tweet);
             iv3.setTag(tweet);
 
+            System.out.println("Retweet count: "+tweet.retweetCount+" Favorite count : "+tweet.favoriteCount);
             t1.setText(Integer.toString(tweet.retweetCount));
             t2.setText(Integer.toString(tweet.favoriteCount));
 
@@ -240,6 +241,8 @@ public class MyAdapter extends TweetViewAdapter {
             child2.setTag(tweet);
             t1.setTag(tweet);
             t2.setTag(tweet);
+
+            System.out.println("Retweet count: " + Integer.toString(((Tweet) t1.getTag()).retweetCount) + " Favorite count : " + Integer.toString(((Tweet) t2.getTag()).favoriteCount));
 
             t1.setText(Integer.toString(((Tweet) t1.getTag()).retweetCount));
             t2.setText(Integer.toString(((Tweet) t2.getTag()).favoriteCount));
