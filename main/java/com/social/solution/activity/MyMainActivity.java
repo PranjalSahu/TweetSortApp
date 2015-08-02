@@ -20,18 +20,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.social.solution.unused.MyApplication;
 import com.social.solution.others.MyTwitterApiClient;
+import com.social.solution.unused.MyApplication;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.services.AccountService;
-import com.twitter.sdk.android.core.services.FavoriteService;
-import com.twitter.sdk.android.core.services.StatusesService;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import io.fabric.sdk.android.Fabric;
-import twitter4j.TwitterFactory;
 
 //import com.crashlytics.android.Crashlytics;
 
@@ -41,10 +37,6 @@ public class MyMainActivity extends AppCompatActivity {
     MyTwitterApiClient twitterApiClient;
     String username                  = null;
 
-    TwitterFactory  twitterFactory;
-    StatusesService statusesService;
-    AccountService  accountService;
-    FavoriteService favoriteService;
     TwitterAuthConfig   authConfig     = null;
     TwitterSession      currentSession = null;
 

@@ -1,4 +1,4 @@
-package com.social.solution.activity;
+package com.social.solution.unused;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,9 @@ import android.support.v7.widget.Toolbar;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.social.solution.unused.MyApplication;
+import com.social.solution.activity.BaseActivity;
+import com.social.solution.activity.LoginActivity;
+import com.social.solution.activity.ViewPagerTabListViewActivity;
 import com.social.solution.R;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;

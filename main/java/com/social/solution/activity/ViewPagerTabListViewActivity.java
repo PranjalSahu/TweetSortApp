@@ -43,7 +43,6 @@ import com.mopub.volley.toolbox.ImageLoader;
 import com.mopub.volley.toolbox.Volley;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.social.solution.HelperFunctions;
 import com.social.solution.R;
 import com.social.solution.fragment.MyFragment;
@@ -54,7 +53,6 @@ import com.social.solution.others.MyAdapter;
 import com.social.solution.others.SlidingTabLayout;
 import com.social.solution.others.SquareImageView;
 import com.social.solution.others.TweetBank;
-import com.social.solution.unused.MyApplication;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.models.Tweet;
@@ -63,7 +61,6 @@ import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import twitter4j.IDs;
@@ -89,11 +86,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public void onBackPressed() {
         super.onBackPressed();
         setResult(0);
-        //System.exit(0);
         finish();
     }
 
-    int currentState = 0;
     SquareImageView picture;
     String profileImageUrl = null;
 
@@ -102,7 +97,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private int  mBaseTranslationY;
     private ViewPager mPager;
     private NavigationAdapter mPagerAdapter;
-    static MyApplication appState;
     SlidingTabLayout slidingTabLayout;
 
     public static Context baseContext = null;
@@ -111,7 +105,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     protected RequestQueue mRequestQueue;
     protected ImageLoader imageLoader;
-    DisplayImageOptions options;
 
 
     public class LoadProfileImage extends AsyncTask<String, Integer, String> {
@@ -177,7 +170,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 HelperFunctions.animate = false;
                 MyFragment fg           = (MyFragment) fgT;
                 ObservableListView olv  = fg.listView;
-                List<Tweet> tList       = fg.tweetlist;
                 MyAdapter mya           = fg.tweetadapter;
                 fg.tempTweetList        = new ArrayList<Tweet>(fg.tweetlist);
                 HelperFunctions.sortTweets(1, fg.tempTweetList, mya, olv);

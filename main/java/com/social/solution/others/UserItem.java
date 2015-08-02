@@ -22,6 +22,6 @@ package com.social.solution.others;
 import twitter4j.User;
 
 public class UserItem {
-    User user;
-    Boolean selected = false;
+    public User user;
+    public Boolean selected = false;
 }

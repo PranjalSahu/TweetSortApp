@@ -31,7 +31,7 @@
             android:value="9f9445c111d388f9254fcf4c3385bfd827ce26e5" />
 
 
-        <activity android:name=".activity.MainActivity" > </activity>
+        <activity android:name=".unused.MainActivity" > </activity>
         <activity android:name=".unused.ShowTweet" android:theme="@android:style/Theme.Translucent"> </activity>
         <activity android:name=".unused.ShowImage" > </activity>
         <activity android:name=".unused.ShowUserProfile" > </activity>

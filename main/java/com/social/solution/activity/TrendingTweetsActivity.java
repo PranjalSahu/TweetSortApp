@@ -49,7 +49,6 @@ public class TrendingTweetsActivity extends BaseActivity {
     List<Tweet> tweetlist;
     List<Tweet> tempTweetList;
     private View mHeaderView;
-    private View mToolbarView;
     String query;
 
     @Override
@@ -86,15 +85,10 @@ public class TrendingTweetsActivity extends BaseActivity {
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mToolbarView = findViewById(R.id.toolbar);
-
-        //mToolbarView.
         tweetadapter    = new MyAdapter(this);
         listView        = (ObservableListView) findViewById(R.id.mylist);
 
-        //setmydata(listView, this.getLayoutInflater().inflate(R.layout.padding, listView, false));
         listView.setAdapter(tweetadapter);
-        mToolbarView = findViewById(R.id.toolbar);
 
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
@@ -164,9 +158,8 @@ public class TrendingTweetsActivity extends BaseActivity {
         }
         else if(id == R.id.sortitemsbyfavorites){
             HelperFunctions.animate = false;
-            List<Tweet> tList       = tweetlist;
             MyAdapter mya           = tweetadapter;
-            tempTweetList           = new ArrayList<Tweet>(tweetlist);
+            tempTweetList           = new ArrayList<>(tweetlist);
             HelperFunctions.sortTweets(2, tempTweetList, mya, listView);
             tweetadapter.setTweets(tempTweetList);
             tweetadapter.notifyDataSetChanged();
@@ -177,7 +170,6 @@ public class TrendingTweetsActivity extends BaseActivity {
         }
         else if(id == R.id.sortitemsbytweet){
             HelperFunctions.animate = false;
-            List<Tweet> tList       = tweetlist;
             MyAdapter mya           = tweetadapter;
             tempTweetList        = new ArrayList<Tweet>(tweetlist);
             HelperFunctions.sortTweets(1, tempTweetList, mya, listView);
