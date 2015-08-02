@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.google.gson.Gson;
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
@@ -18,8 +19,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import twitter4j.DirectMessage;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.TwitterFactory;
+import twitter4j.TwitterObjectFactory;
 import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
+import twitter4j.UserList;
+import twitter4j.UserStreamListener;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  * Created by pranjal on 29/04/15.
@@ -33,28 +45,178 @@ public class HelperFunctions {
     public static ArrayList<String> users  = new ArrayList<String>();
     public static ArrayList<ArrayList<String>> filterList = new ArrayList<ArrayList<String>>();
 
-    public static ArrayList<MyFragment> fragments  = new ArrayList<MyFragment>();
-    static{
-        fragments.add(0, null);
-        fragments.add(1, null);
-        fragments.add(2, null);
-    }
 
-
-    public static twitter4j.Twitter twitter;
-    public static TwitterStream twitterStream;
-    public static MyTwitterApiClient  twitterApiClient;
-    public static StatusesService statusesService;
-    public static AccountService accountService;
-    public static FavoriteService favoriteService;
-    public static SearchService searchService;
+    public static TwitterAuthConfig authConfig     = null;
+    public static TwitterSession currentSession    = null;
+    public static twitter4j.Twitter twitter        = null;
+    public static TwitterStream twitterStream      = null;
+    public static MyTwitterApiClient  twitterApiClient =null;
+    public static StatusesService statusesService      = null;
+    public static AccountService accountService        = null;
+    public static FavoriteService favoriteService      = null;
+    public static SearchService searchService          = null;
 
     SearchService ss;
 
-    public static TwitterAuthConfig authConfig     = null;
-    public static TwitterSession currentSession = null;
 
     public static Gson gson = new Gson();
+
+    private static final UserStreamListener listener = new UserStreamListener() {
+        @Override
+        public void onStatus(Status status) {
+            //TweetBank.insertTweet(t);
+            System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+            String statusJson = TwitterObjectFactory.getRawJSON(status);
+            System.out.println("rawjson "+statusJson);
+            Tweet updatedTweet  = HelperFunctions.gson.fromJson(statusJson, Tweet.class);
+            System.out.println("rawjson updateTweet is "+updatedTweet.text);
+            TweetBank.insertTweet(updatedTweet);
+        }
+
+        @Override
+        public void onFriendList(long[] friendIds) {
+
+        }
+
+        @Override
+        public void onFavorite(User source, User target, Status favoritedStatus) {
+            System.out.println("PRANJALUSERNAMEIS favorite some tweet");
+
+        }
+
+        @Override
+        public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
+
+        }
+
+        @Override
+        public void onFollow(User source, User followedUser) {
+            System.out.println("PRANJALUSERNAMEIS followed someone");
+
+        }
+
+        @Override
+        public void onUnfollow(User source, User unfollowedUser) {
+
+        }
+
+        @Override
+        public void onDirectMessage(DirectMessage directMessage) {
+
+        }
+
+        @Override
+        public void onUserListMemberAddition(User addedMember, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListMemberDeletion(User deletedMember, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListSubscription(User subscriber, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListUnsubscription(User subscriber, User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListCreation(User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListUpdate(User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserListDeletion(User listOwner, UserList list) {
+
+        }
+
+        @Override
+        public void onUserProfileUpdate(User updatedUser) {
+
+        }
+
+        @Override
+        public void onBlock(User source, User blockedUser) {
+
+        }
+
+        @Override
+        public void onUnblock(User source, User unblockedUser) {
+
+        }
+
+        @Override
+        public void onException(Exception ex) {
+            System.out.println("PRANJALUSERNAMEIS exception");
+        }
+
+        @Override
+        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+            System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+        }
+
+        @Override
+        public void onDeletionNotice(long directMessageId, long userId) {
+            System.out.println("Got a direct message deletion notice id:" + directMessageId);
+        }
+
+        @Override
+        public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+            System.out.println("Got a track limitation notice:" + numberOfLimitedStatuses);
+        }
+
+        @Override
+        public void onScrubGeo(long userId, long upToStatusId) {
+            System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+        }
+
+        @Override
+        public void onStallWarning(StallWarning warning) {
+            System.out.println("Got stall warning:" + warning);
+        }
+    };
+
+    public static void checkAndInit(){
+
+        if(HelperFunctions.currentSession == null)
+            HelperFunctions.currentSession = Twitter.getSessionManager().getActiveSession();
+
+        ConfigurationBuilder config = new ConfigurationBuilder();
+        config.setJSONStoreEnabled(true);
+        config.setOAuthConsumerKey(Keys.TWITTER_KEY);
+        config.setOAuthConsumerSecret(Keys.TWITTER_SECRET);
+        config.setOAuthAccessToken(HelperFunctions.currentSession.getAuthToken().token);
+        config.setOAuthAccessTokenSecret(HelperFunctions.currentSession.getAuthToken().secret);
+        Configuration cf        = config.build();
+
+        if(HelperFunctions.twitter == null)
+            HelperFunctions.twitter = new TwitterFactory(cf).getInstance();
+
+        if(HelperFunctions.twitterStream == null) {
+            HelperFunctions.twitterStream = new TwitterStreamFactory(cf).getInstance();
+            HelperFunctions.twitterStream.addListener(listener);
+            HelperFunctions.twitterStream.user();
+        }
+
+        if (HelperFunctions.twitterApiClient == null) {
+            HelperFunctions.twitterApiClient = new MyTwitterApiClient(HelperFunctions.currentSession);
+            HelperFunctions.accountService   = HelperFunctions.twitterApiClient.getAccountService();
+            HelperFunctions.statusesService  = HelperFunctions.twitterApiClient.getStatusesService();
+            HelperFunctions.favoriteService  = HelperFunctions.twitterApiClient.getFavoriteService();
+            HelperFunctions.searchService    = HelperFunctions.twitterApiClient.getSearchService();
+        }
+    }
+
 
     public static boolean checkit(Tweet t){
         return t.user.verified;
@@ -68,7 +230,6 @@ public class HelperFunctions {
 //            else {
                 MyFragment myfg = new MyFragment();
                 myfg.setArguments(b);
-                fragments.add(position, myfg);
                 return myfg;
             //}
     }
@@ -191,5 +352,6 @@ public class HelperFunctions {
                 return 1;
         }
     };
+
 
 }

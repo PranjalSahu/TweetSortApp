@@ -25,13 +25,17 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 
-
-
 import java.util.ArrayList;
 
 public abstract class BaseFragment extends Fragment {
     public static ArrayList<String> getDummyData() {
         return com.social.solution.BaseActivity.getDummyData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        HelperFunctions.checkAndInit();
     }
 
     protected int getActionBarSize() {
