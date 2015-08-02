@@ -5,6 +5,11 @@ import android.view.ViewGroup;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.google.gson.Gson;
+import com.social.solution.fragment.MyFragment;
+import com.social.solution.others.Keys;
+import com.social.solution.others.MyAdapter;
+import com.social.solution.others.MyTwitterApiClient;
+import com.social.solution.others.TweetBank;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -45,16 +50,15 @@ public class HelperFunctions {
     public static ArrayList<String> users  = new ArrayList<String>();
     public static ArrayList<ArrayList<String>> filterList = new ArrayList<ArrayList<String>>();
 
-
-    public static TwitterAuthConfig authConfig     = null;
-    public static TwitterSession currentSession    = null;
-    public static twitter4j.Twitter twitter        = null;
-    public static TwitterStream twitterStream      = null;
-    public static MyTwitterApiClient  twitterApiClient =null;
-    public static StatusesService statusesService      = null;
-    public static AccountService accountService        = null;
-    public static FavoriteService favoriteService      = null;
-    public static SearchService searchService          = null;
+    public static TwitterAuthConfig authConfig = null;
+    public static TwitterSession currentSession = null;
+    public static twitter4j.Twitter twitter = null;
+    public static TwitterStream twitterStream = null;
+    public static MyTwitterApiClient twitterApiClient = null;
+    public static StatusesService statusesService = null;
+    public static AccountService accountService = null;
+    public static FavoriteService favoriteService = null;
+    public static SearchService searchService = null;
 
     SearchService ss;
 
