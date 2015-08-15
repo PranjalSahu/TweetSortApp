@@ -367,7 +367,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         mBaseTranslationY = 0;
 
         Fragment fragment = getCurrentFragment();
-        
+
         if (fragment == null) {
             return;
         }
