@@ -67,8 +67,9 @@ public class NaiveBayesExample {
      */
     public static void main(String[] args) throws IOException {
         //map of dataset files
-        
+
         Map<String, URL> trainingFiles = new HashMap<>();
+        
         trainingFiles.put("English", NaiveBayesExample.class.getResource("/datasets/training.language.en.txt"));
         trainingFiles.put("French", NaiveBayesExample.class.getResource("/datasets/training.language.fr.txt"));
         trainingFiles.put("German", NaiveBayesExample.class.getResource("/datasets/training.language.de.txt"));
