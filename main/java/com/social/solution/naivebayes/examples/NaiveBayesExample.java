@@ -78,7 +78,7 @@ public class NaiveBayesExample {
             trainingExamples.put(entry.getKey(), readLines(entry.getValue()));
         }
 
-        
+
         //train classifier
         NaiveBayes nb = new NaiveBayes();
         nb.setChisquareCriticalValue(6.63); //0.01 pvalue
