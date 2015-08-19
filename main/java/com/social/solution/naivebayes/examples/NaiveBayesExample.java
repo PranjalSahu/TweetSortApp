@@ -77,6 +77,7 @@ public class NaiveBayesExample {
         for(Map.Entry<String, URL> entry : trainingFiles.entrySet()) {
             trainingExamples.put(entry.getKey(), readLines(entry.getValue()));
         }
+
         
         //train classifier
         NaiveBayes nb = new NaiveBayes();
