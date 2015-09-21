@@ -67,7 +67,7 @@ public class TrendingFragment extends BaseFragment {
     long lastTimeStamp;
     int currentState = 0;
 
-    boolean           loading        = false;
+    boolean           loading      = false;
     boolean           downloading = false;
     SharedPreferences prefs          = null;
     ProgressBar headerProgress       = null;

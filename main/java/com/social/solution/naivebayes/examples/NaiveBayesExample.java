@@ -69,7 +69,7 @@ public class NaiveBayesExample {
         //map of dataset files
 
         Map<String, URL> trainingFiles = new HashMap<>();
-        
+
         trainingFiles.put("English", NaiveBayesExample.class.getResource("/datasets/training.language.en.txt"));
         trainingFiles.put("French", NaiveBayesExample.class.getResource("/datasets/training.language.fr.txt"));
         trainingFiles.put("German", NaiveBayesExample.class.getResource("/datasets/training.language.de.txt"));
@@ -99,7 +99,7 @@ public class NaiveBayesExample {
         String outputEn = nb.predict(exampleEn);
         System.out.format("The sentense \"%s\" was classified as \"%s\".%n", exampleEn, outputEn);
         
-        String exampleFr = "Je suis Français";
+        String exampleFr = "Je suis Franaais";
         String outputFr = nb.predict(exampleFr);
         System.out.format("The sentense \"%s\" was classified as \"%s\".%n", exampleFr, outputFr);
         

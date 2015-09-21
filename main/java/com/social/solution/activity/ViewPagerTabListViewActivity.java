@@ -1,27 +1,15 @@
-/*
- * Copyright 2014 Soichiro Kashima
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.social.solution.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
@@ -30,14 +18,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.melnykov.fab.FloatingActionButton;
 import com.mopub.volley.RequestQueue;
 import com.mopub.volley.toolbox.ImageLoader;
 import com.mopub.volley.toolbox.Volley;
@@ -72,8 +65,46 @@ import twitter4j.User;
  * SlidingTabLayout and SlidingTabStrip are from google/iosched:
  * https://github.com/google/iosched
  */
-public class ViewPagerTabListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class ViewPagerTabListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks, OnShowcaseEventListener {
 
+    boolean showIntro = true;
+
+    @Override
+    public void onShowcaseViewHide(ShowcaseView showcaseView) {
+        ++currentShowCase;
+
+        if(currentShowCase == 1) {
+            ViewTarget target = new ViewTarget(R.id.sortitemsbytweet, this);
+            sv  = new ShowcaseView.Builder(this, true)
+                    .setTarget(target)
+                    .setContentTitle("SORT TWEETS BY RETWEET COUNT")
+                    .setStyle(R.style.CustomShowcaseTheme2)
+                    .setShowcaseEventListener(this)
+                    .build();
+        }
+        else if(currentShowCase == 2) {
+            ViewTarget target = new ViewTarget(R.id.originaltimeline, this);
+            sv  = new ShowcaseView.Builder(this, true)
+                    .setTarget(target)
+                    .setContentTitle("SHOW ORIGINAL TIMELINE")
+                    .setStyle(R.style.CustomShowcaseTheme2)
+                    .setShowcaseEventListener(this)
+                    .build();
+
+
+            SharedPreferences.Editor editor = getSharedPreferences("INTRO", MODE_PRIVATE).edit();
+            editor.putString("introopen", "done");
+            editor.commit();
+        }
+    }
+
+    @Override
+    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+    }
+
+    @Override
+    public void onShowcaseViewShow(ShowcaseView showcaseView) {
+    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -89,6 +120,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         finish();
     }
 
+    ShowcaseView sv;
+
     SquareImageView picture;
     String profileImageUrl = null;
 
@@ -99,6 +132,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     private NavigationAdapter mPagerAdapter;
     SlidingTabLayout slidingTabLayout;
 
+    FloatingActionButton fab;
     public static Context baseContext = null;
 
     String username                  = null;
@@ -106,6 +140,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     protected RequestQueue mRequestQueue;
     protected ImageLoader imageLoader;
 
+    Activity activityReference = null;
+
+    int currentShowCase = 0;
 
     public class LoadProfileImage extends AsyncTask<String, Integer, String> {
         @Override
@@ -148,20 +185,20 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             return true;
         }
         else if(id == R.id.sortitemsbyfavorites){
-                Fragment fgT = getCurrentFragment();
-                if(fgT instanceof MyFragment) {
-                    HelperFunctions.animate = false;
-                    MyFragment fg           = (MyFragment) fgT;
-                    ObservableListView olv  = fg.listView;
-                    MyAdapter mya           = fg.tweetadapter;
-                    fg.tempTweetList        = new ArrayList<Tweet>(fg.tweetlist);
-                    HelperFunctions.sortTweets(2, fg.tempTweetList, mya, olv);
-                    fg.tweetadapter.setTweets(fg.tempTweetList);
-                    fg.tweetadapter.notifyDataSetChanged();
-                    olv.smoothScrollToPosition(0);
-                    Toast.makeText(this, "Sorted By Favorite Count", Toast.LENGTH_LONG).show();
-                    HelperFunctions.animate = true;
-                }
+            Fragment fgT = getCurrentFragment();
+            if(fgT instanceof MyFragment) {
+                HelperFunctions.animate = false;
+                MyFragment fg           = (MyFragment) fgT;
+                ObservableListView olv  = fg.listView;
+                MyAdapter mya           = fg.tweetadapter;
+                fg.tempTweetList        = new ArrayList<Tweet>(fg.tweetlist);
+                HelperFunctions.sortTweets(2, fg.tempTweetList, mya, olv);
+                fg.tweetadapter.setTweets(fg.tempTweetList);
+                fg.tweetadapter.notifyDataSetChanged();
+                olv.smoothScrollToPosition(0);
+                Toast.makeText(this, "Sorted By Favorite Count", Toast.LENGTH_LONG).show();
+                HelperFunctions.animate = true;
+            }
             return true;
         }
         else if(id == R.id.sortitemsbytweet){
@@ -181,6 +218,8 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             }
             return true;
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -188,6 +227,24 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.mymenu, menu);
+
+        if(showIntro) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    final View temp = findViewById(R.id.sortitemsbyfavorites);
+                    if (temp != null) {
+                        ViewTarget target = new ViewTarget(temp);
+                        sv = new ShowcaseView.Builder(activityReference, true)
+                                .setTarget(target)
+                                .setContentTitle("SORT TWEETS BY FAVORITE COUNT")
+                                .setStyle(R.style.CustomShowcaseTheme2)
+                                .setShowcaseEventListener((OnShowcaseEventListener) activityReference)
+                                .build();
+                    }
+                }
+            }, 5000);
+        }
         return true;
     }
 
@@ -199,13 +256,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
     public class LoadFriends extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
-
-            try {
-                System.out.println("PRANJALUSERNAMEIS " + HelperFunctions.twitterStream.getScreenName());
-            } catch (TwitterException e) {
-                System.out.println("PRANJALUSERNAMEIS EXCEPTION");
-                e.printStackTrace();
-            }
 
             long nextCursor = -1;
             IDs friendIds   = null;
@@ -221,14 +271,14 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                         HelperFunctions.friends.addAll(followers);
                         for(User follower : followers) {
                             HelperFunctions.users.add(follower.getName());
-                            System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
+                            //System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
                         }
                         cur = cur+100;
                     }
                     followers = HelperFunctions.twitter.lookupUsers(Arrays.copyOfRange(arr, cur, arr.length));
                     for(User follower : followers) {
                         HelperFunctions.friends.addAll(followers);
-                        System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
+                        //System.out.println("FRIEND " + follower.getId() + " " + follower.getScreenName() + " " + follower.getName());
                     }
                 } catch (TwitterException e) {
                     e.printStackTrace();
@@ -253,19 +303,40 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         super.onDestroy();
     }
 
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewpagertab);
 
-        HelperFunctions.TITLES.add(0, "TimeLine");
-        HelperFunctions.TITLES.add(1, "Verified");
-        HelperFunctions.TITLES.add(2, "Trending");
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    int TWEET_COMPOSER_REQUEST_CODE = 100;
+                    Intent intent = new TweetComposer.Builder(baseContext)
+                            .text("What's on your mind")
+                            .createIntent();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
+                }
+                return false;
+            }
+        });
+
+
+        SharedPreferences prefs = getSharedPreferences("INTRO", MODE_PRIVATE);
+        String restoredText     = prefs.getString("introopen", null);
+        if (restoredText != null)
+            showIntro = false;
+
+        activityReference = this;
+
+        if(HelperFunctions.TITLES.size() == 0) {
+            HelperFunctions.TITLES.add(0, "TimeLine");
+            HelperFunctions.TITLES.add(1, "Verified");
+            HelperFunctions.TITLES.add(2, "Trending");
+        }
 
         mRequestQueue = Volley.newRequestQueue(this);
         imageLoader  = new com.mopub.volley.toolbox.ImageLoader(mRequestQueue, new com.mopub.volley.toolbox.ImageLoader.ImageCache() {
@@ -279,7 +350,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         });
 
         TweetBank.init(this.getApplicationContext());
-    //    TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
+        //    TweetBank.sqlitehelper.clearDb(TweetBank.WriteAbleDB);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
@@ -292,9 +363,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //new LoadFriends().execute("0", "1");
-
-        HelperFunctions.checkAndInit();
+        HelperFunctions.checkAndInit(this);
 
         username = HelperFunctions.currentSession.getUserName();
 
@@ -309,6 +378,7 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
+        mPager.setOffscreenPageLimit(3);
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
@@ -333,6 +403,21 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             }
         });
 
+        //ViewTarget target = new ViewTarget(R.id.sortitemsbyfavorites, this);
+//        ViewTarget target = new ViewTarget(R.id.userimage, this);
+//
+//        sv = new ShowcaseView.Builder(this, true)
+//                .setTarget(target)
+//                .setContentTitle("SORT TWEETS BY FAVORITE COUNT")
+//                .setContentText("PRANJAL TESTING TEXT")
+//                .setStyle(R.style.CustomShowcaseTheme2)
+//                .setShowcaseEventListener(this)
+//                .hideOnTouchOutside()
+//                .build();
+
+        //ActionViewTarget target = new ActionViewTarget(this, ActionViewTarget.Type.TITLE);
+
+
         propagateToolbarState(toolbarIsShown());
     }
 
@@ -356,8 +441,6 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
 
     @Override
     public void onDownMotionEvent() {
-        //System.out.println("ViewPagerTabListViewActivity onDownMotionEvent");
-
     }
 
     @Override
@@ -384,10 +467,13 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         int scrollY = listView.getCurrentScrollY();
         if (scrollState == ScrollState.DOWN) {
             showToolbar();
+            fab.show();
         } else if (scrollState == ScrollState.UP) {
             if (toolbarHeight <= scrollY) {
                 hideToolbar();
+                fab.hide();
             } else {
+                fab.show();
                 showToolbar();
             }
         } else {
@@ -400,20 +486,27 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
                 // Toolbar is moving but doesn't know which to move:
                 // you can change this to hideToolbar()
                 showToolbar();
+                fab.show();
             }
         }
     }
 
     private Fragment getCurrentFragment() {
-        Fragment fg = mPagerAdapter.getItemAt(mPager.getCurrentItem());
+        Fragment fg              = mPagerAdapter.getItemAt(mPager.getCurrentItem());
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         if(fg instanceof MyImageFragment) {
+            //MyFloatingActionButton fab = (MyFloatingActionButton) findViewById(R.id.fab);
+            //fab.attachToListView(fg.);
             return (MyImageFragment) fg;
         }
         else if(fg instanceof TrendingFragment){
             return  (TrendingFragment) fg;
         }
         else{
+            //fab.attachToListView(((MyFragment) fg).listView);
+            //((MyFragment) fg).
+            ((MyFragment) fg).mySetOnScrollListener(this);
             return (MyFragment) fg;
         }
     }
@@ -444,9 +537,9 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
             ObservableListView listView;
 
             //if(f instanceof  MyFragment)
-                listView = (ObservableListView) view.findViewById(R.id.mylist);
+            listView = (ObservableListView) view.findViewById(R.id.mylist);
             //else
-             //   listView = (ObservableListView) view.findViewById(R.id.newsobservableview);
+            //   listView = (ObservableListView) view.findViewById(R.id.newsobservableview);
 
             if (isShown) {
                 // Scroll up

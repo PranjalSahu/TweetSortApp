@@ -477,7 +477,6 @@ public class MyFragment extends BaseFragment {
         tweetadapter.notifyDataSetChanged();
         mySetOnScrollListener(storedActivity);
     }
-
     public void displayTweetsFirst(){
         tweetlist.addAll(getFiltered());
 
