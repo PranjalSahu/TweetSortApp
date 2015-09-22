@@ -163,6 +163,18 @@ public class ViewPagerTabListViewActivity extends BaseActivity implements Observ
         @Override
         protected void onPostExecute(String result) {
             picture.setImageUrl(profileImageUrl, imageLoader);
+            picture.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+                        Intent intent = new Intent(ViewPagerTabListViewActivity.this, UserProfile.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        activityReference.overridePendingTransition(R.anim.animation_entry_right, R.anim.animation_exit_left);
+                    }
+                    return true;
+                }
+            });
         }
     }
 
