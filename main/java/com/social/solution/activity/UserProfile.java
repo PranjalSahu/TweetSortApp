@@ -16,15 +16,26 @@
 
 package com.social.solution.activity;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.view.View;
 import android.widget.AbsListView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.mopub.volley.RequestQueue;
+import com.mopub.volley.toolbox.ImageLoader;
+import com.mopub.volley.toolbox.Volley;
 import com.nineoldandroids.view.ViewHelper;
+import com.social.solution.HelperFunctions;
 import com.social.solution.R;
+import com.social.solution.others.SquareImageView;
+
+import twitter4j.TwitterException;
 
 public class UserProfile extends BaseActivity implements ObservableScrollViewCallbacks {
 
@@ -33,6 +44,11 @@ public class UserProfile extends BaseActivity implements ObservableScrollViewCal
     private View mListBackgroundView;
     private ObservableListView mListView;
     private int mParallaxImageHeight;
+    String profileImageUrl = null;
+    SquareImageView picture;
+    protected RequestQueue mRequestQueue;
+    protected ImageLoader imageLoader;
+    Activity activityReference = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +56,22 @@ public class UserProfile extends BaseActivity implements ObservableScrollViewCal
         setContentView(R.layout.activity_parallaxtoolbarlistviewa) ;
 
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        activityReference = this;
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        imageLoader  = new com.mopub.volley.toolbox.ImageLoader(mRequestQueue, new com.mopub.volley.toolbox.ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
+            public void putBitmap(String url, Bitmap bitmap) {
+                mCache.put(url, bitmap);
+            }
+            public Bitmap getBitmap(String url) {
+                return mCache.get(url);
+            }
+        });
+
+
+        picture    = (SquareImageView)findViewById(R.id.userimage);
+        new LoadProfileImage().execute("0", "1");
 
         myTextView = findViewById(R.id.myflexibleview);
 //        mToolbarView = findViewById(R.id.toolbar);
@@ -88,5 +120,29 @@ public class UserProfile extends BaseActivity implements ObservableScrollViewCal
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+    }
+
+    public class LoadProfileImage extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String username = HelperFunctions.currentSession.getUserName();
+                profileImageUrl = HelperFunctions.twitter.showUser(username).getOriginalProfileImageURL();
+                //HelperFunctions.twitter.showUser(username).getBiggerProfileImageURL();
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            picture.setImageUrl(profileImageUrl, imageLoader);
+        }
     }
 }
